@@ -1,0 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(Actor))]
+public class Inventory : MonoBehaviour
+{
+    [SerializeField] private int capacity = 0;
+    [SerializeField] private List<Item> items = new List<Item>();
+
+    public int GetCapacity { get => capacity; }
+    public List<Item> GetItems { get => items; }
+
+    public void Drop(Item item)
+    {
+        items.Remove(item);
+        item.transform.SetParent(null);
+        item.GetComponent<SpriteRenderer>().enabled = true;
+        item.addToGameManager();
+        UIManager.init.addMsg($"You dropped the {item.name}.", "#ff0000");
+    }
+
+}
