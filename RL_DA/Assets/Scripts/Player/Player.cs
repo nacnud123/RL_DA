@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Actor))]
 public class Player : MonoBehaviour, Controls.IPlayerActions
 {
     private Controls controls;
-    [SerializeField] private bool moveKeyHeld;
+    [SerializeField] private bool moveKeyDown;
+    [SerializeField] private bool targetMode;
+    [SerializeField] private bool isSingleTarget;
+    [SerializeField] private GameObject targetObj;
 
     private void Awake() => controls = new Controls();
 
@@ -25,36 +29,60 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
 
     void Controls.IPlayerActions.OnMovement(InputAction.CallbackContext context)
     {
-        if (context.started)
-            moveKeyHeld = true;
+        if (context.started && GetComponent<Actor>().IsAlive)
+        {
+            if (targetMode && !moveKeyDown)
+            {
+                moveKeyDown = true;
+                Move();
+            }
+            else if (!targetMode)
+            {
+                moveKeyDown = true;
+            }
+        }
         else if (context.canceled)
-            moveKeyHeld = false;
+            moveKeyDown = false;
+
+
     }
 
     void Controls.IPlayerActions.OnExit(InputAction.CallbackContext context)
     {
         if (context.performed)
-            UIManager.init.toggleMenu();
+        {
+            if (UIManager.init.GetIsMenuOpen)
+                UIManager.init.toggleMenu();
+            else if (targetMode)
+                ToggleTargetMode();
+        }
+
     }
 
     public void OnView(InputAction.CallbackContext context)
     {
         if (context.performed)
-            if(!UIManager.init.GetIsMenuOpen || UIManager.init.GetIsMsgHistoryOpen)
+            if (!UIManager.init.GetIsMenuOpen || UIManager.init.GetIsMsgHistoryOpen)
                 UIManager.init.toggleMsgHistory();
     }
 
     public void OnPickup(InputAction.CallbackContext context)
     {
         if (context.performed)
-            Action.pickupAction(GetComponent<Actor>());
+        {
+            if (CanAct())
+            {
+                Action.pickupAction(GetComponent<Actor>());
+            }
+        }
+
     }
 
     public void OnInventory(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
-            if(!UIManager.init.GetIsMenuOpen || UIManager.init.GetIsInvOpen)
+            if (CanAct() || UIManager.init.GetIsInvOpen)
             {
                 if (GetComponent<Inventory>().GetItems.Count > 0)
                     UIManager.init.toggleInv(GetComponent<Actor>());
@@ -68,7 +96,7 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
     {
         if (context.performed)
         {
-            if(!UIManager.init.GetIsMenuOpen || UIManager.init.GetIsDropMenuOpen)
+            if (CanAct() || UIManager.init.GetIsDropMenuOpen)
             {
                 if (GetComponent<Inventory>().GetItems.Count > 0)
                     UIManager.init.toggleDropMenu(GetComponent<Actor>());
@@ -78,33 +106,148 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
         }
     }
 
+    public void OnConfirm(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (targetMode)
+            {
+                if (isSingleTarget)
+                {
+                    Actor target = SingleTargetChecks(targetObj.transform.position);
+
+                    if (target != null)
+                        Action.CastAction(GetComponent<Actor>(), target, GetComponent<Inventory>().SelectedConsumable);
+                }
+                else
+                {
+                    List<Actor> targets = AreaTargetChecks(targetObj.transform.position);
+
+                    if (targets != null)
+                        Action.CastAction(GetComponent<Actor>(), targets, GetComponent<Inventory>().SelectedConsumable);
+                }
+            }
+        }
+    }
+
+    public void ToggleTargetMode(bool isArea = false, int radius = 1)
+    {
+        targetMode = !targetMode;
+
+        if (targetMode)
+        {
+            if (targetObj.transform.position != transform.position)
+                targetObj.transform.position = transform.position;
+
+            if (isArea)
+            {
+                isSingleTarget = false;
+                targetObj.transform.GetChild(0).localScale = Vector3.one * (radius + 1);
+                targetObj.transform.GetChild(0).gameObject.SetActive(true);
+            }
+            else
+            {
+                isSingleTarget = true;
+            }
+
+            targetObj.SetActive(true);
+        }
+        else
+        {
+            if (targetObj.transform.GetChild(0).gameObject.activeSelf)
+                targetObj.transform.GetChild(0).gameObject.SetActive(false);
+            targetObj.SetActive(false);
+            GetComponent<Inventory>().SelectedConsumable = null;
+        }
+    }
 
 
     private void FixedUpdate()
     {
-        if (!UIManager.init.GetIsMenuOpen)
+        if (!UIManager.init.GetIsMenuOpen && !targetMode)
         {
-            if (GameManager.init.getIsPlayerTurn && moveKeyHeld && GetComponent<Actor>().IsAlive)
-                movePlayer();
+            if (GameManager.init.getIsPlayerTurn && moveKeyDown && GetComponent<Actor>().IsAlive)
+                Move();
         }
     }
 
-    private void movePlayer()
+    private void Move()
     {
         Vector2 dir = controls.Player.Movement.ReadValue<Vector2>();
         Vector2 roundedDir = new Vector2(Mathf.Round(dir.x), Mathf.Round(dir.y)); // Used to fix some bugs with directional movment
-        Vector3 futurePos = transform.position + (Vector3)roundedDir;
+        Vector3 futurePos;
 
-        if (isValidPos(futurePos))
-            moveKeyHeld = Action.bumpAction(GetComponent<Actor>(), roundedDir);
+        if (targetMode)
+        {
+            futurePos = targetObj.transform.position + (Vector3)roundedDir;
+        }
+        else
+            futurePos = transform.position + (Vector3)roundedDir;
+
+
+        if (targetMode)
+        {
+            Vector3Int targetGridPos = MapManager.init.getFloorMap.WorldToCell(futurePos);
+
+            if (MapManager.init.isValidPos(futurePos) && GetComponent<Actor>().getFOV.Contains(targetGridPos))
+                targetObj.transform.position = futurePos;
+        }
+        else
+        {
+            moveKeyDown = Action.bumpAction(GetComponent<Actor>(), roundedDir);
+        }
+
+
     }
 
-    private bool isValidPos(Vector3 futurePos)
+    private bool CanAct()
     {
-        Vector3Int gridPos = MapManager.init.getFloorMap.WorldToCell(futurePos);
-        if (!MapManager.init.inBounds(gridPos.x, gridPos.y) || MapManager.init.getObstacleMap.HasTile(gridPos) || futurePos == transform.position)
+        if (targetMode || UIManager.init.GetIsMenuOpen || !GetComponent<Actor>().IsAlive)
             return false;
-
-        return true;
+        else
+            return true;
     }
+
+    private Actor SingleTargetChecks(Vector3 targetPos)
+    {
+        Actor target = GameManager.init.GetActorAtLocation(targetPos);
+
+        if(target == null)
+        {
+            UIManager.init.addMsg("You must select an enemy to target.", "#ffffff"); ;
+            return null;
+        }
+
+        if(target == GetComponent<Actor>())
+        {
+            UIManager.init.addMsg("You can't target yourself.", "#ffffff");
+            return null;
+        }
+
+        return target;
+    }
+
+    private List<Actor> AreaTargetChecks(Vector3 targetPos)
+    {
+        int radius = (int)targetObj.transform.GetChild(0).localScale.x - 1;
+
+        Bounds targetBounds = new Bounds(targetPos, Vector3.one * radius * 2);
+        List<Actor> targets = new List<Actor>();
+
+        foreach(Actor target in GameManager.init.getActors)
+        {
+            if (targetBounds.Contains(target.transform.position))
+                targets.Add(target);
+        }
+
+        if(targets.Count == 0)
+        {
+            UIManager.init.addMsg("There are no targets in the radius.", "#ffffff");
+            return null;
+        }
+
+        return targets;
+    }
+
+
 }

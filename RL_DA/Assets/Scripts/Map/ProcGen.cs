@@ -146,8 +146,23 @@ sealed class ProcGen : MonoBehaviour
                     return;
             }
 
-            MapManager.init.createEntity("Potion of Health", new Vector2(x, y));
-
+            float randValue = Random.value;
+            if(randValue < .7f)
+            {
+                MapManager.init.createEntity("Potion of Health", new Vector2(x, y));
+            }
+            else if (randValue < .8f)
+            {
+                MapManager.init.createEntity("Fireball Scroll", new Vector2(x, y));
+            }
+            else if (randValue < .9f)
+            {
+                MapManager.init.createEntity("Confusion Scroll", new Vector2(x, y));
+            }
+            else
+            {
+                MapManager.init.createEntity("Lightning Scroll", new Vector2(x, y));
+            }
             item++;
         }
     }

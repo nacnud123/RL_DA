@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Item : Entity
 {
-    private Consumable consumable;
+    [SerializeField] private Consumable consumable;
 
     public Consumable GetConsumable { get => consumable; }
 

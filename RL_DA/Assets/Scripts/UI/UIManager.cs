@@ -158,26 +158,26 @@ public class UIManager : MonoBehaviour
 
     private void updateMenu(Actor actor, GameObject menuContent)
     {
-        for(int i =0; i < menuContent.transform.childCount; i++)
+        for(int resetNum = 0; resetNum < menuContent.transform.childCount; resetNum++)
         {
-            GameObject menuContentChild = menuContent.transform.GetChild(i).gameObject;
+            GameObject menuContentChild = menuContent.transform.GetChild(resetNum).gameObject;
             menuContentChild.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
             menuContentChild.GetComponent<Button>().onClick.RemoveAllListeners();
             menuContentChild.SetActive(false);
         }
 
         char c = 'a';
-        for(int i = 0; i < actor.GetInventory.GetItems.Count; i++)
+        for(int itemNum = 0; itemNum < actor.GetInventory.GetItems.Count; itemNum++)
         {
-            GameObject menuContentChild = menuContent.transform.GetChild(i).gameObject;
-            menuContentChild.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"({c++}) {actor.GetInventory.GetItems[i].name}";
+            GameObject menuContentChild = menuContent.transform.GetChild(itemNum).gameObject;
+            Item item = actor.GetInventory.GetItems[itemNum];
+            menuContentChild.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"({c++}) {item.name}";
             menuContentChild.GetComponent<Button>().onClick.AddListener(() =>
             {
                 if (menuContent == invContent)
-                    Action.useAction(actor, i - 1);
+                    Action.useAction(actor, item);
                 else if (menuContent == dropMenuContent)
-                    Action.dropAction(actor, actor.GetInventory.GetItems[i - 1]);
-                updateMenu(actor, menuContent);           
+                    Action.dropAction(actor, item);      
             });
             menuContentChild.SetActive(true);
         }

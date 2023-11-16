@@ -14,7 +14,7 @@ public class HostileEnemy : AI
         AStar = GetComponent<AStar>();
     }
 
-    public void RunAI()
+    public override void RunAI()
     {
         if (!fighter.Target) // If it does not have a target set that target to the player
         {
@@ -48,7 +48,7 @@ public class HostileEnemy : AI
             }
         }
 
-        Action.skipAction();
+        Action.waitAction();
 
     }
 

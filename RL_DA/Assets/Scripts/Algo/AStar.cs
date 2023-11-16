@@ -26,7 +26,7 @@ public class AStar : MonoBehaviour {
     }
     Vector2 stepDirection = new Vector2(path.Peek().x - start.x, path.Peek().y - start.y);
 
-    if (GameManager.init.GetBlockingActorAtLocation(transform.position + (Vector3)stepDirection)) {
+    if (GameManager.init.GetActorAtLocation(transform.position + (Vector3)stepDirection)) {
       return Vector2.zero;
     }
 
@@ -81,7 +81,7 @@ public class AStar : MonoBehaviour {
   private int DetermineGScore(Vector2Int neighbour, Vector2Int current) {
     int gScore = 0;
 
-    Actor actor = GameManager.init.GetBlockingActorAtLocation((Vector3Int)neighbour);
+    Actor actor = GameManager.init.GetActorAtLocation((Vector3Int)neighbour);
 
     if (actor) {
       gScore = 10;

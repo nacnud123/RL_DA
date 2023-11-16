@@ -15,6 +15,9 @@ public class Entity : MonoBehaviour
 
     public void Move(Vector2 dir)
     {
-        transform.position += (Vector3)dir;
+        if(MapManager.init.isValidPos(transform.position + (Vector3)dir))
+        {
+            transform.position += (Vector3)dir;
+        }
     }
 }

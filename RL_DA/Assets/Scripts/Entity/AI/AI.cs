@@ -11,6 +11,11 @@ public class AI : MonoBehaviour
 
     private void OnValidate() => aStar = GetComponent<AStar>();
 
+    public virtual void RunAI()
+    {
+
+    }
+
     public void moveAlongPath(Vector3Int targetPos)
     {
         Vector3Int gridPosition = MapManager.init.getFloorMap.WorldToCell(transform.position);

@@ -35,26 +35,26 @@ static public class Action
         GameManager.init.endTurn();
     }
 
-    public static void useAction(Actor actor, int index)
+    public static void useAction(Actor consumer, Item item)
     {
-        Item item = actor.GetInventory.GetItems[index];
-
         bool itemUsed = false;
 
         if (item.GetComponent<Consumable>())
-            itemUsed = item.GetComponent<Consumable>().Activate(actor, item);
-
-        if (!itemUsed)
-            return;
+            itemUsed = item.GetComponent<Consumable>().Activate(consumer);
 
         UIManager.init.toggleInv();
-        GameManager.init.endTurn();
+
+
+        if (itemUsed)
+        {
+            GameManager.init.endTurn();
+        }
     }
 
 
     public static bool bumpAction(Actor actor, Vector2 dir)
     {
-        Actor target = GameManager.init.GetBlockingActorAtLocation(actor.transform.position + (Vector3)dir);
+        Actor target = GameManager.init.GetActorAtLocation(actor.transform.position + (Vector3)dir);
 
         if (target)
         {
@@ -100,8 +100,24 @@ static public class Action
         GameManager.init.endTurn();
     }
 
-    public static void skipAction()
+    public static void waitAction()
     {
         GameManager.init.endTurn();
+    }
+
+    public static void CastAction(Actor consumer, Actor target, Consumable consumable)
+    {
+        bool castSuccess = consumable.Cast(consumer, target);
+
+        if (castSuccess)
+            GameManager.init.endTurn();
+    }
+
+    public static void CastAction(Actor consumer, List<Actor> targets, Consumable consumable)
+    {
+        bool castSuccess = consumable.Cast(consumer, targets);
+
+        if (castSuccess)
+            GameManager.init.endTurn();
     }
 }

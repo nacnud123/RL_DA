@@ -16,6 +16,8 @@ public class Actor : Entity
     public List<Vector3Int> getFOV { get => fov; }
     public Inventory GetInventory { get => inv; }
 
+    public AI AI { get => ai; set => ai = value; }
+
     private void OnValidate()
     {
         if (GetComponent<AI>())

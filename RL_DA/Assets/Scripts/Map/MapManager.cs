@@ -88,6 +88,15 @@ public class MapManager : MonoBehaviour
             case "Potion of Health":
                 Instantiate(Resources.Load<GameObject>("Potion of Health"), new Vector3(position.x + .5f, position.y + .5f, 0), Quaternion.identity).name = "Potion of Health";
                 break;
+            case "Fireball Scroll":
+                Instantiate(Resources.Load<GameObject>("Fireball Scroll"), new Vector3(position.x + .5f, position.y + .5f, 0), Quaternion.identity).name = "Fireball Scroll";
+                break;
+            case "Confusion Scroll":
+                Instantiate(Resources.Load<GameObject>("Confusion Scroll"), new Vector3(position.x + .5f, position.y + .5f, 0), Quaternion.identity).name = "Confusion Scroll";
+                break;
+            case "Lightning Scroll":
+                Instantiate(Resources.Load<GameObject>("Lightning Scroll"), new Vector3(position.x + .5f, position.y + .5f, 0), Quaternion.identity).name = "Lightning Scroll";
+                break;
             default:
                 Debug.LogError("No eneity of name: {entity}");
                 break;
@@ -152,5 +161,14 @@ public class MapManager : MonoBehaviour
             fogMap.SetTile(pos, fogTile);
             fogMap.SetTileFlags(pos, TileFlags.None);
         }
+    }
+
+    public bool isValidPos(Vector3 futurePos)
+    {
+        Vector3Int gridPos = floorMap.WorldToCell(futurePos);
+        if (!inBounds(gridPos.x, gridPos.y) || getObstacleMap.HasTile(gridPos))
+            return false;
+
+        return true;
     }
 }
