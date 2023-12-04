@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -7049084470504224915}
   - component: {fileID: -1782777632295938276}
   - component: {fileID: 2050319648527824387}
+  - component: {fileID: -8509539478069354914}
   m_Layer: 0
   m_Name: Troll
   m_TagString: Untagged
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1942499575
-  m_SortingLayer: 3
+  m_SortingLayer: 1
   m_SortingOrder: 2
   m_Sprite: {fileID: 1214309553, guid: 89dc76539d8615c4fb18ecd03f499fda, type: 3}
   m_Color: {r: 0, g: 0.49803922, b: 0, a: 1}
@@ -106,6 +107,8 @@ MonoBehaviour:
   fov: []
   ai: {fileID: 2050319648527824387}
   inv: {fileID: 0}
+  fighter: {fileID: -7049084470504224915}
+  level: {fileID: -8509539478069354914}
 --- !u!114 &-7049084470504224915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,3 +153,21 @@ MonoBehaviour:
   aStar: {fileID: -1782777632295938276}
   fighter: {fileID: -7049084470504224915}
   isFighting: 0
+--- !u!114 &-8509539478069354914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3417674161635461090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3a1b0e8531ebd9458136eeb5743e371, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentLevel: 1
+  currentXP: 0
+  xpToNextLevel: 350
+  levelUpBase: 200
+  levelUpFactor: 150
+  xpGiven: 100

@@ -42,4 +42,35 @@ public class ConfusedEnemy : AI
             turnsRemainig--;
         }
     }
+
+
+    public override AIState SaveState() => new ConfusedState(
+        _type: "ConfusedEnemy",
+        _prevAI: prevAI,
+        _turnsRemaining: turnsRemainig
+        );
+
+    public void LoadState(ConfusedState state)
+    {
+        if (state.PrevAI == "HostileEnemy")
+            prevAI = GetComponent<HostileEnemy>();
+
+        turnsRemainig = state.TurnsRemaining;
+    }
+}
+
+[System.Serializable]
+public class ConfusedState : AIState
+{
+    [SerializeField] private string prevAI;
+    [SerializeField] private int turnsRemaining;
+
+    public string PrevAI { get => prevAI; set => prevAI = value; }
+    public int TurnsRemaining { get => turnsRemaining; set => turnsRemaining = value; }
+
+    public ConfusedState(string _type = "", AI _prevAI = null, int _turnsRemaining = 0) : base(_type)
+    {
+        prevAI = _prevAI.GetType().ToString();
+        turnsRemaining = _turnsRemaining;
+    }
 }

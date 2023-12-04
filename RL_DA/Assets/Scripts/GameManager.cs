@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,8 +14,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Entities")]
     [SerializeField] private int actorNum = 0;
-    [SerializeField] private List<Entity> entities = new List<Entity>();
-    [SerializeField] private List<Actor> actors = new List<Actor>();
+    [SerializeField] private List<Entity> entities;
+    [SerializeField] private List<Actor> actors;
 
     [Header("Death")]
     [SerializeField] private Sprite deadSprite;
@@ -31,6 +32,23 @@ public class GameManager : MonoBehaviour
             init = this;
         else
             Destroy(gameObject);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SceneState sceneState = SaveManager.init.Save.Scenes.Find(x => x.FloorNumber == SaveManager.init.CurrentFloor);
+
+        if(sceneState is not null)
+        {
+            LoadState(sceneState.GameState, true);
+        }
+        else
+        {
+            entities = new List<Entity>();
+            actors = new List<Actor>();
+        }
     }
 
     private void StartTurn()
@@ -75,6 +93,15 @@ public class GameManager : MonoBehaviour
         entities.Add(entity);
     }
 
+    public void InsertEntity(Entity entity, int index)
+    {
+        if (!entity.gameObject.activeSelf)
+        {
+            entity.gameObject.SetActive(true);
+        }
+        entities.Insert(index, entity);
+    }
+
     public void removeEntity(Entity entity)
     {
         entity.gameObject.SetActive(false);
@@ -99,6 +126,11 @@ public class GameManager : MonoBehaviour
         delayTime = setTime();
     }
 
+    public void RefreshPlayer()
+    {
+        actors[0].updateFOV();
+    }
+
     public Actor GetActorAtLocation(Vector3 location)
     {
         foreach(Actor actor in actors)
@@ -110,4 +142,111 @@ public class GameManager : MonoBehaviour
     }
 
     private float setTime() => baseTime / actors.Count;
+
+    public GameState SaveState()
+    {
+        foreach(Item item in actors[0].GetInventory.GetItems)
+        {
+            addEntity(item);
+        }
+
+        GameState gameState = new GameState(_entities: entities.ConvertAll(x => x.SaveState()));
+
+        foreach (Item item in actors[0].GetInventory.GetItems)
+            removeEntity(item);
+
+        return gameState;
+    }
+
+    public void LoadState(GameState state, bool canRemovePlayer)
+    {
+        isPlayerTurn = false; // Stops the player from moving until everything is loaded
+        Reset(canRemovePlayer);
+        StartCoroutine(LoadEntityStates(state.Entities, canRemovePlayer));
+    }
+
+    private IEnumerator LoadEntityStates(List<EntityState> entityStates, bool canPlacePlayer)
+    {
+        int entityNum = 0;
+        while(entityNum < entityStates.Count)
+        {
+            yield return new WaitForEndOfFrame();
+            string entityName = entityStates[entityNum].Name.Contains("Remains of") ? entityStates[entityNum].Name.Substring(entityStates[entityNum].Name.LastIndexOf(' ') + 1) : entityStates[entityNum].Name;
+
+            if(entityStates[entityNum].Type == EntityState.EntityType.Actor)
+            {
+                ActorState actorState = entityStates[entityNum] as ActorState;
+
+                if(entityName == "Player" && !canPlacePlayer)
+                {
+                    actors[0].transform.position = entityStates[entityNum].Position;
+                    RefreshPlayer();
+                    entityNum++;
+                    continue;
+                }
+
+                Actor actor = MapManager.init.createEntity(entityName, actorState.Position).GetComponent<Actor>();
+
+                actor.LoadState(actorState);
+            }
+            else if(entityStates[entityNum].Type == EntityState.EntityType.Item)
+            {
+                ItemState itemState = entityStates[entityNum] as ItemState;
+
+                if(itemState.Parent == "Player" && !canPlacePlayer)
+                {
+                    entityNum++;
+                    continue;
+                }
+
+                Item item = MapManager.init.createEntity(entityName, itemState.Position).GetComponent<Item>();
+
+                item.LoadState(itemState);
+            }
+            entityNum++;
+        }
+        isPlayerTurn = true;
+    }
+
+    public void Reset(bool canRemovePlayer)
+    {
+        if (entities.Count > 0)
+        {
+            foreach (Entity e in entities)
+            {
+                if(!canRemovePlayer && e.GetComponent<Player>())
+                {
+                    continue;
+                }
+
+                Destroy(e.gameObject);
+            }
+
+            if (canRemovePlayer)
+            {
+                entities.Clear();
+                actors.Clear();
+            }
+            else
+            {
+                entities.RemoveRange(1, entities.Count - 1);
+                actors.RemoveRange(1, actors.Count - 1);
+            }
+
+            
+        }
+    }
+}
+
+[System.Serializable]
+public class GameState
+{
+    [SerializeField] private List<EntityState> entities;
+
+    public List<EntityState> Entities { get => entities; set => entities = value; }
+
+    public GameState(List<EntityState> _entities)
+    {
+        entities = _entities;
+    }
 }

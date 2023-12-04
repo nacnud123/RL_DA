@@ -24,6 +24,11 @@ public class RectangularRoom
     // Return center of the room
     public Vector2Int center() => new Vector2Int(x + width / 2, y + height / 2);
 
+    /// <summary>
+    /// Return a random inner position inside the room
+    /// </summary>
+    public Vector2Int RandomPoint() => new Vector2Int(Random.Range(x + 1, x + width - 1), Random.Range(y + 1, y + height - 1));
+
     // Return the area of the room as a bound
     public Bounds getBounds() => new Bounds(new Vector3(x, y, 0), new Vector3(width, height, 0));
 

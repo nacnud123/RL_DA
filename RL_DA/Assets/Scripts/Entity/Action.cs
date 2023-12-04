@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 static public class Action
 {
@@ -17,14 +18,48 @@ static public class Action
             }
 
             Item item = GameManager.init.getEntities[i].GetComponent<Item>();
-            item.transform.SetParent(actor.transform);
-            actor.GetInventory.GetItems.Add(item);
+            actor.GetInventory.Add(item);
 
             UIManager.init.addMsg($"You picked up the {item.name}.", "#ffffff");
 
-            GameManager.init.removeEntity(item);
             GameManager.init.endTurn();
         }
+    }
+
+    public static void TakeStairsAction(Actor actor)
+    {
+        Vector3Int pos = MapManager.init.getFloorMap.WorldToCell(actor.transform.position);
+        string tileName = MapManager.init.getFloorMap.GetTile(pos).name;
+
+        Debug.Log($"Curr tile name: {tileName}");
+
+        if(tileName != MapManager.init.UpStairsTile.name && tileName != MapManager.init.DownStairsTile.name)
+        {
+            UIManager.init.addMsg("There are no stairs here.", "#0da2ff");
+            return;
+        }
+        if(SaveManager.init.CurrentFloor == 1 && tileName == MapManager.init.UpStairsTile.name)
+        {
+            UIManager.init.addMsg("You cannot go back up.", "#0da2ff");
+            return;
+        }
+
+        SaveManager.init.SaveGame();
+        SaveManager.init.CurrentFloor += tileName == MapManager.init.UpStairsTile.name ? -1 : 1; // Checks if it is and up stairs or down stairs
+
+        if (SaveManager.init.Save.Scenes.Exists(x => x.FloorNumber == SaveManager.init.CurrentFloor)) // Goes up a floor if it exists
+        {
+            SaveManager.init.LoadScene(false);
+        }
+        else // If it does not exist then go down a floor and generate a new floor
+        {
+            GameManager.init.Reset(false);
+            MapManager.init.GenerateDungeon();
+        }
+
+        UIManager.init.addMsg("You take the stiars", "#0da2ff");
+        UIManager.init.setDungeonFloorText(SaveManager.init.CurrentFloor);
+
     }
 
     public static void dropAction(Actor actor, Item item)
@@ -70,7 +105,7 @@ static public class Action
 
     public static void meleeAction(Actor actor, Actor target)
     {
-        int dmg = actor.GetComponent<Fighter>().getPower - target.GetComponent<Fighter>().getDefense;
+        int dmg = actor.GetComponent<Fighter>().Power - target.GetComponent<Fighter>().Defense;
 
         string attackDesc = $"{actor.name} attacks {target.name}";
 

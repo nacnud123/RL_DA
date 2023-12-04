@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Actor))]
-sealed class Fighter : MonoBehaviour
+public class Fighter : MonoBehaviour
 {
     [SerializeField] private int maxHP, hp, defense, power;
     [SerializeField] private Actor target;
@@ -22,9 +22,9 @@ sealed class Fighter : MonoBehaviour
                 Die();
         }
     }
-
-    public int getDefense { get => defense; }
-    public int getPower { get => power; }
+    public int MaxHp { get => maxHP; set => maxHP = value; }
+    public int Defense { get => defense; set => defense = value; }
+    public int Power { get => power; set => power = value; }
     public Actor Target { get => target; set => target = value; }
 
     private void Start()
@@ -36,15 +36,19 @@ sealed class Fighter : MonoBehaviour
         }
     }
 
-    private void Die()
+    public void Die()
     {
-        if (GetComponent<Player>())
-        {
-            UIManager.init.addMsg("You died!", "#ff0000");
-        }
-        else
-        {
-            UIManager.init.addMsg($"{name} is dead.", "#ffa500");
+        if (GetComponent<Actor>().IsAlive) {
+            if (GetComponent<Player>())
+            {
+                UIManager.init.addMsg("You died!", "#ff0000");
+            }
+            else
+            {
+                GameManager.init.getActors[0].GetComponent<Level>().AddXP(GetComponent<Level>().XPGiven);
+                UIManager.init.addMsg($"{name} is dead.", "#ffa500");
+            }
+            GetComponent<Actor>().IsAlive = false;
         }
 
         SpriteRenderer sp = GetComponent<SpriteRenderer>();
@@ -54,7 +58,6 @@ sealed class Fighter : MonoBehaviour
 
         name = $"Remains of {name}";
         GetComponent<Actor>().BlocksMovment = false;
-        GetComponent<Actor>().IsAlive = false;
         if (!GetComponent<Player>())
         {
             GameManager.init.removeActor(this.GetComponent<Actor>());
@@ -75,5 +78,43 @@ sealed class Fighter : MonoBehaviour
         int amountRec = newHpVal - hp;
         Hp = newHpVal;
         return amountRec;
+    }
+
+    public FighterState SaveState() => new FighterState(
+        _maxHp: maxHP,
+        _hp: hp,
+        _defense: defense,
+        _power: power,
+        _target: target != null ? target.name : null
+        );
+
+    public void LoadState(FighterState state)
+    {
+        maxHP = state.MaxHp;
+        hp = state.Hp;
+        defense = state.Defense;
+        power = state.Power;
+        target = GameManager.init.getActors.Find(a => a.name == state.Target);
+    }
+}
+
+public class FighterState
+{
+    [SerializeField] private int maxHp, hp, defense, power;
+    [SerializeField] private string target;
+
+    public int MaxHp { get => maxHp; set => maxHp = value; }
+    public int Hp { get => hp; set => hp = value; }
+    public int Defense { get => defense; set => defense = value; }
+    public int Power { get => power; set => power = value; }
+    public string Target { get => target; set => target = value; }
+
+    public FighterState(int _maxHp, int _hp, int _defense, int _power, string _target)
+    {
+        maxHp = _maxHp;
+        hp = _hp;
+        defense = _defense;
+        power = _power;
+        target = _target;
     }
 }

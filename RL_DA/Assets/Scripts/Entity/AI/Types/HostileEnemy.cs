@@ -52,4 +52,7 @@ public class HostileEnemy : AI
 
     }
 
+    public override AIState SaveState() => new AIState(
+        _type: "HostileEnemy"
+        );
 }
