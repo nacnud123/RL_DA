@@ -31,7 +31,7 @@ static public class Action
         Vector3Int pos = MapManager.init.getFloorMap.WorldToCell(actor.transform.position);
         string tileName = MapManager.init.getFloorMap.GetTile(pos).name;
 
-        Debug.Log($"Curr tile name: {tileName}");
+        //Debug.Log($"Curr tile name: {tileName}");
 
         if(tileName != MapManager.init.UpStairsTile.name && tileName != MapManager.init.DownStairsTile.name)
         {

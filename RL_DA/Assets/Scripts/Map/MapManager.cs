@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
-
+using System;
 
 public class MapManager : MonoBehaviour
 {
@@ -57,8 +57,8 @@ public class MapManager : MonoBehaviour
 
     private void Awake()
     {
-        if (init == null) init = this;
-        else Destroy(gameObject);
+        if (init == null) { init = this; }
+        else { Destroy(gameObject); }
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -115,9 +115,19 @@ public class MapManager : MonoBehaviour
 
     public GameObject createEntity(string entity, Vector2 position)
     {
-        GameObject entityObject = Instantiate(Resources.Load<GameObject>($"{entity}"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity);
-        entityObject.name = entity;
-        return entityObject;
+        try
+        {
+            GameObject entityObject = Instantiate(Resources.Load<GameObject>($"{entity}"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity);
+            entityObject.name = entity;
+            return entityObject;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Something went wrong when creating entity!");
+            Debug.Log($"{entity} or {position} may not exist. Make sure things are spelled right");
+            return null;
+        }
+       
     }
 
     public void updateFogMap(List<Vector3Int> playerFov)
@@ -125,7 +135,7 @@ public class MapManager : MonoBehaviour
         foreach(Vector3Int pos in visibleTiles)
         {
             if (!tiles[pos].IsExplored)
-                tiles[pos].IsExplored = true;
+            { tiles[pos].IsExplored = true; }
 
             tiles[pos].IsVisible = false;
             fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1f, .5f));
@@ -205,6 +215,7 @@ public class MapManager : MonoBehaviour
         rooms.Clear();
         tiles.Clear();
         visibleTiles.Clear();
+        nodes.Clear();
 
         floorMap.ClearAllTiles();
         obstacleMap.ClearAllTiles();

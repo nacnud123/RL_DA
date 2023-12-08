@@ -49,11 +49,14 @@ public class SaveManager : MonoBehaviour
         else
             AddScene(SaveState());
 
-        if (!tempSave) return;
+        if (!tempSave)
+        {
+            string path = Path.Combine(Application.persistentDataPath, saveFileName);
+            byte[] saveJson = SerializationUtility.SerializeValue(save, DataFormat.JSON);
+            File.WriteAllBytes(path, saveJson);
+        }
 
-        string path = Path.Combine(Application.persistentDataPath, saveFileName);
-        byte[] saveJson = SerializationUtility.SerializeValue(save, DataFormat.JSON);
-        File.WriteAllBytes(path, saveJson);
+       
     }
 
     public void LoadGame()
@@ -86,9 +89,9 @@ public class SaveManager : MonoBehaviour
     {
         SceneState sceneState = save.Scenes.Find(x => x.FloorNumber == currentFloor);
         if (sceneState is not null)
-            LoadState(sceneState, canRemovePlayer);
+        { LoadState(sceneState, canRemovePlayer); }
         else
-            Debug.LogError("No save data for this floor");
+        { Debug.LogError("No save data for this floor"); }
     }
 
     public SceneState SaveState() => new SceneState(

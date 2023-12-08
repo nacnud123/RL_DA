@@ -6,7 +6,7 @@ using UnityEngine;
 using SysRandom = System.Random;
 using UnityRandom = UnityEngine.Random;
 
-sealed class ProcGen : MonoBehaviour
+sealed class ProcGen
 {
     private List<Tuple<int, int>> maxItemsByFloor = new List<Tuple<int, int>>
     {
@@ -28,7 +28,7 @@ sealed class ProcGen : MonoBehaviour
     private List<Tuple<int, string, int>> itemChance = new List<Tuple<int, string, int>>
     {
         new Tuple<int, string, int>(0, "Potion of Health", 35),
-        new Tuple<int, string, int>(2, "Confusion Spell", 10),
+        new Tuple<int, string, int>(2, "Confusion Scroll", 10),
         new Tuple<int, string, int>(4, "Lightning Scroll", 25),
         new Tuple<int, string, int>(6, "Fireball Scroll", 25)
     };
@@ -92,7 +92,7 @@ sealed class ProcGen : MonoBehaviour
             RectangularRoom newRoom = new RectangularRoom(roomX, roomY, roomWidth, roomHeight);
 
             if (newRoom.Overlaps(rooms)) // If it overlaps then don't make it
-                continue;
+            { continue; }
 
             for(int x = roomX; x < roomX + roomWidth; x++)
             {
@@ -114,10 +114,8 @@ sealed class ProcGen : MonoBehaviour
             {
                 tunnelBetween(rooms[rooms.Count - 1], newRoom);
             }
-            else { }
 
             placeEntities(newRoom, SaveManager.init.CurrentFloor);
-
 
             rooms.Add(newRoom);
         }
@@ -127,7 +125,7 @@ sealed class ProcGen : MonoBehaviour
         //Add the player to the first room
         Vector3Int playerPos = (Vector3Int)rooms[0].RandomPoint();
 
-        while(GameManager.init.GetActorAtLocation(playerPos) is not null)
+        while (GameManager.init.GetActorAtLocation(playerPos) is not null)
         {
             playerPos = (Vector3Int)rooms[0].RandomPoint();
         }
@@ -136,7 +134,7 @@ sealed class ProcGen : MonoBehaviour
 
         if (!isNewGame)
         {
-            GameManager.init.getActors[0].transform.position = new Vector3(playerPos.x + .5f, playerPos.y + .5f, 0);
+            GameManager.init.getActors[0].transform.position = new Vector3(playerPos.x + 0.5f, playerPos.y + 0.5f, 0);
         }
         else
         {
@@ -151,9 +149,9 @@ sealed class ProcGen : MonoBehaviour
         Vector2Int tunnelCorner;
 
         if (UnityRandom.value < .5f) // Should room start vertically or horizontally
-            tunnelCorner = new Vector2Int(newRoomCenter.x, oldRoomCenter.y); // Move horizontally, then vertically
+        { tunnelCorner = new Vector2Int(newRoomCenter.x, oldRoomCenter.y); } // Move horizontally, then vertically
         else
-            tunnelCorner = new Vector2Int(oldRoomCenter.x, newRoomCenter.y); // Move vertically, then horizontally
+        { tunnelCorner = new Vector2Int(oldRoomCenter.x, newRoomCenter.y); } // Move vertically, then horizontally
 
         //Gen coords for the tunnel
         List<Vector2Int> tunnelCoords = new List<Vector2Int>();
@@ -165,7 +163,7 @@ sealed class ProcGen : MonoBehaviour
         {
             setFloorTile(new Vector3Int(tunnelCoords[i].x, tunnelCoords[i].y));
 
-            MapManager.init.getFloorMap.SetTile(new Vector3Int(tunnelCoords[i].x, tunnelCoords[i].y, 0), MapManager.init.FloorTile);
+            //MapManager.init.getFloorMap.SetTile(new Vector3Int(tunnelCoords[i].x, tunnelCoords[i].y, 0), MapManager.init.FloorTile);
 
             for(int x = tunnelCoords[i].x - 1; x <= tunnelCoords[i].x + 1; x++)
             {
@@ -181,7 +179,7 @@ sealed class ProcGen : MonoBehaviour
     private bool setWallTileIfEmpty(Vector3Int pos)
     {
         if (MapManager.init.getFloorMap.GetTile(pos))
-            return true;
+        { return true; }
         else
         {
             MapManager.init.getObstacleMap.SetTile(pos, MapManager.init.WallTile);
@@ -192,7 +190,7 @@ sealed class ProcGen : MonoBehaviour
     private void setFloorTile(Vector3Int pos)
     {
         if (MapManager.init.getObstacleMap.GetTile(pos))
-            MapManager.init.getObstacleMap.SetTile(pos, null);
+        { MapManager.init.getObstacleMap.SetTile(pos, null); }
         MapManager.init.getFloorMap.SetTile(pos, MapManager.init.FloorTile);
     }
 
