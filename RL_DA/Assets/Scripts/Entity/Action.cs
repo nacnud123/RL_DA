@@ -62,8 +62,29 @@ static public class Action
 
     }
 
+    public static void TalkAction(Actor actor) // Not Done, Talk direction up,down,left,right like spell casting. 
+    {
+        Debug.Log("Talking!");
+        for (int i = 0; i < GameManager.init.getActors.Count; i++)
+        {
+           
+            // GameManager.init.GetActorAtLocation(actor.transform.position); maybe use this.
+            if (!GameManager.init.getNPCAtLocation(actor.transform.position).GetComponent<NPC>())
+                continue;
+
+            GameManager.init.getNPCAtLocation(actor.transform.position).GetComponent<NPC>().onTalk();
+
+            GameManager.init.endTurn();
+        }
+    }
+
     public static void dropAction(Actor actor, Item item)
     {
+        if (actor.GetEquipment.ItemIsEquipped(item))
+        {
+            actor.GetEquipment.toggleEquip(item);
+        }
+
         actor.GetInventory.Drop(item);
 
         UIManager.init.toggleDropMenu();
@@ -74,7 +95,7 @@ static public class Action
     {
         bool itemUsed = false;
 
-        if (item.GetComponent<Consumable>())
+        if (item.GetConsumable is not null)
             itemUsed = item.GetComponent<Consumable>().Activate(consumer);
 
         UIManager.init.toggleInv();
@@ -89,9 +110,10 @@ static public class Action
 
     public static bool bumpAction(Actor actor, Vector2 dir)
     {
+        Debug.Log("Moving!");
         Actor target = GameManager.init.GetActorAtLocation(actor.transform.position + (Vector3)dir);
 
-        if (target)
+        if (target && !target.GetComponent<NPC>())
         {
             meleeAction(actor, target);
             return false;
@@ -105,7 +127,7 @@ static public class Action
 
     public static void meleeAction(Actor actor, Actor target)
     {
-        int dmg = actor.GetComponent<Fighter>().Power - target.GetComponent<Fighter>().Defense;
+        int dmg = actor.GetComponent<Fighter>().Power() - target.GetComponent<Fighter>().Defense();
 
         string attackDesc = $"{actor.name} attacks {target.name}";
 
@@ -154,5 +176,19 @@ static public class Action
 
         if (castSuccess)
             GameManager.init.endTurn();
+    }
+
+    static public void EquipAction(Actor actor, Item item)
+    {
+        if(item.GetEquippable is null)
+        {
+            UIManager.init.addMsg($"The {item.name} cannot be equipped.", "#808080");
+            return;
+        }
+
+        actor.GetEquipment.toggleEquip(item);
+
+        UIManager.init.toggleInv();
+        GameManager.init.endTurn();
     }
 }

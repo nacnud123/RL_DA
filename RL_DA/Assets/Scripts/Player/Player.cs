@@ -16,6 +16,7 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
 
     private void OnEnable()
     {
+        
         controls.Player.SetCallbacks(this);
         controls.Player.Enable();
     }
@@ -153,6 +154,17 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
         }
     }
 
+    public void OnTalk(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (CanAct())
+            {
+                Action.TalkAction(GetComponent<Actor>());
+            }
+        }
+    }
+
     public void ToggleTargetMode(bool isArea = false, int radius = 1)
     {
         targetMode = !targetMode;
@@ -272,5 +284,6 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
         return targets;
     }
 
+   
 
 }

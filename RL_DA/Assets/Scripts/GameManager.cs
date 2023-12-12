@@ -141,6 +141,16 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    public Actor getNPCAtLocation(Vector3 loc)
+    {
+        foreach(Actor a in actors)
+        {
+            if (a.BlocksMovment && a.GetComponent<NPC>() && a.transform.position == loc)
+                return a;
+        }
+        return null;
+    }
+
     private float setTime() => baseTime / actors.Count;
 
     public GameState SaveState()
@@ -171,10 +181,12 @@ public class GameManager : MonoBehaviour
         while(entityNum < entityStates.Count)
         {
             yield return new WaitForEndOfFrame();
-            string entityName = entityStates[entityNum].Name.Contains("Remains of") ? entityStates[entityNum].Name.Substring(entityStates[entityNum].Name.LastIndexOf(' ') + 1) : entityStates[entityNum].Name;
+            
 
             if(entityStates[entityNum].Type == EntityState.EntityType.Actor)
             {
+                string entityName = entityStates[entityNum].Name.Contains("Remains of") ? entityStates[entityNum].Name.Substring(entityStates[entityNum].Name.LastIndexOf(' ') + 1) : entityStates[entityNum].Name;
+
                 ActorState actorState = entityStates[entityNum] as ActorState;
 
                 if(entityName == "Player" && !canPlacePlayer)
@@ -191,6 +203,7 @@ public class GameManager : MonoBehaviour
             }
             else if(entityStates[entityNum].Type == EntityState.EntityType.Item)
             {
+                string entityName = entityStates[entityNum].Name.Contains("(E)") ? entityStates[entityNum].Name.Replace(" (E)", "") : entityStates[entityNum].Name;
                 ItemState itemState = entityStates[entityNum] as ItemState;
 
                 if(itemState.Parent == "Player" && !canPlacePlayer)

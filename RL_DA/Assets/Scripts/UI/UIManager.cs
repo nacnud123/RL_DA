@@ -167,8 +167,8 @@ public class UIManager : MonoBehaviour
         GameObject agilityButton = levelUpMenuContent.transform.GetChild(2).gameObject;
 
         constitutionButton.GetComponent<TextMeshProUGUI>().text = $"a) Constitution (+20 HP, from {actor.GetComponent<Fighter>().MaxHp})";
-        strengthButton.GetComponent<TextMeshProUGUI>().text = $"b) Strength (+1 attack, from {actor.GetComponent<Fighter>().Power})";
-        agilityButton.GetComponent<TextMeshProUGUI>().text = $"c) Agility (+1 defense, from {actor.GetComponent<Fighter>().Defense})";
+        strengthButton.GetComponent<TextMeshProUGUI>().text = $"b) Strength (+1 attack, from {actor.GetComponent<Fighter>().Power()})";
+        agilityButton.GetComponent<TextMeshProUGUI>().text = $"c) Agility (+1 defense, from {actor.GetComponent<Fighter>().Defense()})";
 
         foreach (Transform child in levelUpMenuContent.transform)
         {
@@ -209,8 +209,8 @@ public class UIManager : MonoBehaviour
             charInfoMenu.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"Level: {actor.GetComponent<Level>().CurrentLevel}";
             charInfoMenu.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = $"XP: {actor.GetComponent<Level>().CurrentXP}";
             charInfoMenu.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = $"XP needed for next level: {actor.GetComponent<Level>().XpToNextLevel}";
-            charInfoMenu.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = $"Attack: {actor.GetComponent<Fighter>().Power}";
-            charInfoMenu.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = $"Defense: {actor.GetComponent<Fighter>().Defense}";
+            charInfoMenu.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = $"Attack: {actor.GetComponent<Fighter>().Power()}";
+            charInfoMenu.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = $"Defense: {actor.GetComponent<Fighter>().Defense()}";
         }
     }
 
@@ -307,9 +307,21 @@ public class UIManager : MonoBehaviour
             menuContentChild.GetComponent<Button>().onClick.AddListener(() =>
             {
                 if (menuContent == invContent)
-                    Action.useAction(actor, item);
-                else if (menuContent == dropMenuContent)
-                    Action.dropAction(actor, item);      
+                {
+                    if(item.GetConsumable is not null)
+                    {
+                        Action.useAction(actor, item);
+                    }
+                    else if(item.GetEquippable is not null)
+                    {
+                        Action.EquipAction(actor, item);
+                    }
+                }
+                else if(menuContent == dropMenuContent)
+                {
+                    Action.dropAction(actor, item);
+                }
+                updateMenu(actor, menuContent);
             });
             menuContentChild.SetActive(true);
         }

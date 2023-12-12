@@ -9,6 +9,7 @@ public class Actor : Entity
     [SerializeField] private List<Vector3Int> fov;
     [SerializeField] private AI ai;
     [SerializeField] private Inventory inv;
+    [SerializeField] private Equipment equipment;
     [SerializeField] private Fighter fighter;
     [SerializeField] private Level level;
 
@@ -17,6 +18,7 @@ public class Actor : Entity
     public bool IsAlive { get => isAlive; set => isAlive = value; }
     public List<Vector3Int> getFOV { get => fov; }
     public Inventory GetInventory { get => inv; }
+    public Equipment GetEquipment { get => equipment; }
 
     public AI AI { get => ai; set => ai = value; }
 
@@ -38,6 +40,9 @@ public class Actor : Entity
 
         if (GetComponent<Level>())
             level = GetComponent<Level>();
+
+        if (GetComponent<Equipment>())
+            equipment = GetComponent<Equipment>();
     }
 
     // Start is called before the first frame update

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -7484542097776191581}
   - component: {fileID: -8627199150300126894}
   - component: {fileID: 4233525243018517537}
+  - component: {fileID: 5878378473201871842}
   m_Layer: 0
   m_Name: Orc
   m_TagString: Untagged
@@ -107,6 +108,7 @@ MonoBehaviour:
   fov: []
   ai: {fileID: -8627199150300126894}
   inv: {fileID: 0}
+  equipment: {fileID: 5878378473201871842}
   fighter: {fileID: -1449122827191549021}
   level: {fileID: 4233525243018517537}
 --- !u!114 &-1449122827191549021
@@ -123,8 +125,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 10
   hp: 10
-  defense: 0
-  power: 3
+  baseDefense: 0
+  basePower: 3
   target: {fileID: 0}
 --- !u!114 &-7484542097776191581
 MonoBehaviour:
@@ -171,3 +173,17 @@ MonoBehaviour:
   levelUpBase: 200
   levelUpFactor: 150
   xpGiven: 30
+--- !u!114 &5878378473201871842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3417674161635461090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 495eaeb88a4018f4cb58be018f6e4ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapon: {fileID: 0}
+  armor: {fileID: 0}
