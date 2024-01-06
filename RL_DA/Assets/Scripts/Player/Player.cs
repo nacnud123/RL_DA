@@ -11,6 +11,15 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
     [SerializeField] private bool targetMode;
     [SerializeField] private bool isSingleTarget;
     [SerializeField] private GameObject targetObj;
+    [SerializeField] private int numSleepTurns = 0;
+    [SerializeField] private int poisionTurns = 0;
+    [SerializeField] private int confusionTurns = 0;
+    [SerializeField] private bool healthRegen = false;
+
+    public int NumSlTurns { get => numSleepTurns; set => numSleepTurns = value; }
+    public int PoisTurns { get => poisionTurns; set => poisionTurns = value; }
+    public int ConfTurns { get => confusionTurns; set => confusionTurns = value; }
+    public bool HealthRegen { get => healthRegen; set => healthRegen = value; }
 
     private void Awake() => controls = new Controls();
 
@@ -165,6 +174,10 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
         }
     }
 
+    public void OnId(InputAction.CallbackContext context)
+    {
+    }
+
     public void ToggleTargetMode(bool isArea = false, int radius = 1)
     {
         targetMode = !targetMode;
@@ -229,13 +242,21 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
         }
         else
         {
-            moveKeyDown = Action.bumpAction(GetComponent<Actor>(), roundedDir);
+            if(confusionTurns > 0)
+            {
+                moveKeyDown = Action.bumpAction(GetComponent<Actor>(), -roundedDir);
+            }
+            else
+            {
+                moveKeyDown = Action.bumpAction(GetComponent<Actor>(), roundedDir);
+            }
+            
         }
 
 
     }
 
-    private bool CanAct()
+    public bool CanAct()
     {
         if (targetMode || UIManager.init.GetIsMenuOpen || !GetComponent<Actor>().IsAlive)
             return false;

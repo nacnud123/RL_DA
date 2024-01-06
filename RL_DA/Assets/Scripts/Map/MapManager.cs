@@ -80,8 +80,8 @@ public class MapManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Camera.main.transform.position = new Vector3(40, 20.25f, -10);
-        Camera.main.orthographicSize = 27;
+        //Camera.main.transform.position = new Vector3(40, 20.25f, -10);
+        //Camera.main.orthographicSize = 27;
     }
 
     public void GenerateDungeon(bool isNewGame = false)
@@ -118,7 +118,29 @@ public class MapManager : MonoBehaviour
         try
         {
             GameObject entityObject = Instantiate(Resources.Load<GameObject>($"{entity}"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity);
+
             entityObject.name = entity;
+
+            if (entityObject.GetComponent<Item>())
+            {
+                if (entityObject.GetComponent<Item>().GetConsumable || entityObject.GetComponent<Ring>())
+                {
+                    if(entityObject.GetComponent<Item>().CurrName == "")
+                    {
+                        entityObject.GetComponent<Item>().CurrName = GameManager.init.makeRandName(entityObject.GetComponent<Item>().RealName);
+                        if (entityObject.name.Contains("Potion")) { entityObject.GetComponent<Item>().CurrName += "Potion"; }
+                        if (entityObject.name.Contains("Scroll")) { entityObject.GetComponent<Item>().CurrName += "Scroll"; }
+                        if (entityObject.name.Contains("Ring")) { entityObject.GetComponent<Item>().CurrName += "Ring"; }
+                    }
+                }
+                else
+                {
+                    entityObject.GetComponent<Item>().CurrName = entityObject.GetComponent<Item>().RealName;
+                }
+               
+            }
+            
+
             return entityObject;
         }
         catch (Exception e)

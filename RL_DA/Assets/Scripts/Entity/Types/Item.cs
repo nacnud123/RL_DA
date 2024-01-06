@@ -6,9 +6,13 @@ public class Item : Entity
 {
     [SerializeField] private Consumable consumable;
     [SerializeField] private Equippable equippable;
+    [SerializeField] private string currName = "";
+    [SerializeField] private string realName = "";
 
     public Consumable GetConsumable { get => consumable; }
     public Equippable GetEquippable { get => equippable; }
+    public string CurrName { get => currName; set => currName = value; }
+    public string RealName { get => realName; set => currName = value; }
 
     private void OnValidate()
     {
@@ -22,6 +26,8 @@ public class Item : Entity
 
     public override EntityState SaveState() => new ItemState(
         _name: name,
+        _currName: currName,
+        _realName: realName,
         _blocksMovment: BlocksMovment,
         _isVisible: MapManager.init.VisibleTiles.Contains(MapManager.init.getFloorMap.WorldToCell(transform.position)),
         _pos: transform.position,
@@ -43,6 +49,8 @@ public class Item : Entity
             }
         }
         transform.position = state.Position;
+        this.currName = state.CurrName;
+        this.realName = state.RealName;
     }
 }
 
@@ -50,11 +58,17 @@ public class Item : Entity
 public class ItemState: EntityState
 {
     [SerializeField] private string parent;
+    [SerializeField] private string currName;
+    [SerializeField] private string realName;
 
     public string Parent { get => parent; set => parent = value; }
+    public string CurrName { get => currName; set => currName = value; }
+    public string RealName { get => realName; set => realName = value; }
 
-    public ItemState(EntityType _type = EntityType.Item, string _name = "", bool _blocksMovment = false, bool _isVisible = false, Vector3 _pos = new Vector3(), string _parent = "") : base(_type, _name, _blocksMovment, _isVisible, _pos)
+    public ItemState(EntityType _type = EntityType.Item, string _name = "", string _currName = "", string _realName = "", bool _blocksMovment = false, bool _isVisible = false, Vector3 _pos = new Vector3(), string _parent = "") : base(_type, _name, _blocksMovment, _isVisible, _pos)
     {
         parent = _parent;
+        currName = _currName;
+        realName = _realName;
     }
 }

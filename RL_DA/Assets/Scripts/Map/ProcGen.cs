@@ -1,4 +1,3 @@
-using System.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,20 +26,64 @@ sealed class ProcGen
 
     private List<Tuple<int, string, int>> itemChance = new List<Tuple<int, string, int>> // Floor, ItemName, Chance
     {
-        new Tuple<int, string, int>(0, "Potion of Health", 35),
-        new Tuple<int, string, int>(2, "Confusion Scroll", 10),
-        new Tuple<int, string, int>(4, "Lightning Scroll", 25),
-        new Tuple<int, string, int>(4, "Sword", 5),
-        new Tuple<int, string, int>(6, "Fireball Scroll", 25),
-        new Tuple<int,string,int>(6, "Chainmail", 15)
+        new Tuple<int, string, int>(0, "Potions/Potion of Health", 35),
+        new Tuple<int, string, int>(2, "Potions/Potion of Confusion", 35),
+        new Tuple<int, string, int>(4, "Potions/Potion of Increase Level", 35),
+        new Tuple<int, string, int>(6, "Potions/Potion of Poison", 35),
+        new Tuple<int, string, int>(10, "Potions/Potion of Increase Level", 35),
+
+        new Tuple<int, string, int>(0, "Scrolls/Die Scroll", 5),
+        new Tuple<int, string, int>(2, "Scrolls/Confusion Scroll", 10),
+        new Tuple<int, string, int>(2, "Scrolls/Identify Scroll", 30),
+        new Tuple<int, string, int>(4, "Scrolls/Lightning Scroll", 25),
+        new Tuple<int, string, int>(4, "Scrolls/Sleep Scroll", 10),
+        new Tuple<int, string, int>(6, "Scrolls/Fireball Scroll", 25),
+
+        new Tuple<int, string, int>(2, "Weapons/War Hammer", 5),
+        new Tuple<int, string, int>(4, "Weapons/Mace", 5),
+        new Tuple<int, string, int>(6, "Weapons/Long Sword", 5),
+        new Tuple<int, string, int>(8, "Weapons/Two Handed Sword", 5),
+
+        new Tuple<int,string,int>(1, "Armor/Rings/Ring", 15),
+        new Tuple<int,string,int>(4, "Armor/Rings/Ring Of Regen", 15),
+        new Tuple<int,string,int>(8, "Armor/Rings/Ring of Stength", 15),
+
+        new Tuple<int,string,int>(2, "Armor/Ring", 15),
+        new Tuple<int,string,int>(4, "Armor/Scale", 15),
+        new Tuple<int,string,int>(6, "Armor/Chainmail", 15),
+        new Tuple<int,string,int>(8, "Armor/Banded", 15),
+        new Tuple<int,string,int>(10, "Armor/Plate", 15),
+        new Tuple<int,string,int>(12, "Armor/Splint", 15)
+
+
     };
 
-    private List<Tuple<int, string, int>> monsterChances = new List<Tuple<int, string, int>>
+
+    private List<Tuple<int, int, string, int>> monsterChances = new List<Tuple<int, int, string, int>> // firstLevel, lastLevel, Name, Chance
     {
-        new Tuple<int, string, int>(1, "Orc", 80),
-        new Tuple<int, string, int>(3, "Troll", 15),
-        new Tuple<int, string, int>(5, "Troll", 30),
-        new Tuple<int, string, int>(7, "Troll", 60)
+        new Tuple<int,int,string,int>(1,8,"Monsters/Bat", 100),
+        new Tuple<int,int,string,int>(7,16,"Monsters/Centaur", 60),
+        new Tuple<int,int,string,int>(21,126,"Monsters/Dragon", 100),
+        new Tuple<int,int,string,int>(1,7,"Monsters/Emu", 80),
+        new Tuple<int,int,string,int>(12,126,"Monsters/Fly Man", 80),
+        new Tuple<int,int,string,int>(20,126,"Monsters/Griffin", 85),
+        new Tuple<int,int,string,int>(1,10,"Monsters/Hobgoblin", 67),
+        new Tuple<int,int,string,int>(2,11,"Monsters/Ice Monster", 68),
+        new Tuple<int,int,string,int>(21,126,"Monsters/Jabberwock", 100),
+        new Tuple<int,int,string,int>(1,6,"Monsters/Kestrel", 60),
+        new Tuple<int,int,string,int>(18,126,"Monsters/Medusa", 85),
+        new Tuple<int,int,string,int>(4,13,"Monsters/Orc", 70),
+        new Tuple<int,int,string,int>(15,24,"Monsters/Phantom", 80),
+        new Tuple<int,int,string,int>(8,17,"Monsters/Quagga", 78),
+        new Tuple<int,int,string,int>(3,12,"Monsters/Rattlesnake", 70),
+        new Tuple<int,int,string,int>(1,9,"Monsters/Snake", 50),
+        new Tuple<int,int,string,int>(13,22,"Monsters/Troll", 75),
+        new Tuple<int,int,string,int>(17,26,"Monsters/Black Unicorn", 85),
+        new Tuple<int,int,string,int>(19,126,"Monsters/Vampire", 85),
+        new Tuple<int,int,string,int>(14,23,"Monsters/Wraith", 75),
+        new Tuple<int,int,string,int>(16,25,"Monsters/Xeroc", 75),
+        new Tuple<int,int,string,int>(11,20,"Monsters/Yeti", 80),
+        new Tuple<int,int,string,int>(5,14,"Monsters/Zombie", 69)
     };
 
     public int getMaxValueForFloor(List<Tuple<int,int>> values, int floor)
@@ -57,12 +100,32 @@ sealed class ProcGen
         return curVal;
     }
 
-    public List<string> getEntitiesAtRandom(List<Tuple<int,string,int>> chances, int numOfEntities, int floor)
+    public List<string> getEntitiesAtRandom(List<Tuple<int,int,string,int>> chances, int numOfEntities, int floor)
     {
         List<string> entities = new List<string>();
         List<int> weightedChances = new List<int>();
 
-        foreach(Tuple<int,string,int> chan in chances)
+        foreach(Tuple<int,int,string,int> chan in chances)
+        {
+            if (floor >= chan.Item1 && floor <= chan.Item2)
+            {
+                entities.Add(chan.Item3);
+                weightedChances.Add(chan.Item4);
+            }
+        }
+
+        SysRandom rnd = new SysRandom();
+        List<string> chosenEntities = rnd.Choices(entities, weightedChances, numOfEntities);
+
+        return chosenEntities;
+    }
+
+    public List<string> getEntitiesAtRandom(List<Tuple<int, string, int>> chances, int numOfEntities, int floor)
+    {
+        List<string> entities = new List<string>();
+        List<int> weightedChances = new List<int>();
+
+        foreach (Tuple<int, string, int> chan in chances)
         {
             if (floor >= chan.Item1)
             {
@@ -143,11 +206,14 @@ sealed class ProcGen
             GameObject player = MapManager.init.createEntity("Player", (Vector2Int)playerPos);
             Actor playerActor = player.GetComponent<Actor>();
 
-            Item starterWeapon = MapManager.init.createEntity("Dagger", (Vector2Int)playerPos).GetComponent<Item>();
-            Item starterArmor = MapManager.init.createEntity("Leather Armor", (Vector2Int)playerPos).GetComponent<Item>();
+            Item starterWeapon = MapManager.init.createEntity("Weapons/Dagger", (Vector2Int)playerPos).GetComponent<Item>();
+            Item starterArmor = MapManager.init.createEntity("Armor/Leather", (Vector2Int)playerPos).GetComponent<Item>();
 
             playerActor.GetInventory.Add(starterWeapon);
             playerActor.GetInventory.Add(starterArmor);
+
+            Item testingItem = MapManager.init.createEntity("Armor/Rings/Ring of Stength", (Vector2Int)playerPos).GetComponent<Item>();
+            playerActor.GetInventory.Add(testingItem);
 
             playerActor.GetEquipment.equipToSlot("Weapon", starterWeapon, false);
             playerActor.GetEquipment.equipToSlot("Armor", starterArmor, false);
@@ -212,6 +278,7 @@ sealed class ProcGen
 
     private void placeEntities(RectangularRoom newRoom, int floorNum)
     {
+        //bool isItem = false;
         int numOfMon = UnityRandom.Range(0, getMaxValueForFloor(maxMonstersByFloor, floorNum) + 1);
         int numOfItems = UnityRandom.Range(0, getMaxValueForFloor(maxItemsByFloor, floorNum) + 1);
 

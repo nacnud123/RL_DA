@@ -30,4 +30,10 @@ public class Inventory : MonoBehaviour
         UIManager.init.addMsg($"You dropped the {item.name}.", "#ff0000");
     }
 
+    public void identifyItem(Item item)
+    {
+        item.CurrName = item.RealName;
+        UIManager.init.addMsg($"Thats a {item.RealName}", "#0da2ff");
+    }
+
 }

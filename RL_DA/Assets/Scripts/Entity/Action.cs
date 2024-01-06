@@ -20,7 +20,7 @@ static public class Action
             Item item = GameManager.init.getEntities[i].GetComponent<Item>();
             actor.GetInventory.Add(item);
 
-            UIManager.init.addMsg($"You picked up the {item.name}.", "#ffffff");
+            UIManager.init.addMsg($"You picked up the {item.CurrName}.", "#ffffff");
 
             GameManager.init.endTurn();
         }
@@ -95,10 +95,14 @@ static public class Action
     {
         bool itemUsed = false;
 
+        if (item.GetComponent<IdentifyScroll>())
+            UIManager.init.skipRest = true;
+
         if (item.GetConsumable is not null)
             itemUsed = item.GetComponent<Consumable>().Activate(consumer);
-
-        UIManager.init.toggleInv();
+        
+        if(!item.GetComponent<IdentifyScroll>())
+            UIManager.init.toggleInv();
 
 
         if (itemUsed)
@@ -107,6 +111,14 @@ static public class Action
         }
     }
 
+
+
+    public static void identifyAction(Actor actor, Item item)
+    {
+        actor.GetInventory.identifyItem(item);
+        UIManager.init.toggleIdentifyMenu();
+        GameManager.init.endTurn();
+    }
 
     public static bool bumpAction(Actor actor, Vector2 dir)
     {

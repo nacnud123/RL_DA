@@ -107,6 +107,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Id"",
+                    ""type"": ""Button"",
+                    ""id"": ""eefef481-2261-4704-a911-c4b6290fb222"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -252,6 +261,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Talk"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1186f5b7-9c34-46f1-8ed5-4b195e51a1f4"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Arrow Keys"",
+                    ""action"": ""Id"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -286,6 +306,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player_Confirm = m_Player.FindAction("Confirm", throwIfNotFound: true);
         m_Player_Info = m_Player.FindAction("Info", throwIfNotFound: true);
         m_Player_Talk = m_Player.FindAction("Talk", throwIfNotFound: true);
+        m_Player_Id = m_Player.FindAction("Id", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -356,6 +377,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Confirm;
     private readonly InputAction m_Player_Info;
     private readonly InputAction m_Player_Talk;
+    private readonly InputAction m_Player_Id;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
@@ -369,6 +391,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Confirm => m_Wrapper.m_Player_Confirm;
         public InputAction @Info => m_Wrapper.m_Player_Info;
         public InputAction @Talk => m_Wrapper.m_Player_Talk;
+        public InputAction @Id => m_Wrapper.m_Player_Id;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -405,6 +428,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Talk.started += instance.OnTalk;
             @Talk.performed += instance.OnTalk;
             @Talk.canceled += instance.OnTalk;
+            @Id.started += instance.OnId;
+            @Id.performed += instance.OnId;
+            @Id.canceled += instance.OnId;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -436,6 +462,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Talk.started -= instance.OnTalk;
             @Talk.performed -= instance.OnTalk;
             @Talk.canceled -= instance.OnTalk;
+            @Id.started -= instance.OnId;
+            @Id.performed -= instance.OnId;
+            @Id.canceled -= instance.OnId;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -473,5 +502,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnConfirm(InputAction.CallbackContext context);
         void OnInfo(InputAction.CallbackContext context);
         void OnTalk(InputAction.CallbackContext context);
+        void OnId(InputAction.CallbackContext context);
     }
 }

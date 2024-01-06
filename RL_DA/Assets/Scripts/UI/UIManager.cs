@@ -35,6 +35,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject dropMenu;
     [SerializeField] private GameObject dropMenuContent;
 
+    [Header("Id menu UI")]
+    [SerializeField] private bool isIdMenuOpen = false; // Read only
+    [SerializeField] private GameObject idMenu;
+    [SerializeField] private GameObject idMenuContent;
+
     [Header("Escape Menu UI")]
     [SerializeField] private bool isEscMenuOpen = false; // Read only
     [SerializeField] private GameObject escMenu;
@@ -48,12 +53,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject levelUpMenu;
     [SerializeField] private GameObject levelUpMenuContent;
 
+
+    public bool skipRest = false;
     public bool GetIsMenuOpen { get => isMenuOpen; }
     public bool GetIsMsgHistoryOpen { get => isMsgHistoryOpen; }
     public bool GetIsInvOpen { get => isInvOpen; }
     public bool GetIsDropMenuOpen { get => isDropMenuOpen; }
     public bool GetIsEscMenuOpen { get => isEscMenuOpen; }
     public bool GetIsCharMenuOpen { get => isCharInfoOpen; }
+    public bool GetIsIdMenuOpen { get => isIdMenuOpen; }
 
     private void Awake()
     {
@@ -148,6 +156,18 @@ public class UIManager : MonoBehaviour
             updateMenu(actor, dropMenuContent);
     }
 
+    public void toggleIdentifyMenu(Actor actor = null)
+    {
+        isIdMenuOpen = !isIdMenuOpen;
+        setBools(idMenu, isIdMenuOpen);
+
+        eventSystem.SetSelectedGameObject(idMenuContent.transform.GetChild(0).gameObject);
+
+        if (isMenuOpen)
+            updateMenu(actor, idMenuContent);
+        
+    }
+
     public void toggleEscMenu()
     {
         isEscMenuOpen = !isEscMenuOpen;
@@ -224,6 +244,7 @@ public class UIManager : MonoBehaviour
     {
         SaveManager.init.SaveGame(false);
         addMsg("The game has saved.", "#0da2ff");
+        toggleMenu();
     }
 
     public void Load()
@@ -235,6 +256,9 @@ public class UIManager : MonoBehaviour
 
     public void Quit()
     {
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #endif
         Application.Quit();
     }
 
@@ -290,6 +314,7 @@ public class UIManager : MonoBehaviour
 
     private void updateMenu(Actor actor, GameObject menuContent)
     {
+
         for(int resetNum = 0; resetNum < menuContent.transform.childCount; resetNum++)
         {
             GameObject menuContentChild = menuContent.transform.GetChild(resetNum).gameObject;
@@ -303,7 +328,7 @@ public class UIManager : MonoBehaviour
         {
             GameObject menuContentChild = menuContent.transform.GetChild(itemNum).gameObject;
             Item item = actor.GetInventory.GetItems[itemNum];
-            menuContentChild.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"({c++}) {item.name}";
+            menuContentChild.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"({c++}) {item.CurrName}";
             menuContentChild.GetComponent<Button>().onClick.AddListener(() =>
             {
                 if (menuContent == invContent)
@@ -321,11 +346,22 @@ public class UIManager : MonoBehaviour
                 {
                     Action.dropAction(actor, item);
                 }
+                else if(menuContent == idMenuContent)
+                {
+                    Debug.Log("Id menu use Action.");
+                    Action.identifyAction(actor, item);
+                    skipRest = false;
+                }
                 updateMenu(actor, menuContent);
             });
             menuContentChild.SetActive(true);
         }
-        eventSystem.SetSelectedGameObject(menuContent.transform.GetChild(0).gameObject);
+
+        if(skipRest == false)
+        {
+            eventSystem.SetSelectedGameObject(menuContent.transform.GetChild(0).gameObject);
+        }
+        
 
     }
 }

@@ -7,9 +7,13 @@ public class Equipment : MonoBehaviour
 {
     [SerializeField] private Equippable weapon;
     [SerializeField] private Equippable armor;
+    [SerializeField] private Equippable ring;
+    
 
     public Equippable Weapon { get => weapon; set => weapon = value; }
     public Equippable Armor { get => armor; set => armor = value; }
+    public Equippable Ring { get => ring; set => ring = value; }
+    
 
     public int DefenseBonus()
     {
@@ -23,6 +27,11 @@ public class Equipment : MonoBehaviour
         if(armor is not null && armor.DefenseBonus > 0)
         {
             bonus += armor.DefenseBonus;
+        }
+
+        if (ring is not null && ring.DefenseBonus > 0)
+        {
+            bonus += ring.DefenseBonus;
         }
 
         return bonus;
@@ -42,6 +51,11 @@ public class Equipment : MonoBehaviour
             bonus += armor.PowerBonus;
         }
 
+        if(ring is not null && ring.PowerBonus > 0)
+        {
+            bonus += ring.PowerBonus;
+        }
+
         return bonus;
     }
 
@@ -50,7 +64,7 @@ public class Equipment : MonoBehaviour
         if (item.GetEquippable is null)
             return false;
 
-        return item.GetEquippable == weapon || item.GetEquippable == armor;
+        return item.GetEquippable == weapon || item.GetEquippable == armor || item.GetEquippable == ring;
     }
 
     public void unequipMsg(string name)
@@ -65,7 +79,7 @@ public class Equipment : MonoBehaviour
 
     public void equipToSlot(string slot, Item item, bool addMsg)
     {
-        Equippable currentItem = slot == "Weapon" ? weapon : armor;
+        Equippable currentItem = getSlot(slot);
 
         if(currentItem is not null)
         {
@@ -75,45 +89,71 @@ public class Equipment : MonoBehaviour
         if(slot == "Weapon")
         {
             weapon = item.GetEquippable;
+            
+        }
+        else if(slot == "Armor")
+        {
+            armor = item.GetEquippable;
         }
         else
         {
-            armor = item.GetEquippable;
+            ring = item.GetEquippable;
+            ring.equip(this.GetComponent<Actor>());
         }
 
         if (addMsg)
         {
-            equipMsg(item.name);
+            equipMsg(item.CurrName);
         }
 
         item.name = $"{item.name} (E)";
+        item.CurrName = $"{item.CurrName} (E)";
         
     }
 
     public void unequipFromSlot(string slot, bool addMsg)
     {
-        Equippable currentItem = slot == "Weapon" ? weapon : armor;
+        Equippable currentItem = getSlot(slot);
+        Item temp = currentItem.GetComponent<Item>();
         currentItem.name = currentItem.name.Replace(" (E)", "");
+        temp.CurrName = temp.CurrName.Replace(" (E)", "");
 
         if (addMsg)
         {
-            unequipMsg(currentItem.name);
+            unequipMsg(temp.CurrName);
         }
 
         if(slot == "Weapon")
         {
             weapon = null;
         }
-        else
+        else if(slot == "Armor")
         {
             armor = null;
         }
-        // Stopd 2:53
+        else
+        {
+            ring.unequip(this.GetComponent<Actor>());
+            ring = null;
+        }
     }
 
     public void toggleEquip(Item equippableItem, bool addMsg = true)
     {
-        string slot = equippableItem.GetEquippable.EquipmentType == EquipmentType.Weapon ? "Weapon" : "Armor";
+        string slot = "";
+
+        switch (equippableItem.GetEquippable.EquipmentType)
+        {
+            case EquipmentType.Weapon:
+                slot = "Weapon";
+                break;
+            case EquipmentType.Armor:
+                slot = "Armor";
+                break;
+            case EquipmentType.Ring:
+                slot = "Ring";
+                break;
+        }
 
         if (ItemIsEquipped(equippableItem))
         {
@@ -123,6 +163,21 @@ public class Equipment : MonoBehaviour
         {
             equipToSlot(slot, equippableItem, addMsg);
         }
+    }
+
+    public Equippable getSlot(string inSlot)
+    {
+
+        switch (inSlot)
+        {
+            case "Weapon":
+                return weapon;
+            case "Armor":
+                return armor;
+            case "Ring":
+                return ring;
+        }
+        return null;
     }
 
 }
