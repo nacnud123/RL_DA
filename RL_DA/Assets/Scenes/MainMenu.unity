@@ -2235,9 +2235,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lots of new stuff:\n-Rings with effects\n-New potions\n-New Scrolls\n-Lots
-    of new enemies\n-New armor\n-New weapons\n-Bug fixes\n\t-Camera bug when loading
-    is now fixed\n-New Tileset\n\nStill very unbalanced. needs fixing."
+  m_text: 'Lots of new stuff:
+
+    -Multi-tile enemies
+
+    -Doors
+
+    -Should Have
+    Better Performance'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
