@@ -14,10 +14,10 @@ public class GameManager : MonoBehaviour
     [Header("Time")]
     [SerializeField] private float baseTime = .1f;
     [SerializeField] private float delayTime; // Read-only
-    [SerializeField] private bool isPlayerTurn = true;
+    private Queue<Actor> actorQueue;
 
     [Header("Entities")]
-    [SerializeField] private int actorNum = 0;
+    [SerializeField] private bool isPlayerTurn = true;// Read-only
     [SerializeField] private List<Entity> entities;
     [SerializeField] private List<Actor> actors;
 
@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            actorQueue = new Queue<Actor>();
             entities = new List<Entity>();
             actors = new List<Actor>();
         }
@@ -68,43 +69,35 @@ public class GameManager : MonoBehaviour
 
     private void StartTurn()
     {
-        if (actors[actorNum].GetComponent<Player>())
+        Actor actor = actorQueue.Peek();
+
+        if (actor.GetComponent<Player>())
         {
             isPlayerTurn = true;
-            if (actors[actorNum].GetComponent<Player>().NumSlTurns > 0)
-            {
-                actors[actorNum].GetComponent<Player>().NumSlTurns -= 1;
-                UIManager.init.addMsg("You are asleep!", "#00ff00");
-                Action.waitAction();
-            }
-            if(actors[actorNum].GetComponent<Player>().PoisTurns > 0)
-            {
-                actors[actorNum].GetComponent<Fighter>().Hp -= 2;
-                actors[actorNum].GetComponent<Player>().PoisTurns -= 1;
-            }
-            if(actors[actorNum].GetComponent<Player>().ConfTurns > 0)
-            {
-                actors[actorNum].GetComponent<Player>().ConfTurns -= 1;
-            }
         }
         else
         {
-            if (actors[actorNum].AI != null)
-                actors[actorNum].AI.RunAI();
+            if(actor.AI != null)
+            {
+                actor.AI.RunAI();
+            }
             else
+            {
                 Action.waitAction();
+            }
         }
     }
 
     public void endTurn()
     {
-        if (actors[actorNum].GetComponent<Player>())
-            isPlayerTurn = false;
+        Actor actor = actorQueue.Dequeue();
 
-        if (actorNum == actors.Count - 1)
-            actorNum = 0;
-        else
-            actorNum += 1;
+        if (actor.GetComponent<Player>())
+        {
+            isPlayerTurn = false;
+        }
+
+        actorQueue.Enqueue(actor);
 
         StartCoroutine(turnDelay());
     }
@@ -123,6 +116,11 @@ public class GameManager : MonoBehaviour
         }
 
         entities.Add(entity);
+    }
+
+    public void DestroyEntity(Entity entity)
+    {
+        Destroy(entity.gameObject);
     }
 
     public void InsertEntity(Entity entity, int index)
@@ -144,18 +142,25 @@ public class GameManager : MonoBehaviour
     {
         actors.Add(actor);
         delayTime = setTime();
+        actorQueue.Enqueue(actor);
     }
 
     public void insertActor(Actor actor, int index)
     {
         actors.Insert(index, actor);
         delayTime = setTime();
+        actorQueue.Enqueue(actor);
+
     }
 
     public void removeActor(Actor actor)
     {
+        if (actor.GetComponent<Player>())
+            return;
         actors.Remove(actor);
         delayTime = setTime();
+
+        actorQueue = new Queue<Actor>(actorQueue.Where(x => x != actor));
     }
 
     public void RefreshPlayer()
@@ -167,11 +172,39 @@ public class GameManager : MonoBehaviour
     {
         foreach(Actor actor in actors)
         {
-            if (actor.BlocksMovment && actor.transform.position == location)
-                return actor;
+            if(actor.Size.x == 1 && actor.Size.y == 1)
+            {
+                if (actor.transform.position == location)
+                    return actor;
+            }
+            else
+            {
+                if (actor.OccupiedTiles.Contains(location))
+                    return actor;
+            }
         }
         return null;
     }
+    public Actor[] GetActorsAtLocation(Vector3 location)
+    {
+        List<Actor> actorsAtLocation = new List<Actor>();
+        foreach (Actor actor in actors)
+        {
+            if (actor.Size.x == 1 && actor.Size.y == 1)
+            {
+                if (actor.transform.position == location)
+                    actorsAtLocation.Add(actor);
+            }
+            else
+            {
+                if (actor.OccupiedTiles.Contains(location))
+                    actorsAtLocation.Add(actor);
+            }
+        }
+        return actorsAtLocation.ToArray();
+
+    }
+
 
     public Actor getNPCAtLocation(Vector3 loc)
     {
@@ -291,11 +324,13 @@ public class GameManager : MonoBehaviour
             {
                 entities.Clear();
                 actors.Clear();
+                actorQueue.Clear();
             }
             else
             {
                 entities.RemoveRange(1, entities.Count - 1);
                 actors.RemoveRange(1, actors.Count - 1);
+                actorQueue = new Queue<Actor>(actorQueue.Where(x => x.GetComponent<Player>()));
             }
 
             

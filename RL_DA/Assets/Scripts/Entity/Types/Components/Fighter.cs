@@ -86,12 +86,12 @@ public class Fighter : MonoBehaviour
             else
             {
                 GameManager.init.getActors[0].GetComponent<Level>().AddXP(GetComponent<Level>().XPGiven);
-                UIManager.init.addMsg($"{name} is dead.", "#ffa500");
+                UIManager.init.addMsg($"{GetComponent<Actor>().GetName} is dead.", "#ffa500");
             }
             GetComponent<Actor>().IsAlive = false;
         }
 
-        SpriteRenderer sp = GetComponent<SpriteRenderer>();
+        SpriteRenderer sp = GetComponent<Actor>().SR;
         sp.sprite = GameManager.init.getDeadSprite;
         sp.color = new Color(191, 0, 0, 1);
         sp.sortingOrder = 0;

@@ -22,7 +22,16 @@ public class Item : Entity
         }
     }
 
-    private void Start() => addToGameManager();
+
+
+    private void Start()
+    {
+        if (!GameManager.init.getEntities.Contains(this))
+        {
+            addToGameManager();
+
+        }
+    }
 
     public override EntityState SaveState() => new ItemState(
         _name: name,
@@ -37,7 +46,7 @@ public class Item : Entity
     public void LoadState(ItemState state)
     {
         if (!state.IsVisible)
-            GetComponent<SpriteRenderer>().enabled = false;
+            SR.enabled = false;
         if(state.Parent != "")
         {
             GameObject parent = GameObject.Find(state.Parent);

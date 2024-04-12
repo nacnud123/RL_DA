@@ -30,13 +30,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3417674161635461090}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4599113061002100485
 SpriteRenderer:
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 2092583501
+  m_SortingLayerID: -1942499575
   m_SortingLayer: 1
   m_SortingOrder: 2
   m_Sprite: {fileID: 525330372, guid: e776099e384fca048a93c9de23f7f7c8, type: 3}
@@ -103,6 +103,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blocksMovement: 1
+  spriteRender: {fileID: 4599113061002100485}
+  size: {x: 1, y: 1}
+  occupiedTiles: []
   isAlive: 1
   fovRange: 8
   fov: []
@@ -111,6 +114,7 @@ MonoBehaviour:
   equipment: {fileID: -2573708987317586630}
   fighter: {fileID: -7049084470504224915}
   level: {fileID: -8509539478069354914}
+  realName: Kestrel
 --- !u!114 &-7049084470504224915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,3 +191,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapon: {fileID: 0}
   armor: {fileID: 0}
+  ring: {fileID: 0}

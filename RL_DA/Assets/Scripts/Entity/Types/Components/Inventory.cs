@@ -25,7 +25,7 @@ public class Inventory : MonoBehaviour
     {
         items.Remove(item);
         item.transform.SetParent(null);
-        item.GetComponent<SpriteRenderer>().enabled = true;
+        item.SR.enabled = true;
         item.addToGameManager();
         UIManager.init.addMsg($"You dropped the {item.name}.", "#ff0000");
     }

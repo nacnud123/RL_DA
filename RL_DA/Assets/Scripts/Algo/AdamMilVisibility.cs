@@ -208,7 +208,15 @@ sealed class AdamMilVisibility : Visibility {
       case 6: nx += y; ny += x; break;
       case 7: nx += x; ny += y; break;
     }
-    return MapManager.init.getObstacleMap.HasTile(new Vector3Int((int)nx, (int)ny, 0));
+        if (MapManager.init.getObstacleMap.HasTile(new Vector3Int((int)nx, (int)ny, 0)))
+            return true;
+        else if(MapManager.init.getInteractableMap.HasTile(new Vector3Int((int)nx, (int)ny, 0)) 
+            && MapManager.init.getInteractableMap.GetTile(new Vector3Int((int)nx, (int)ny, 0)).name == "closedDoor")
+        {
+            return true;
+        }
+
+        return false;
   }
 
   void SetVisible(uint x, uint y, uint octant, Vector3Int origin, List<Vector3Int> fieldOfView) {

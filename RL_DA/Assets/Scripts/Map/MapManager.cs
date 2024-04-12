@@ -24,9 +24,12 @@ public class MapManager : MonoBehaviour
     [SerializeField] private TileBase fogTile;
     [SerializeField] private TileBase upStairsTile;
     [SerializeField] private TileBase downStairsTile;
+    [SerializeField] private TileBase closedDoor;
+    [SerializeField] private TileBase openDoor;
 
     [Header("TileMaps")]
     [SerializeField] private Tilemap floorMap;
+    [SerializeField] private Tilemap interactableMap;
     [SerializeField] private Tilemap obstacleMap;
     [SerializeField] private Tilemap fogMap;
 
@@ -45,8 +48,11 @@ public class MapManager : MonoBehaviour
     public TileBase WallTile { get => wallTile; }
     public TileBase UpStairsTile { get => upStairsTile; }
     public TileBase DownStairsTile { get => downStairsTile; }
+    public TileBase ClosedDoor { get => closedDoor; }
+    public TileBase OpenDoor { get => openDoor; }
 
     public Tilemap getFloorMap { get => floorMap; }
+    public Tilemap getInteractableMap { get => interactableMap; }
     public Tilemap getObstacleMap { get => obstacleMap; }
     public Tilemap getFogMap { get => fogMap; }
 
@@ -101,6 +107,7 @@ public class MapManager : MonoBehaviour
         procGen.generateDungeon(width, height, roomMaxSize, roomMinSize, maxRooms, rooms, isNewGame);
 
         addTileMapToDictionary(floorMap);
+        addTileMapToDictionary(interactableMap);
         addTileMapToDictionary(obstacleMap);
 
         setupFogMap();
@@ -140,6 +147,14 @@ public class MapManager : MonoBehaviour
                
             }
             
+            if(entityObject.GetComponent<Actor>() is not null)
+            {
+                entityObject.GetComponent<Actor>().addToGameManager();
+            }
+            else if(entityObject.GetComponent<Item>() is not null)
+            {
+                entityObject.GetComponent<Item>().addToGameManager();
+            }
 
             return entityObject;
         }
@@ -180,12 +195,31 @@ public class MapManager : MonoBehaviour
             if (entity.GetComponent<Player>())
                 continue;
 
-            Vector3Int entityPos = floorMap.WorldToCell(entity.transform.position);
+            bool isVisible = false;
+            Vector3Int entityPos = Vector3Int.zero;
 
-            if (visibleTiles.Contains(entityPos))
-                entity.GetComponent<SpriteRenderer>().enabled = true;
+            if(entity.Size.x > 1 || entity.Size.y > 1)
+            {
+                foreach(Vector3 pos in entity.OccupiedTiles)
+                {
+                    entityPos = floorMap.WorldToCell(pos);
+                    if (visibleTiles.Contains(entityPos))
+                    {
+                        isVisible = true;
+                        break;
+                    }
+                }
+            }
             else
-                entity.GetComponent<SpriteRenderer>().enabled = false;
+            {
+                entityPos = floorMap.WorldToCell(entity.transform.position);
+                if (visibleTiles.Contains(entityPos))
+                {
+                    isVisible = true;
+                }
+            }
+
+            entity.SR.enabled = isVisible;
         }
     }
 
@@ -223,6 +257,39 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public void UpdateTile(Entity entity)
+    {
+        Vector3Int gridPosition;
+
+        if(entity.Size.x > 1 || entity.Size.y > 1)
+        {
+            foreach(Vector3 pos in entity.OccupiedTiles)
+            {
+                gridPosition = floorMap.WorldToCell(pos);
+                if (tiles.ContainsKey(gridPosition))
+                {
+                    if(tiles[gridPosition].Name == closedDoor.name)
+                    {
+                        interactableMap.SetTile(gridPosition, openDoor);
+                        tiles[gridPosition].Name = openDoor.name;
+                    }
+                }
+            }
+        }
+        else
+        {
+            gridPosition = floorMap.WorldToCell(entity.transform.position);
+            if (tiles.ContainsKey(gridPosition))
+            {
+                if (tiles[gridPosition].Name == closedDoor.name)
+                {
+                    interactableMap.SetTile(gridPosition, openDoor);
+                    tiles[gridPosition].Name = openDoor.name;
+                }
+            }
+        }
+    }
+
     public bool isValidPos(Vector3 futurePos)
     {
         Vector3Int gridPos = floorMap.WorldToCell(futurePos);
@@ -240,6 +307,7 @@ public class MapManager : MonoBehaviour
         nodes.Clear();
 
         floorMap.ClearAllTiles();
+        interactableMap.ClearAllTiles();
         obstacleMap.ClearAllTiles();
         fogMap.ClearAllTiles();
     }
@@ -277,6 +345,14 @@ public class MapManager : MonoBehaviour
             else if(tiles[pos].Name == downStairsTile.name)
             {
                 floorMap.SetTile(pos, downStairsTile);
+            }
+            else if(tiles[pos].Name == closedDoor.name)
+            {
+                interactableMap.SetTile(pos, closedDoor);
+            }
+            else if(tiles[pos].Name == openDoor.name)
+            {
+                interactableMap.SetTile(pos, openDoor);
             }
         }
         setupFogMap();

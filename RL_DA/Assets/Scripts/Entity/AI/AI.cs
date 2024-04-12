@@ -16,9 +16,9 @@ public class AI : MonoBehaviour
 
     }
 
-    public void moveAlongPath(Vector3Int targetPos)
+    public void moveAlongPath(Vector3 closestTilePos, Vector3Int targetPos)
     {
-        Vector3Int gridPosition = MapManager.init.getFloorMap.WorldToCell(transform.position);
+        Vector3Int gridPosition = MapManager.init.getFloorMap.WorldToCell(closestTilePos);
         Vector2 dir = aStar.Compute((Vector2Int)gridPosition, (Vector2Int)targetPos);
         Action.movementAction(GetComponent<Actor>(), dir);
     }

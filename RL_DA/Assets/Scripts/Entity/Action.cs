@@ -122,26 +122,47 @@ static public class Action
 
     public static bool bumpAction(Actor actor, Vector2 dir)
     {
-        Debug.Log("Moving!");
-        Actor target = GameManager.init.GetActorAtLocation(actor.transform.position + (Vector3)dir);
+        if(actor.Size.x > 1 || actor.Size.y > 1)
+        {
+            for(int i = 0; i < actor.OccupiedTiles.Length; i++)
+            {
+                Actor target = GameManager.init.GetActorAtLocation(actor.OccupiedTiles[i] + (Vector3)dir);
+                if(target != null && target != actor)
+                {
+                    meleeAction(actor, target);
+                    return false;
+                }
+            }
 
-        if (target && !target.GetComponent<NPC>())
-        {
-            meleeAction(actor, target);
-            return false;
-        }
-        else
-        {
             movementAction(actor, dir);
             return true;
         }
+        else
+        {
+            Actor target = GameManager.init.GetActorAtLocation(actor.transform.position + (Vector3)dir);
+
+            if (target)
+            {
+                meleeAction(actor, target);
+                return false;
+            }
+            else
+            {
+                movementAction(actor, dir);
+                return true;
+            }
+
+        }
+       
+
+        
     }
 
     public static void meleeAction(Actor actor, Actor target)
     {
         int dmg = actor.GetComponent<Fighter>().Power() - target.GetComponent<Fighter>().Defense();
 
-        string attackDesc = $"{actor.name} attacks {target.name}";
+        string attackDesc = $"{actor.GetName} attacks {target.GetName}";
 
         string colorHex = "";
 
