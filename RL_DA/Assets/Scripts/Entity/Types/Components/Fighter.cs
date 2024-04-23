@@ -7,6 +7,7 @@ public class Fighter : MonoBehaviour
 {
     [SerializeField] private int maxHP, hp, baseDefense, basePower;
     [SerializeField] private Actor target;
+    [SerializeField] private Color bloodColor;
 
     public int Hp
     {

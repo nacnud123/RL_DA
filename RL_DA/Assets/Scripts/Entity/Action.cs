@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 static public class Action
 {
+
     public static void pickupAction(Actor actor)
     {
         for(int i = 0; i < GameManager.init.getEntities.Count; i++)
@@ -175,6 +176,10 @@ static public class Action
         {
             UIManager.init.addMsg($"{attackDesc} for {dmg} hit points", colorHex);
             target.GetComponent<Fighter>().Hp -= dmg;
+            if (actor.GetComponent<Player>())
+            {
+                Camera.main.GetComponent<ScreenShake>().TriggerShake();
+            }
         }
         else
         {

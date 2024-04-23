@@ -245,6 +245,7 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
             if(confusionTurns > 0)
             {
                 moveKeyDown = Action.bumpAction(GetComponent<Actor>(), -roundedDir);
+                confusionTurns -= 1;
             }
             else
             {
