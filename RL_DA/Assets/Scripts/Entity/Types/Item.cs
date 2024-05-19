@@ -22,14 +22,11 @@ public class Item : Entity
         }
     }
 
-
-
     private void Start()
     {
-        if (!GameManager.init.getEntities.Contains(this))
+        if(!GameManager.init.getEntities.Contains(this))
         {
             addToGameManager();
-
         }
     }
 

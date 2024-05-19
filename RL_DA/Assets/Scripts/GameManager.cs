@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     private Queue<Actor> actorQueue;
 
     [Header("Entities")]
-    [SerializeField] private bool isPlayerTurn = true;// Read-only
+    [SerializeField] private bool isPlayerTurn = true;
     [SerializeField] private List<Entity> entities;
     [SerializeField] private List<Actor> actors;
 
@@ -57,6 +57,10 @@ public class GameManager : MonoBehaviour
 
         if(sceneState is not null)
         {
+            if(actorQueue == null)
+            {
+                actorQueue = new Queue<Actor>();
+            }
             LoadState(sceneState.GameState, true);
         }
         else
@@ -74,32 +78,45 @@ public class GameManager : MonoBehaviour
         if (actor.GetComponent<Player>())
         {
             isPlayerTurn = true;
+            if (actor.GetComponent<Player>().NumSlTurns > 0)
+            {
+                actor.GetComponent<Player>().NumSlTurns -= 1;
+                UIManager.init.addMsg("You are asleep!", "#00ff00");
+                Action.waitAction();
+            }
+            if(actor.GetComponent<Player>().PoisTurns > 0)
+            {
+                actor.GetComponent<Fighter>().Hp -= 2;
+                actor.GetComponent<Player>().PoisTurns -= 1;
+            }
+            if(actor.GetComponent<Player>().ConfTurns > 0)
+            {
+                actor.GetComponent<Player>().ConfTurns -= 1;
+            }
         }
         else
         {
-            if(actor.AI != null)
-            {
+            if (actor.AI != null)
                 actor.AI.RunAI();
-            }
             else
-            {
                 Action.waitAction();
-            }
         }
     }
 
     public void endTurn()
     {
         Actor actor = actorQueue.Dequeue();
-
         if (actor.GetComponent<Player>())
-        {
             isPlayerTurn = false;
-        }
 
         actorQueue.Enqueue(actor);
 
         StartCoroutine(turnDelay());
+    }
+
+    public void DestroyEntity(Entity entity)
+    {
+        Destroy(entity.gameObject);
     }
 
     private IEnumerator turnDelay()
@@ -118,11 +135,6 @@ public class GameManager : MonoBehaviour
         entities.Add(entity);
     }
 
-    public void DestroyEntity(Entity entity)
-    {
-        Destroy(entity.gameObject);
-    }
-
     public void InsertEntity(Entity entity, int index)
     {
         if (!entity.gameObject.activeSelf)
@@ -130,6 +142,8 @@ public class GameManager : MonoBehaviour
             entity.gameObject.SetActive(true);
         }
         entities.Insert(index, entity);
+        //delayTime = setTime();
+        
     }
 
     public void removeEntity(Entity entity)
@@ -150,13 +164,13 @@ public class GameManager : MonoBehaviour
         actors.Insert(index, actor);
         delayTime = setTime();
         actorQueue.Enqueue(actor);
-
     }
 
     public void removeActor(Actor actor)
     {
         if (actor.GetComponent<Player>())
             return;
+
         actors.Remove(actor);
         delayTime = setTime();
 
@@ -172,39 +186,11 @@ public class GameManager : MonoBehaviour
     {
         foreach(Actor actor in actors)
         {
-            if(actor.Size.x == 1 && actor.Size.y == 1)
-            {
-                if (actor.transform.position == location)
-                    return actor;
-            }
-            else
-            {
-                if (actor.OccupiedTiles.Contains(location))
-                    return actor;
-            }
+            if (actor.BlocksMovment && actor.transform.position == location)
+                return actor;
         }
         return null;
     }
-    public Actor[] GetActorsAtLocation(Vector3 location)
-    {
-        List<Actor> actorsAtLocation = new List<Actor>();
-        foreach (Actor actor in actors)
-        {
-            if (actor.Size.x == 1 && actor.Size.y == 1)
-            {
-                if (actor.transform.position == location)
-                    actorsAtLocation.Add(actor);
-            }
-            else
-            {
-                if (actor.OccupiedTiles.Contains(location))
-                    actorsAtLocation.Add(actor);
-            }
-        }
-        return actorsAtLocation.ToArray();
-
-    }
-
 
     public Actor getNPCAtLocation(Vector3 loc)
     {

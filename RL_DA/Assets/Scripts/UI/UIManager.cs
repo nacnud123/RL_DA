@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -253,11 +252,6 @@ public class UIManager : MonoBehaviour
         SaveManager.init.LoadGame();
         addMsg("The game has loaded.", "#0da2ff");
         toggleMenu();
-    }
-
-    public void mainMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
     }
 
     public void Quit()

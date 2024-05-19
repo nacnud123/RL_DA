@@ -54,7 +54,10 @@ internal sealed class ProcGen
         new Tuple<int,string,int>(8, "Armor/Banded", 15),
         new Tuple<int,string,int>(10, "Armor/Plate", 15),
         new Tuple<int,string,int>(12, "Armor/Splint", 15)
+
+
     };
+
 
     private List<Tuple<int, int, string, int>> monsterChances = new List<Tuple<int, int, string, int>> // firstLevel, lastLevel, Name, Chance
     {
@@ -81,18 +84,15 @@ internal sealed class ProcGen
         new Tuple<int,int,string,int>(16,25,"Monsters/Xeroc", 75),
         new Tuple<int,int,string,int>(11,20,"Monsters/Yeti", 80),
         new Tuple<int,int,string,int>(5,14,"Monsters/Zombie", 69)
-        //new Tuple<int,int,string,int>(1, 126, "Monsters/Slime", 80),
-        //new Tuple<int,int,string,int>(1, 126, "Monsters/Box", 40),
-        //new Tuple<int,int,string,int>(1, 126, "Monsters/Smaller Box", 60),
     };
 
     private readonly HashSet<Vector3Int> tunnelCoords = new HashSet<Vector3Int>();
 
-    public int getMaxValueForFloor(List<Tuple<int, int>> values, int floor)
+    public int getMaxValueForFloor(List<Tuple<int,int>> values, int floor)
     {
         int curVal = 0;
-
-        foreach (Tuple<int, int> val in values)
+        
+        foreach(Tuple<int,int> val in values)
         {
             if (floor >= val.Item1)
             {
@@ -102,12 +102,12 @@ internal sealed class ProcGen
         return curVal;
     }
 
-    public List<string> getEntitiesAtRandom(List<Tuple<int, int, string, int>> chances, int numOfEntities, int floor)
+    public List<string> getEntitiesAtRandom(List<Tuple<int,int,string,int>> chances, int numOfEntities, int floor)
     {
         List<string> entities = new List<string>();
         List<int> weightedChances = new List<int>();
 
-        foreach (Tuple<int, int, string, int> chan in chances)
+        foreach(Tuple<int,int,string,int> chan in chances)
         {
             if (floor >= chan.Item1 && floor <= chan.Item2)
             {
@@ -146,9 +146,9 @@ internal sealed class ProcGen
     /// Gen a new dungeon
     /// </summary>
 
-    public void generateDungeon(int mapWidth, int mapHeight, int roomMaxSize, int roomMinSize, int maxRoom, List<RectangularRoom> rooms, bool isNewGame)
+    public void generateDungeon(int mapWidth, int mapHeight, int roomMaxSize, int roomMinSize, int maxRoom, List<RectangularRoom> rooms,bool isNewGame)
     {
-        for (int roomNum = 0; roomNum < maxRoom; roomNum++)
+        for(int roomNum = 0; roomNum < maxRoom; roomNum++)
         {
             int roomWidth = UnityRandom.Range(roomMinSize, roomMaxSize);
             int roomHeight = UnityRandom.Range(roomMinSize, roomMaxSize);
@@ -161,11 +161,11 @@ internal sealed class ProcGen
             if (newRoom.Overlaps(rooms)) // If it overlaps then don't make it
             { continue; }
 
-            for (int x = roomX; x < roomX + roomWidth; x++)
+            for(int x = roomX; x < roomX + roomWidth; x++)
             {
-                for (int y = roomY; y < roomY + roomHeight; y++)
+                for(int y = roomY; y < roomY + roomHeight; y++)
                 {
-                    if (x == roomX || x == roomX + roomWidth - 1 || y == roomY || y == roomY + roomHeight - 1)
+                    if(x == roomX || x == roomX + roomWidth - 1 || y == roomY || y == roomY + roomHeight - 1)
                     {
                         if (setWallTileIfEmpty(new Vector3Int(x, y)))
                             continue;
@@ -187,16 +187,12 @@ internal sealed class ProcGen
             rooms.Add(newRoom);
         }
 
-        //Add doors to the rooms
-        foreach (RectangularRoom room in rooms)
+        foreach(RectangularRoom room in rooms)
         {
             PlaceDoors(room, rooms);
         }
 
-        // Add the stairs
-        MapManager.init.getFloorMap.SetTile((Vector3Int)rooms[rooms.Count - 1].RandomPoint(), MapManager.init.DownStairsTile);
-
-        //Add the player to the first room
+        // Add the player to the first room
         Vector3Int playerPos = (Vector3Int)rooms[0].RandomPoint();
         int maxAttempts = 10, attempts = 0;
 
@@ -217,6 +213,10 @@ internal sealed class ProcGen
             }
             attempts++;
         }
+
+
+        // Add the stairs
+        MapManager.init.getFloorMap.SetTile((Vector3Int)rooms[rooms.Count - 1].RandomPoint(), MapManager.init.DownStairsTile);
 
         MapManager.init.getFloorMap.SetTile(playerPos, MapManager.init.UpStairsTile);
 
@@ -242,6 +242,8 @@ internal sealed class ProcGen
             playerActor.GetEquipment.equipToSlot("Armor", starterArmor, false);
 
             Camera.main.transform.parent = player.gameObject.transform;
+
+
         }
     }
 
@@ -349,18 +351,17 @@ internal sealed class ProcGen
         List<Vector2Int> tunnelCoords = new List<Vector2Int>();
         BresenhamLine.Compute(oldRoomCenter, tunnelCorner, tunnelCoords);
         BresenhamLine.Compute(tunnelCorner, newRoomCenter, tunnelCoords);
-
+        
         //Set Tiles for tunnel
-        for (int i = 0; i < tunnelCoords.Count; i++)
+        for(int i = 0; i < tunnelCoords.Count; i++)
         {
             setFloorTile(new Vector3Int(tunnelCoords[i].x, tunnelCoords[i].y));
-            this.tunnelCoords.Add(new Vector3Int(tunnelCoords[i].x, tunnelCoords[i].y));
 
             //MapManager.init.getFloorMap.SetTile(new Vector3Int(tunnelCoords[i].x, tunnelCoords[i].y, 0), MapManager.init.FloorTile);
 
-            for (int x = tunnelCoords[i].x - 1; x <= tunnelCoords[i].x + 1; x++)
+            for(int x = tunnelCoords[i].x - 1; x <= tunnelCoords[i].x + 1; x++)
             {
-                for (int y = tunnelCoords[i].y - 1; y <= tunnelCoords[i].y + 1; y++)
+                for(int y = tunnelCoords[i].y - 1; y <= tunnelCoords[i].y + 1; y++)
                 {
                     if (setWallTileIfEmpty(new Vector3Int(x, y)))
                         continue;
@@ -389,7 +390,7 @@ internal sealed class ProcGen
 
     private void placeEntities(RectangularRoom newRoom, int floorNum)
     {
-        int maxAttempts = 10;
+        //bool isItem = false;
         int numOfMon = UnityRandom.Range(0, getMaxValueForFloor(maxMonstersByFloor, floorNum) + 1);
         int numOfItems = UnityRandom.Range(0, getMaxValueForFloor(maxItemsByFloor, floorNum) + 1);
 
@@ -398,45 +399,17 @@ internal sealed class ProcGen
 
         List<string> entityNames = monName.Concat(itemNames).ToList();
 
-        foreach (string entName in entityNames)
+        foreach(string entName in entityNames)
         {
-            Vector2Int entityPos = Vector2Int.zero;
-            Entity entity = MapManager.init.createEntity(entName, entityPos).GetComponent<Entity>();
-            bool canPlace = false;
+            Vector3Int entPos = (Vector3Int)newRoom.RandomPoint();
 
-            for (int attempts = 0; attempts < maxAttempts; attempts++)
+            while(GameManager.init.GetActorAtLocation(entPos) is not null)
             {
-                entityPos = newRoom.RandomPoint();
-                Vector2 entityPosFloat = new Vector3(entityPos.x + .5f, entityPos.y + .5f);
-
-                if (entity.Size.x > 1 || entity.Size.y > 1)
-                {
-                    entity.transform.position = entityPosFloat;
-                    entity.OccupiedTiles = entity.getOccupTiles();
-
-                    canPlace = entity.OccupiedTiles.All(pos => MapManager.init.isValidPos(pos) && GameManager.init.GetActorsAtLocation(pos).Length <= 1);
-
-                    if (canPlace)
-                    { break; }
-                }
-                else if (GameManager.init.GetActorAtLocation(entityPosFloat) == null)
-                {
-                    entity.transform.position = entityPosFloat;
-                    canPlace = true;
-                    break;
-                }
+                entPos = (Vector3Int)newRoom.RandomPoint();
             }
 
-            if (!canPlace)
-            {
-                if (entity.GetComponent<Actor>() is not null)
-                {
-                    GameManager.init.removeActor(entity.GetComponent<Actor>());
-                }
-
-                GameManager.init.removeEntity(entity);
-                GameManager.init.DestroyEntity(entity);
-            }
+            MapManager.init.createEntity(entName, (Vector2Int)entPos);
         }
     }
+
 }

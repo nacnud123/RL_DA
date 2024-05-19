@@ -12,7 +12,6 @@ public class Actor : Entity
     [SerializeField] private Equipment equipment;
     [SerializeField] private Fighter fighter;
     [SerializeField] private Level level;
-    [SerializeField] private string realName;
 
     AdamMilVisibility algorithm;
 
@@ -25,8 +24,6 @@ public class Actor : Entity
 
     public Fighter Fighter { get => fighter; set => fighter = value; }
     public Level Level { get => level; set => level = value; }
-
-    public string GetName { get => realName; }
 
     private void OnValidate()
     {
@@ -51,11 +48,11 @@ public class Actor : Entity
     // Start is called before the first frame update
     void Start()
     {
-        if (!GameManager.init.getActors.Contains(this))
+        if(!GameManager.init.getActors.Contains(this))
         {
             addToGameManager();
         }
-        
+
         if (isAlive)
         {
             algorithm = new AdamMilVisibility();
@@ -64,11 +61,6 @@ public class Actor : Entity
         else if(fighter != null)
         {
             fighter.Die();
-        }
-
-        if(Size.x > 1 || Size.y > 1)
-        {
-            OccupiedTiles = getOccupTiles();
         }
     }
 

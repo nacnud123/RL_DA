@@ -7,7 +7,6 @@ public class Fighter : MonoBehaviour
 {
     [SerializeField] private int maxHP, hp, baseDefense, basePower;
     [SerializeField] private Actor target;
-    [SerializeField] private Color bloodColor;
 
     public int Hp
     {
@@ -87,7 +86,7 @@ public class Fighter : MonoBehaviour
             else
             {
                 GameManager.init.getActors[0].GetComponent<Level>().AddXP(GetComponent<Level>().XPGiven);
-                UIManager.init.addMsg($"{GetComponent<Actor>().GetName} is dead.", "#ffa500");
+                UIManager.init.addMsg($"{name} is dead.", "#ffa500");
             }
             GetComponent<Actor>().IsAlive = false;
         }

@@ -33,30 +33,11 @@ public class HostileEnemy : AI
                 if (!isFighting)
                     isFighting = true;
 
-                Actor actor = GetComponent<Actor>();
-                float targetDistance;
-                Vector3 closestTilePos = transform.position;
+                float targetDis = Vector3.Distance(transform.position, fighter.Target.transform.position);
+                Actor acotr = GetComponent<Actor>();
+                Vector3 closestTilePos = transform.position; // Maybe reduntend. Is hold-over from multi-tile enemies.
 
-                if(actor.Size.x > 1 || actor.Size.y > 1)
-                {
-                    float closestDistance = float.MaxValue;
-                    for(int i = 0; i < actor.OccupiedTiles.Length; i++)
-                    {
-                        float distance = Vector3.Distance(actor.OccupiedTiles[i], fighter.Target.transform.position);
-                        if(distance < closestDistance)
-                        {
-                            closestDistance = distance;
-                            closestTilePos = actor.OccupiedTiles[i];
-                        }
-                    }
-                    targetDistance = closestDistance;
-                }
-                else
-                {
-                    targetDistance = Vector3.Distance(transform.position, fighter.Target.transform.position);
-                }
-
-                if(targetDistance < 1.5f) // If it close to the player attack it.
+                if (targetDis < 1.5f) // If it close to the player attack it.
                 {
                     Action.meleeAction(GetComponent<Actor>(), fighter.Target);
                     return;

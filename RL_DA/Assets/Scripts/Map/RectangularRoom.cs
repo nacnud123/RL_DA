@@ -45,22 +45,19 @@ public class RectangularRoom
         return false;
     }
 
-    ///<summary>
-    ///return a list of positions allong the walls of the room
-    /// </summary>
     public List<Vector2Int> getWallPositions()
     {
         List<Vector2Int> wallPositions = new List<Vector2Int>();
 
         //Top and Bottom walls
-        for(int i = x; i < x + width; i++)
+        for (int i = x; i < x + width; i++)
         {
             wallPositions.Add(new Vector2Int(i, y));
             wallPositions.Add(new Vector2Int(i, y + height - 1));
         }
 
         //Left and right
-        for(int j = y + 1; j < y+ height - 1; j++)
+        for (int j = y + 1; j < y + height - 1; j++)
         {
             wallPositions.Add(new Vector2Int(x, j));
             wallPositions.Add(new Vector2Int(x + width - 1, j));
