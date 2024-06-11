@@ -7,6 +7,9 @@ public class AI : MonoBehaviour
 {
     [SerializeField] private AStar aStar;
 
+    public bool isFrozen = false, isPoisoned = false;
+    public int frozenTurns = 0, poisonedTurns = 0;
+
     public AStar AStar { get => aStar; set => aStar = value; }
 
     private void OnValidate() => aStar = GetComponent<AStar>();

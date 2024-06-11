@@ -16,6 +16,33 @@ public class HostileEnemy : AI
 
     public override void RunAI()
     {
+        if (isFrozen)
+        {
+            frozenTurns -= 1;
+            if(frozenTurns != 0)
+            {
+                Action.waitAction();
+                return;
+            }
+            else
+            {
+                isFrozen = false;
+            }
+        }
+
+        if (isPoisoned)
+        {
+            poisonedTurns -= 1;
+            if(poisonedTurns != 0)
+            {
+                fighter.Hp -= Random.Range(1, 10);
+            }
+            else
+            {
+                isPoisoned = false;
+            }
+        }
+
         if (!fighter.Target) // If it does not have a target set that target to the player
         {
             fighter.Target = GameManager.init.getActors[0];
