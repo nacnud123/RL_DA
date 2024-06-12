@@ -112,6 +112,7 @@ MonoBehaviour:
   equipment: {fileID: -2573708987317586630}
   fighter: {fileID: -7049084470504224915}
   level: {fileID: -8509539478069354914}
+  realName: Centaur
 --- !u!114 &-7049084470504224915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +155,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aStar: {fileID: -1782777632295938276}
+  isFrozen: 0
+  isPoisoned: 0
+  frozenTurns: 0
+  poisonedTurns: 0
   fighter: {fileID: -7049084470504224915}
   isFighting: 0
 --- !u!114 &-8509539478069354914

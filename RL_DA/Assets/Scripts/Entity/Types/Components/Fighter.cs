@@ -7,6 +7,7 @@ public class Fighter : MonoBehaviour
 {
     [SerializeField] private int maxHP, hp, baseDefense, basePower;
     [SerializeField] private Actor target;
+    
 
     public int Hp
     {
@@ -38,6 +39,7 @@ public class Fighter : MonoBehaviour
     public int BaseDefense { get => baseDefense; set => baseDefense = value; }
     public int BasePower { get => basePower; set => basePower = value; }
     public Actor Target { get => target; set => target = value; }
+   
 
     public int Power()
     {
@@ -86,7 +88,7 @@ public class Fighter : MonoBehaviour
             else
             {
                 GameManager.init.getActors[0].GetComponent<Level>().AddXP(GetComponent<Level>().XPGiven);
-                UIManager.init.addMsg($"{name} is dead.", "#ffa500");
+                UIManager.init.addMsg($"{this.GetComponent<Actor>().RealName} is dead.", "#ffa500");
             }
             GetComponent<Actor>().IsAlive = false;
         }
@@ -96,7 +98,7 @@ public class Fighter : MonoBehaviour
         sp.color = new Color(191, 0, 0, 1);
         sp.sortingOrder = 0;
 
-        name = $"Remains of {name}";
+        name = $"Remains of {this.GetComponent<Actor>().RealName}";
         GetComponent<Actor>().BlocksMovment = false;
         if (!GetComponent<Player>())
         {

@@ -2236,14 +2236,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Changes
 
-    - Fixed save issue
-
-    - Added camera shake
-
-    - Scrolls
-    should now work
-
-    - Added doors
+    - Added new scrolls
 
 
     Still may see some bugs'

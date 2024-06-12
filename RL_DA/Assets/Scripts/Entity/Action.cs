@@ -141,7 +141,7 @@ static public class Action
     {
         int dmg = actor.GetComponent<Fighter>().Power() - target.GetComponent<Fighter>().Defense();
 
-        string attackDesc = $"{actor.name} attacks {target.name}";
+        string attackDesc = $"{actor.name} attacks {target.RealName}";
 
         string colorHex = "";
 

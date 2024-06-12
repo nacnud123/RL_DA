@@ -15,11 +15,13 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
     [SerializeField] private int poisionTurns = 0;
     [SerializeField] private int confusionTurns = 0;
     [SerializeField] private bool healthRegen = false;
+    [SerializeField] private bool teleporting = false;
 
     public int NumSlTurns { get => numSleepTurns; set => numSleepTurns = value; }
     public int PoisTurns { get => poisionTurns; set => poisionTurns = value; }
     public int ConfTurns { get => confusionTurns; set => confusionTurns = value; }
     public bool HealthRegen { get => healthRegen; set => healthRegen = value; }
+    public bool Teleporting { get => teleporting; set => teleporting = value; }
 
     private void Awake() => controls = new Controls();
 
@@ -130,20 +132,39 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
         {
             if (targetMode)
             {
-                if (isSingleTarget)
+                if (teleporting)
                 {
-                    Actor target = SingleTargetChecks(targetObj.transform.position);
+                    if (MapManager.init.isValidPos(targetObj.transform.position) && GetComponent<Actor>().getFOV.Contains(Vector3Int.FloorToInt(targetObj.transform.position)))
+                    {
+                        this.transform.position = new Vector2(targetObj.transform.position.x,targetObj.transform.position.y);
+                        Action.CastAction(GetComponent<Actor>(), this.GetComponent<Actor>(), GetComponent<Inventory>().SelectedConsumable);
 
-                    if (target != null)
-                        Action.CastAction(GetComponent<Actor>(), target, GetComponent<Inventory>().SelectedConsumable);
+                    }
+                    else
+                    {
+                        UIManager.init.addMsg("Can't teleport there!", "#ffffff");
+                        Debug.Log("Can't teleport, no");
+                    }
                 }
                 else
                 {
-                    List<Actor> targets = AreaTargetChecks(targetObj.transform.position);
+                    if (isSingleTarget)
+                    {
+                        Actor target = SingleTargetChecks(targetObj.transform.position);
 
-                    if (targets != null)
-                        Action.CastAction(GetComponent<Actor>(), targets, GetComponent<Inventory>().SelectedConsumable);
+                        if (target != null)
+                            Action.CastAction(GetComponent<Actor>(), target, GetComponent<Inventory>().SelectedConsumable);
+                    }
+                    else
+                    {
+                        List<Actor> targets = AreaTargetChecks(targetObj.transform.position);
+
+                        if (targets != null)
+                            Action.CastAction(GetComponent<Actor>(), targets, GetComponent<Inventory>().SelectedConsumable);
+                    }
                 }
+                
+                
             }
             else if (CanAct())
             {

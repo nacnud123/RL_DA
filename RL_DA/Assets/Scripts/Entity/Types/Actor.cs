@@ -12,6 +12,7 @@ public class Actor : Entity
     [SerializeField] private Equipment equipment;
     [SerializeField] private Fighter fighter;
     [SerializeField] private Level level;
+    [SerializeField] private string realName = "";
 
     AdamMilVisibility algorithm;
 
@@ -24,6 +25,8 @@ public class Actor : Entity
 
     public Fighter Fighter { get => fighter; set => fighter = value; }
     public Level Level { get => level; set => level = value; }
+
+    public string RealName { get => realName; set => realName = value; }
 
     private void OnValidate()
     {

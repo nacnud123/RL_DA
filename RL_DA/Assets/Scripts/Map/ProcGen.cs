@@ -33,6 +33,7 @@ internal sealed class ProcGen
         new Tuple<int, string, int>(10, "Potions/Potion of Increase Level", 35),
 
         new Tuple<int, string, int>(0, "Scrolls/Die Scroll", 5),
+        new Tuple<int, string, int>(0, "Scrolls/Spawn Monster Scroll", 5),
         new Tuple<int, string, int>(2, "Scrolls/Confusion Scroll", 10),
         new Tuple<int, string, int>(2, "Scrolls/Identify Scroll", 30),
         new Tuple<int, string, int>(2, "Scrolls/Freeze Scroll", 30),
@@ -40,6 +41,8 @@ internal sealed class ProcGen
         new Tuple<int, string, int>(4, "Scrolls/Sleep Scroll", 10),
         new Tuple<int, string, int>(4, "Scrolls/Poison Scroll", 10),
         new Tuple<int, string, int>(6, "Scrolls/Fireball Scroll", 25),
+        new Tuple<int, string, int>(6, "Scrolls/Reveal Scroll", 25),
+        new Tuple<int, string, int>(6, "Scrolls/Teleport Scroll", 10),
 
         new Tuple<int, string, int>(2, "Weapons/War Hammer", 5),
         new Tuple<int, string, int>(4, "Weapons/Mace", 5),
@@ -237,7 +240,7 @@ internal sealed class ProcGen
             playerActor.GetInventory.Add(starterWeapon);
             playerActor.GetInventory.Add(starterArmor);
 
-            Item testingItem = MapManager.init.createEntity("Scrolls/Freeze Scroll", (Vector2Int)playerPos).GetComponent<Item>();
+            Item testingItem = MapManager.init.createEntity("Scrolls/Spawn Monster Scroll", (Vector2Int)playerPos).GetComponent<Item>();
             Item testingItem2 = MapManager.init.createEntity("Scrolls/Poison Scroll", (Vector2Int)playerPos).GetComponent<Item>();
             playerActor.GetInventory.Add(testingItem);
             playerActor.GetInventory.Add(testingItem2);

@@ -1,4 +1,1 @@
-Teleport
 SpawnMonster
-Reveal Map
-Make Friendly

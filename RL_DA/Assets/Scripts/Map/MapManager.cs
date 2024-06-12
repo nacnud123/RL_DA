@@ -60,6 +60,7 @@ public class MapManager : MonoBehaviour
     public List<Vector3Int> VisibleTiles { get => visibleTiles; }
 
     public Dictionary<Vector2Int, Node> getNodes { get => nodes; set => nodes = value; }
+    public Dictionary<Vector3Int, TileData> Tiles { get => tiles; }
 
     private void Awake()
     {
@@ -186,6 +187,18 @@ public class MapManager : MonoBehaviour
             tiles[pos].IsVisible = true;
             fogMap.SetColor(pos, Color.clear);
             visibleTiles.Add(pos);
+        }
+    }
+
+    public void revealMap()
+    {
+        foreach(Vector3Int pos in tiles.Keys)
+        {
+            if(!tiles[pos].IsExplored)
+            {
+                tiles[pos].IsExplored = true;
+                fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1f, .5f));
+            }
         }
     }
 
