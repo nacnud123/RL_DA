@@ -1,1 +1,10 @@
-SpawnMonster
+Spell Staff - basically like the scrolls already in the game but you can use them more than once. Once out of use and if the player uses it again it explodes (Unless they have a high enough intelligence)
+Class System:
+	Archer - high dex, spawns with bow, arrows, potion of invisibility, can leap to discovered tiles (its like a skill or something)
+	Wizard - high intel, spawns with staff and spell book, can learn new spells from scrolls. Can make enemies friendly for a short while.
+	Fighter - Default stuff basically what I have.
+	None - can learn spells, spawns with a sword and spell book, can learn any skill.
+
+
+
+Potential fix for slowdown - remove ability to move up stairs (Not ideal)

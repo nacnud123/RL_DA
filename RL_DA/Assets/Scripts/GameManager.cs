@@ -322,6 +322,40 @@ public class GameManager : MonoBehaviour
             
         }
     }
+
+    public void makeExplosion(Vector3 startPos, int radius)
+    {
+
+        Bounds targetBounds = new Bounds(startPos, Vector3.one * radius * 2);
+
+        foreach (Actor target in GameManager.init.getActors)
+        {
+            if (targetBounds.Contains(target.transform.position))
+            {
+                target.GetComponent<Fighter>().Hp -= 2;
+                UIManager.init.addMsg($"The {target.name} is engulfed in a fireball, taking {2} damage!", "#ff0000");
+            }
+
+        }
+    }
+
+    public int getDamage(string dmgString)
+    {
+        int total = 0;
+        var parts = dmgString.Split(new char[] { '/', 'd' });
+        for (int i = 0; i < parts.Length; i += 2)
+        {
+            int numofRolls = int.Parse(parts[i]);
+            int diceType = int.Parse(parts[i + 1]);
+
+            for (int j = 0; j < numofRolls; j++)
+            {
+                total += Random.Range(1, diceType);
+            }
+        }
+
+        return total;
+    }
 }
 
 [System.Serializable]

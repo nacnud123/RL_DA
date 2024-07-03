@@ -295,11 +295,11 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
             return null;
         }
 
-        if(target == GetComponent<Actor>())
+        /*if(target == GetComponent<Actor>())
         {
             UIManager.init.addMsg("You can't target yourself.", "#ffffff");
             return null;
-        }
+        }*/
 
         return target;
     }
