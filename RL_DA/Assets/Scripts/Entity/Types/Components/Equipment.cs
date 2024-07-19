@@ -43,7 +43,7 @@ public class Equipment : MonoBehaviour
 
         if(weapon is not null && weapon.PowerBonus > 0)
         {
-            bonus += weapon.PowerBonus;
+            bonus += GameManager.init.getDamage(weapon.Damage);
         }
 
         if(armor is not null && armor.PowerBonus > 0)

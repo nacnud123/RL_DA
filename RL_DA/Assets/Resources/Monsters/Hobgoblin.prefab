@@ -130,6 +130,7 @@ MonoBehaviour:
   baseDefense: 1
   basePower: 3
   target: {fileID: 0}
+  damage: 1d3/1d2
 --- !u!114 &-1782777632295938276
 MonoBehaviour:
   m_ObjectHideFlags: 0

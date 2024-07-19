@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Actor))]
 public class Level : MonoBehaviour
 {
-    [SerializeField] private int currentLevel = 1, currentXP, xpToNextLevel, levelUpBase = 200, levelUpFactor = 150, xpGiven;
+    [SerializeField] private int currentLevel = 1, currentXP, xpToNextLevel, levelUpBase = 10, levelUpFactor = 10, xpGiven;
 
     public int CurrentLevel { get => currentLevel; }
     public int CurrentXP { get => currentXP; }

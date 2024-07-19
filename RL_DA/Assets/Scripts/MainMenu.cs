@@ -10,7 +10,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private Button continueButton;
     [SerializeField] private GameObject changeLog;
+    [SerializeField] private GameObject optionsMenu;
     private bool isChangeLogOpen = false;
+    private bool isOptionsOpen = false;
 
     private void Start()
     {
@@ -47,5 +49,11 @@ public class MainMenu : MonoBehaviour
     {
         isChangeLogOpen = !isChangeLogOpen;
         changeLog.SetActive(isChangeLogOpen);
+    }
+
+    public void viewOptions()
+    {
+        isOptionsOpen = !isOptionsOpen;
+        optionsMenu.SetActive(isOptionsOpen);
     }
 }

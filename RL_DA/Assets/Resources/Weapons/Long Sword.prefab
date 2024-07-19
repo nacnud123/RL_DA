@@ -119,3 +119,4 @@ MonoBehaviour:
   equipmentType: 0
   powerBonus: 6
   defenseBonus: 0
+  damage: 1d8

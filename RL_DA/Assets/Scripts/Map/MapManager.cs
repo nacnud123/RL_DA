@@ -131,23 +131,30 @@ public class MapManager : MonoBehaviour
 
             if (entityObject.GetComponent<Item>())
             {
-                if (entityObject.GetComponent<Item>().GetConsumable || entityObject.GetComponent<Ring>())
+                if (PlayerPrefs.GetInt("scrambleNames", 0) == 0)
                 {
-                    if(entityObject.GetComponent<Item>().CurrName == "")
-                    {
-                        entityObject.GetComponent<Item>().CurrName = GameManager.init.makeRandName(entityObject.GetComponent<Item>().RealName);
-                        if (entityObject.name.Contains("Potion")) { entityObject.GetComponent<Item>().CurrName += "Potion"; }
-                        if (entityObject.name.Contains("Scroll")) { entityObject.GetComponent<Item>().CurrName += "Scroll"; }
-                        if (entityObject.name.Contains("Ring")) { entityObject.GetComponent<Item>().CurrName += "Ring"; }
-                    }
+                    Debug.Log($"Curr Name: {entityObject.GetComponent<Item>().CurrName}, Real Name: {entityObject.GetComponent<Item>().RealName}");
+
+                    entityObject.GetComponent<Item>().CurrName = entityObject.GetComponent<Item>().RealName;
                 }
                 else
                 {
-                    entityObject.GetComponent<Item>().CurrName = entityObject.GetComponent<Item>().RealName;
-                }
-               
+                    if (entityObject.GetComponent<Item>().GetConsumable || entityObject.GetComponent<Ring>())
+                    {
+                        if (entityObject.GetComponent<Item>().CurrName == "")
+                        {
+                            entityObject.GetComponent<Item>().CurrName = GameManager.init.makeRandName(entityObject.GetComponent<Item>().RealName);
+                            if (entityObject.name.Contains("Potion")) { entityObject.GetComponent<Item>().CurrName += "Potion"; }
+                            if (entityObject.name.Contains("Scroll")) { entityObject.GetComponent<Item>().CurrName += "Scroll"; }
+                            if (entityObject.name.Contains("Ring")) { entityObject.GetComponent<Item>().CurrName += "Ring"; }
+                        }
+                    }
+                    else
+                    {
+                        entityObject.GetComponent<Item>().CurrName = entityObject.GetComponent<Item>().RealName;
+                    }
+                }                
             }
-
 
             if (entityObject.GetComponent<Actor>() is not null)
             {

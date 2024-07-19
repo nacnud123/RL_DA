@@ -7,7 +7,9 @@ public class Fighter : MonoBehaviour
 {
     [SerializeField] private int maxHP, hp, baseDefense, basePower;
     [SerializeField] private Actor target;
-    
+    [SerializeField] private string damage = "";
+
+    public string Damage { get => damage; }
 
     public int Hp
     {
@@ -39,11 +41,18 @@ public class Fighter : MonoBehaviour
     public int BaseDefense { get => baseDefense; set => baseDefense = value; }
     public int BasePower { get => basePower; set => basePower = value; }
     public Actor Target { get => target; set => target = value; }
-   
+
 
     public int Power()
     {
-        return basePower + powerBonus();
+        if (this.GetComponent<HostileEnemy>())
+        {
+            return GameManager.init.getDamage(Damage);
+        }
+        else
+        {
+            return basePower + powerBonus();
+        }
     }
 
     public int Defense()
@@ -64,6 +73,7 @@ public class Fighter : MonoBehaviour
     {
         if (GetComponent<Equipment>() is not null)
         {
+            
             return GetComponent<Equipment>().PowerBonus();
         }
         return 0;

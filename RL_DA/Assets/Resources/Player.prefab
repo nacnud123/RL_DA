@@ -113,6 +113,7 @@ MonoBehaviour:
   poisionTurns: 0
   confusionTurns: 0
   healthRegen: 0
+  teleporting: 0
 --- !u!114 &2099803101609084791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,6 +136,7 @@ MonoBehaviour:
   equipment: {fileID: -7538874265633751123}
   fighter: {fileID: -4681233567774152661}
   level: {fileID: -4763412661780621373}
+  realName: 
 --- !u!114 &-4681233567774152661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,11 +149,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48405a7544161664f888ad9c09c119b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 30
-  hp: 30
+  maxHP: 12
+  hp: 12
   baseDefense: 1
   basePower: 7
   target: {fileID: 0}
+  damage: 
 --- !u!114 &5658060129932091896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,9 +184,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: 1
   currentXP: 0
-  xpToNextLevel: 350
-  levelUpBase: 200
-  levelUpFactor: 150
+  xpToNextLevel: 10
+  levelUpBase: 0
+  levelUpFactor: 10
   xpGiven: 0
 --- !u!114 &-7538874265633751123
 MonoBehaviour:

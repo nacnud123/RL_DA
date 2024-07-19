@@ -130,6 +130,7 @@ MonoBehaviour:
   baseDefense: 1
   basePower: 4
   target: {fileID: 0}
+  damage: 1d3
 --- !u!114 &-1782777632295938276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,7 +179,7 @@ MonoBehaviour:
   xpToNextLevel: 0
   levelUpBase: 0
   levelUpFactor: 0
-  xpGiven: 15
+  xpGiven: 2
 --- !u!114 &-2573708987317586630
 MonoBehaviour:
   m_ObjectHideFlags: 0
