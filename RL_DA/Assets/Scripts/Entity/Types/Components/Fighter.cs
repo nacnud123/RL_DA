@@ -108,7 +108,7 @@ public class Fighter : MonoBehaviour
         sp.color = new Color(191, 0, 0, 1);
         sp.sortingOrder = 0;
 
-        name = $"Remains of {this.GetComponent<Actor>().RealName}";
+        name = $"Remains of {this.GetComponent<Actor>().name}";
         GetComponent<Actor>().BlocksMovment = false;
         if (!GetComponent<Player>())
         {
@@ -117,7 +117,7 @@ public class Fighter : MonoBehaviour
 
     }
 
-    public int Heal(int amount)
+    public int Heal(int amount, bool showMessage = false)
     {
         if (hp == maxHP)
             return 0;

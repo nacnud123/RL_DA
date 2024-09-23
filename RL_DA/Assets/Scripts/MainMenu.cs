@@ -11,8 +11,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button continueButton;
     [SerializeField] private GameObject changeLog;
     [SerializeField] private GameObject optionsMenu;
+    [SerializeField] private GameObject credditsMenu;
     private bool isChangeLogOpen = false;
     private bool isOptionsOpen = false;
+    private bool isCredditsOpen = false;
 
     private void Start()
     {
@@ -55,5 +57,11 @@ public class MainMenu : MonoBehaviour
     {
         isOptionsOpen = !isOptionsOpen;
         optionsMenu.SetActive(isOptionsOpen);
+    }
+
+    public void viewCreddits()
+    {
+        isCredditsOpen = !isCredditsOpen;
+        credditsMenu.SetActive(isCredditsOpen);
     }
 }

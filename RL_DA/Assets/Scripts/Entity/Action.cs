@@ -122,7 +122,7 @@ static public class Action
 
     public static bool bumpAction(Actor actor, Vector2 dir)
     {
-        Debug.Log("Moving!");
+        //Debug.Log("Moving!");
         Actor target = GameManager.init.GetActorAtLocation(actor.transform.position + (Vector3)dir);
 
         if (target && !target.GetComponent<NPC>())
@@ -141,7 +141,7 @@ static public class Action
     {
         int dmg = actor.GetComponent<Fighter>().Power() - target.GetComponent<Fighter>().Defense();
 
-        string attackDesc = $"{actor.name} attacks {target.RealName}";
+        string attackDesc = $"{actor.RealName} attacks {target.RealName}";
 
         string colorHex = "";
 
@@ -158,11 +158,16 @@ static public class Action
             if(actor.GetComponent<Player>())
             {
                 Camera.main.GetComponent<ScreenShake>().TriggerShake();
+                SFXManager.init.playHitSfx();
             }
         }
         else
         {
             UIManager.init.addMsg($"{attackDesc} but does not damage.", colorHex);
+            if (actor.GetComponent<Player>())
+            {
+                SFXManager.init.playMissSfx();
+            }
         }
         GameManager.init.endTurn();
     }

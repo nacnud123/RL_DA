@@ -140,6 +140,7 @@ public class UIManager : MonoBehaviour
 
     public void toggleInv(Actor actor = null)
     {
+        Debug.Log("Toggled Inv!");
         isInvOpen = !isInvOpen;
         setBools(inv, isInvOpen);
 
@@ -323,12 +324,12 @@ public class UIManager : MonoBehaviour
             menuContentChild.SetActive(false);
         }
 
-        char c = 'a';
+        //char c = 'a';
         for(int itemNum = 0; itemNum < actor.GetInventory.GetItems.Count; itemNum++)
         {
             GameObject menuContentChild = menuContent.transform.GetChild(itemNum).gameObject;
             Item item = actor.GetInventory.GetItems[itemNum];
-            menuContentChild.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"({c++}) {item.CurrName}";
+            menuContentChild.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"{item.CurrName}"; //({c++})
             menuContentChild.GetComponent<Button>().onClick.AddListener(() =>
             {
                 if (menuContent == invContent)

@@ -1,0 +1,21 @@
+By: Duncan Armstrong
+A huge thanks to The Sleepy Koala for the base of the project.
+Another huge thanks to all of those who have played the game and to Ethan Adams and Pat for helping play test it.
+
+Sounds credits:
+Sword_hit_w_loud_ringout_02_2022 by Artninja -- https://freesound.org/s/710330/ -- License: Attribution 4.0
+Sword_Hit_Wood_1.wav by gronnie -- https://freesound.org/s/563173/ -- License: Attribution 4.0
+Whoosh+Sword_Hit Flesh.wav by marb7e -- https://freesound.org/s/620354/ -- License: Attribution 4.0
+Single Sword Hit.wav by MTJohnson -- https://freesound.org/s/426322/ -- License: Creative Commons 0
+Metal hit_1(sword, hammer, blacksmith).wav by o_ciz -- https://freesound.org/s/475416/ -- License: Creative Commons 0
+heavy_metal_hit_w_loud_ringout_noises_01_08242024 by Artninja -- https://freesound.org/s/752078/ -- License: Attribution 4.0
+Sword Hit by qubodup -- https://freesound.org/s/442769/ -- License: Creative Commons 0
+Swords Clash - High Quality #3 by Christopherderp -- https://freesound.org/s/364531/ -- License: Creative Commons 0
+strike4.wav by Empiremonkey -- https://freesound.org/s/616496/ -- License: Creative Commons 0
+metallic_hit.wav by dermotte -- https://freesound.org/s/263008/ -- License: Attribution 4.0
+swoosh-2.mp3 by lesaucisson -- https://freesound.org/s/585256/ -- License: Creative Commons 0
+Whoosh by qubodup -- https://freesound.org/s/60013/ -- License: Creative Commons 0
+Woosh by lebaston100 -- https://freesound.org/s/264438/ -- License: Attribution 4.0
+Dark Cave Drone by Kinoton -- https://freesound.org/s/421826/ -- License: Creative Commons 0
+Water Dripping in Cave.wav by Sclolex -- https://freesound.org/s/177958/ -- License: Creative Commons 0
+Ambience, Creepy Wind, A.wav by InspectorJ -- https://freesound.org/s/413549/ -- License: Attribution 4.0

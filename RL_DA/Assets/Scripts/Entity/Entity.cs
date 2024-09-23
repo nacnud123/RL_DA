@@ -59,7 +59,9 @@ public class EntityState
     public EntityState(EntityType _type = EntityType.Other, string _name = "", bool _blocksMovment = false, bool _isVisible = false, Vector3 _pos = new Vector3())
     {
         type = _type;
+        Debug.Log($"In Entity State Name Bef {name}");
         name = _name;
+        Debug.Log($"In Entity State Name Aft {name}");
         blocksMovement = _blocksMovment;
         IsVisible = _isVisible;
         position = _pos;

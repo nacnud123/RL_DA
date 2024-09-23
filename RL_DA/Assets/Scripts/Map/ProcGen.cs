@@ -236,10 +236,12 @@ internal sealed class ProcGen
 
             Item starterWeapon = MapManager.init.createEntity("Weapons/Dagger", (Vector2Int)playerPos).GetComponent<Item>();
             Item starterArmor = MapManager.init.createEntity("Armor/Leather", (Vector2Int)playerPos).GetComponent<Item>();
+            Item starterSpell = MapManager.init.createEntity("Scrolls/Fireball Scroll", (Vector2Int)playerPos).GetComponent<Item>();
             //Item starterWand = MapManager.init.createEntity("Wands/Magic Missile", (Vector2Int)playerPos).GetComponent<Item>();
 
             playerActor.GetInventory.Add(starterWeapon);
             playerActor.GetInventory.Add(starterArmor);
+            playerActor.GetInventory.Add(starterSpell);
             //playerActor.GetInventory.Add(starterWand);
 
             /*Item testingItem = MapManager.init.createEntity("Scrolls/Spawn Monster Scroll", (Vector2Int)playerPos).GetComponent<Item>();

@@ -56,7 +56,10 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
         else if (context.canceled)
             moveKeyDown = false;
 
-
+        if (healthRegen)
+        {
+            this.GetComponent<Fighter>().Heal(1);
+        }
     }
 
     void Controls.IPlayerActions.OnExit(InputAction.CallbackContext context)
