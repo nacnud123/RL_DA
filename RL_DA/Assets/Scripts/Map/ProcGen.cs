@@ -49,6 +49,10 @@ internal sealed class ProcGen
         new Tuple<int, string, int>(6, "Weapons/Long Sword", 5),
         new Tuple<int, string, int>(8, "Weapons/Two Handed Sword", 5),
 
+        new Tuple<int, string, int>(4, "Wands/Magic Missile", 25),
+        new Tuple<int, string, int>(7, "Wands/Fireball", 25),
+        new Tuple<int, string, int>(8, "Wands/Drain Life", 25),
+
         new Tuple<int,string,int>(1, "Armor/Rings/Ring", 15),
         new Tuple<int,string,int>(4, "Armor/Rings/Ring Of Regen", 15),
         new Tuple<int,string,int>(8, "Armor/Rings/Ring of Stength", 15),

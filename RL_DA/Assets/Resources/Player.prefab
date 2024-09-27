@@ -341,8 +341,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: 1
   currentXP: 0
-  xpToNextLevel: 10
-  levelUpBase: 0
+  xpToNextLevel: 11
+  levelUpBase: 1
   levelUpFactor: 10
   xpGiven: 0
 --- !u!114 &-7538874265633751123

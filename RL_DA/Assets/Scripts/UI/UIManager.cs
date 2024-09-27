@@ -187,9 +187,9 @@ public class UIManager : MonoBehaviour
         GameObject strengthButton = levelUpMenuContent.transform.GetChild(1).gameObject;
         GameObject agilityButton = levelUpMenuContent.transform.GetChild(2).gameObject;
 
-        constitutionButton.GetComponent<TextMeshProUGUI>().text = $"a) Constitution (+20 HP, from {actor.GetComponent<Fighter>().MaxHp})";
-        strengthButton.GetComponent<TextMeshProUGUI>().text = $"b) Strength (+1 attack, from {actor.GetComponent<Fighter>().Power()})";
-        agilityButton.GetComponent<TextMeshProUGUI>().text = $"c) Agility (+1 defense, from {actor.GetComponent<Fighter>().Defense()})";
+        constitutionButton.GetComponent<TextMeshProUGUI>().text = $"Constitution (+20 HP, from {actor.GetComponent<Fighter>().MaxHp})";
+        strengthButton.GetComponent<TextMeshProUGUI>().text = $"Strength (+1 attack, from {actor.GetComponent<Fighter>().Power()})";
+        agilityButton.GetComponent<TextMeshProUGUI>().text = $"Agility (+1 defense, from {actor.GetComponent<Fighter>().Defense()})";
 
         foreach (Transform child in levelUpMenuContent.transform)
         {
