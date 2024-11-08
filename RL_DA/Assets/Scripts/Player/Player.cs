@@ -155,14 +155,14 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
                     {
                         Actor target = SingleTargetChecks(targetObj.transform.position);
 
-                        if (target != null)
+                        if (target != null && GetComponent<Inventory>().SelectedConsumable != null)
                             Action.CastAction(GetComponent<Actor>(), target, GetComponent<Inventory>().SelectedConsumable);
                     }
                     else
                     {
                         List<Actor> targets = AreaTargetChecks(targetObj.transform.position);
 
-                        if (targets != null)
+                        if (targets != null && GetComponent<Inventory>().SelectedConsumable != null)
                             Action.CastAction(GetComponent<Actor>(), targets, GetComponent<Inventory>().SelectedConsumable);
                     }
                 }
@@ -329,6 +329,42 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
         return targets;
     }
 
-   
+    public void OnFire(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            var rangedWeapon = GetComponent<Equipment>().Ranged;
 
+            if (rangedWeapon == null) 
+            { UIManager.init.addMsg($"You don't have a ranged weapon equipped!", "#ff0000"); GameManager.init.endTurn(); return; }
+
+            if (!GetComponent<Actor>().GetInventory.hasAmmoType(((RangedWeapon)rangedWeapon).RequiredAmmo))
+            { UIManager.init.addMsg($"You don't have the right type of ammo to fire this weapon!", "#ff0000"); GameManager.init.endTurn(); return; }
+
+            /*if (!((RangedAmmo)GetComponent<Equipment>().RangedAmmo).canFire())
+            { UIManager.init.addMsg($"You don't have enough ammo!", "#ff0000"); GameManager.init.endTurn(); return; }*/
+
+            if (targetMode)
+            {
+                Actor target = SingleTargetChecks(targetObj.transform.position);
+
+                
+
+                if (target != null)
+                {
+                    Action.attackAction(GetComponent<Actor>(), target, GameManager.init.getDamage(((RangedWeapon)rangedWeapon).RangedDamage));
+
+                    ((RangedWeapon)rangedWeapon).fireShot();
+
+                    ToggleTargetMode();
+                    GameManager.init.endTurn();
+                }
+            }
+            else
+            {
+                ToggleTargetMode();
+            }
+
+        }
+    }
 }

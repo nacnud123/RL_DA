@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnMonsterScroll : Consumable
+public class SpawnMonsterScroll : Scroll
 {
     public override bool Activate(Actor actor)
     {

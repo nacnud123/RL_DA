@@ -49,9 +49,9 @@ internal sealed class ProcGen
         new Tuple<int, string, int>(6, "Weapons/Long Sword", 5),
         new Tuple<int, string, int>(8, "Weapons/Two Handed Sword", 5),
 
-        new Tuple<int, string, int>(4, "Wands/Magic Missile", 25),
-        new Tuple<int, string, int>(7, "Wands/Fireball", 25),
-        new Tuple<int, string, int>(8, "Wands/Drain Life", 25),
+        new Tuple<int, string, int>(5, "Wands/Magic Missile", 25),
+        new Tuple<int, string, int>(8, "Wands/Fireball", 25),
+        new Tuple<int, string, int>(9, "Wands/Drain Life", 25),
 
         new Tuple<int,string,int>(1, "Armor/Rings/Ring", 15),
         new Tuple<int,string,int>(4, "Armor/Rings/Ring Of Regen", 15),
@@ -62,8 +62,9 @@ internal sealed class ProcGen
         new Tuple<int,string,int>(6, "Armor/Chainmail", 15),
         new Tuple<int,string,int>(8, "Armor/Banded", 15),
         new Tuple<int,string,int>(10, "Armor/Plate", 15),
-        new Tuple<int,string,int>(12, "Armor/Splint", 15)
+        new Tuple<int,string,int>(12, "Armor/Splint", 15),
 
+        new Tuple<int, string, int>(3, "Ranged Weapons/Arrows", 10)
 
     };
 
@@ -240,13 +241,13 @@ internal sealed class ProcGen
 
             Item starterWeapon = MapManager.init.createEntity("Weapons/Dagger", (Vector2Int)playerPos).GetComponent<Item>();
             Item starterArmor = MapManager.init.createEntity("Armor/Leather", (Vector2Int)playerPos).GetComponent<Item>();
-            Item starterSpell = MapManager.init.createEntity("Scrolls/Fireball Scroll", (Vector2Int)playerPos).GetComponent<Item>();
-            //Item starterWand = MapManager.init.createEntity("Wands/Magic Missile", (Vector2Int)playerPos).GetComponent<Item>();
-
+            //Item starterSpell = MapManager.init.createEntity("Scrolls/Fireball Scroll", (Vector2Int)playerPos).GetComponent<Item>();
+            Item starterRanged = MapManager.init.createEntity("Ranged Weapons/Bow", (Vector2Int)playerPos).GetComponent<Item>();
+            
             playerActor.GetInventory.Add(starterWeapon);
             playerActor.GetInventory.Add(starterArmor);
-            playerActor.GetInventory.Add(starterSpell);
-            //playerActor.GetInventory.Add(starterWand);
+            playerActor.GetInventory.Add(starterRanged);
+            //((Wand)starterWand.GetConsumable).initName();
 
             /*Item testingItem = MapManager.init.createEntity("Scrolls/Spawn Monster Scroll", (Vector2Int)playerPos).GetComponent<Item>();
             Item testingItem2 = MapManager.init.createEntity("Scrolls/Poison Scroll", (Vector2Int)playerPos).GetComponent<Item>();
@@ -256,6 +257,8 @@ internal sealed class ProcGen
 
             playerActor.GetEquipment.equipToSlot("Weapon", starterWeapon, false);
             playerActor.GetEquipment.equipToSlot("Armor", starterArmor, false);
+
+            playerActor.GetEquipment.equipToSlot("Ranged", starterRanged, false);
 
             Camera.main.transform.parent = player.gameObject.transform;
 

@@ -4613,7 +4613,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Beta
 
-    V 1'
+    V 2'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 20206b14158de5d43bb5df2073f6650b, type: 2}
   m_sharedMaterial: {fileID: -9193376414395171094, guid: 20206b14158de5d43bb5df2073f6650b, type: 2}
@@ -5655,15 +5655,12 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Changes
 
-    - Now in Beta. I really didn''t add anything but I felt the
-    game had been in alpha for too long.
+    - Added ranged weapons
 
-    - Fixed some messages.
+    - Added dmg popups
 
-    - Ring
-    of regeneration now actually works.
-
-    - Added sounds and volume sliders'
+    - Fixed
+    bugs'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 20206b14158de5d43bb5df2073f6650b, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

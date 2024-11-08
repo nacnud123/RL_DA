@@ -18,7 +18,16 @@ static public class Action
             }
 
             Item item = GameManager.init.getEntities[i].GetComponent<Item>();
-            actor.GetInventory.Add(item);
+
+            if(item.GetType() == typeof(RangedAmmo))
+            {
+                actor.GetInventory.addToAmmo(item, ((RangedAmmo)item).Type, ((RangedAmmo)item).Amount);
+            }
+            else
+            {
+                actor.GetInventory.Add(item);
+            }
+
 
             UIManager.init.addMsg($"You picked up the {item.CurrName}.", "#ffffff");
 
@@ -127,7 +136,7 @@ static public class Action
 
         if (target && !target.GetComponent<NPC>())
         {
-            meleeAction(actor, target);
+            attackAction(actor, target);
             return false;
         }
         else
@@ -137,9 +146,13 @@ static public class Action
         }
     }
 
-    public static void meleeAction(Actor actor, Actor target)
+    public static void attackAction(Actor actor, Actor target, int _dmg = -1)
     {
-        int dmg = actor.GetComponent<Fighter>().Power() - target.GetComponent<Fighter>().Defense();
+        int dmg;
+        if (_dmg != -1)
+            dmg = _dmg - target.GetComponent<Fighter>().Defense();
+        else
+            dmg = actor.GetComponent<Fighter>().Power() - target.GetComponent<Fighter>().Defense();
 
         string attackDesc = $"{actor.RealName} attacks {target.RealName}";
 
@@ -159,6 +172,7 @@ static public class Action
             {
                 Camera.main.GetComponent<ScreenShake>().TriggerShake();
                 SFXManager.init.playHitSfx();
+                DamagePopup.Create(target.transform.position, dmg, false);
             }
         }
         else
@@ -169,6 +183,8 @@ static public class Action
                 SFXManager.init.playMissSfx();
             }
         }
+        
+
         GameManager.init.endTurn();
     }
 

@@ -18,9 +18,10 @@ public class DrainLifeWand : Wand
         {
             int dmg = GameManager.init.getDamage(Damage) + 1;
 
-            UIManager.init.addMsg($"The {target.name} is hit with a drain life, it takes {dmg} damage!", "#ff0000");
+            UIManager.init.addMsg($"The {target.RealName} is hit with a drain life, it takes {dmg} damage!", "#ff0000");
             target.GetComponent<Fighter>().Hp -= dmg;
 
+            UIManager.init.addMsg($"You feel better, you steal {dmg} health from {target.RealName}", "#ff0000");
             actor.GetComponent<Fighter>().Hp += dmg;
 
             Uses -= 1;

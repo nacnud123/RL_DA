@@ -66,7 +66,7 @@ public class HostileEnemy : AI
 
                 if (targetDis < 1.5f) // If it close to the player attack it.
                 {
-                    Action.meleeAction(GetComponent<Actor>(), fighter.Target);
+                    Action.attackAction(GetComponent<Actor>(), fighter.Target);
                     return;
                 }
                 else // If it is not close to the player continue to walk to it.

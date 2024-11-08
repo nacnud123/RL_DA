@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConfusionPot : Consumable
+public class ConfusionPot : Potion
 {
     public override bool Activate(Actor actor)
     {

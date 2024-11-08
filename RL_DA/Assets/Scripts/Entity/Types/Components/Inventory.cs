@@ -19,7 +19,12 @@ public class Inventory : MonoBehaviour
         item.transform.SetParent(transform);
         GameManager.init.removeEntity(item);
     }
-
+    
+    public void Remove(Item item)
+    {
+        items.Remove(item);
+        item.transform.SetParent(null);
+    }
 
     public void Drop(Item item)
     {
@@ -34,6 +39,28 @@ public class Inventory : MonoBehaviour
     {
         item.CurrName = item.RealName;
         UIManager.init.addMsg($"Thats a {item.RealName}", "#0da2ff");
+    }
+
+    public bool hasAmmoType(AmmoType inType)
+    {
+        if(items.Exists(x => x.GetType() == typeof(RangedAmmo)))
+        {
+            return ((RangedAmmo)items.Find(x => x.GetType() == typeof(RangedAmmo))).Type == inType;
+        }
+
+        return false;
+    }
+
+    public void addToAmmo(Item item, AmmoType inType, int inAmount)
+    {
+        if (items.Exists(x => x.GetType() == typeof(RangedAmmo)))
+        {
+            ((RangedAmmo)items.Find(x => x.GetType() == typeof(RangedAmmo))).Amount += inAmount;
+        }
+        else
+        {
+            this.Add(item);
+        }
     }
 
 }

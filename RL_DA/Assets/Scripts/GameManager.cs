@@ -24,11 +24,15 @@ public class GameManager : MonoBehaviour
     [Header("Death")]
     [SerializeField] private Sprite deadSprite;
 
+    [Header("Dmg effects")]
+    [SerializeField] private Transform damagePopupObj;
+
     // Gets
     public bool getIsPlayerTurn { get => isPlayerTurn; }
     public List<Entity> getEntities { get => entities; }
     public List<Actor> getActors { get => actors; }
     public Sprite getDeadSprite { get => deadSprite; }
+    public Transform DamagePopupObj { get => damagePopupObj; }
 
     static string[] syllables = {
         "blech ","foo ","barf ","rech ","bar ",

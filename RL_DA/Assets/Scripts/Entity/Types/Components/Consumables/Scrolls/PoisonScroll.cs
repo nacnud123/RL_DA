@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoisonScroll : Consumable
+public class PoisonScroll : Scroll
 {
     public override bool Activate(Actor actor)
     {
@@ -14,7 +14,7 @@ public class PoisonScroll : Consumable
 
     public override bool Cast(Actor consumer, Actor target)
     {
-        UIManager.init.addMsg($"{target.name} is poisoned!", "#ffffff");
+        UIManager.init.addMsg($"{target.RealName} is poisoned!", "#ffffff");
         target.AI.isPoisoned = true;
         target.AI.poisonedTurns = Random.Range(3, 8);
         Consume(consumer);

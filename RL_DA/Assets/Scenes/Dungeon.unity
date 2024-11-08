@@ -151,12 +151,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1acf7ff5eff45e4eacd9fe5ffc28124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseTime: 0.075
+  baseTime: 0.05
   delayTime: 0
   isPlayerTurn: 1
   entities: []
   actors: []
   deadSprite: {fileID: 899046848, guid: e776099e384fca048a93c9de23f7f7c8, type: 3}
+  damagePopupObj: {fileID: 5824726173285357392, guid: 24b1449b1ee1d3a4d8ccc2b6fdd7104b, type: 3}
 --- !u!4 &934322808
 Transform:
   m_ObjectHideFlags: 0

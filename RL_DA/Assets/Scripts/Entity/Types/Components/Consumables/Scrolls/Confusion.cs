@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Confusion : Consumable
+public class Confusion : Scroll
 {
     [SerializeField] private int numOfTurns = 10;
 
@@ -22,7 +22,7 @@ public class Confusion : Consumable
         {
             if(confusedEnemy.TurnsRem > 0)
             {
-                UIManager.init.addMsg($"The {target.name} is already confused.", "#FF0000");
+                UIManager.init.addMsg($"The {target.RealName} is already confused.", "#FF0000");
                 consumer.GetComponent<Inventory>().SelectedConsumable = null;
                 consumer.GetComponent<Player>().ToggleTargetMode();
                 return false;
@@ -35,7 +35,7 @@ public class Confusion : Consumable
         confusedEnemy.PrevAI = target.AI;
         confusedEnemy.TurnsRem = numOfTurns;
 
-        UIManager.init.addMsg($"You cast confusion. {target.name} starts to stumble around!", "#ff0000");
+        UIManager.init.addMsg($"You cast confusion. {target.RealName} starts to stumble around!", "#ff0000");
         target.AI = confusedEnemy;
         Consume(consumer);
         consumer.GetComponent<Player>().ToggleTargetMode();

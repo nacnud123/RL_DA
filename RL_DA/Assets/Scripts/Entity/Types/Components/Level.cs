@@ -40,7 +40,7 @@ public class Level : MonoBehaviour
         xpToNextLevel = ExpToNextLevel();
     }
 
-    public void IncrMaxXP(int amount = 20)
+    public void IncrMaxXP(int amount = 10)
     {
         GetComponent<Fighter>().MaxHp += amount;
         GetComponent<Fighter>().Hp += amount;
@@ -50,7 +50,7 @@ public class Level : MonoBehaviour
     }
     
 
-    public void IncrPower(int amount = 20)
+    public void IncrPower(int amount = 1)
     {
         GetComponent<Fighter>().BasePower += amount;
 

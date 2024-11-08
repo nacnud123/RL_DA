@@ -8,11 +8,13 @@ public class Equipment : MonoBehaviour
     [SerializeField] private Equippable weapon;
     [SerializeField] private Equippable armor;
     [SerializeField] private Equippable ring;
+    [SerializeField] private Equippable ranged;
     
 
     public Equippable Weapon { get => weapon; set => weapon = value; }
     public Equippable Armor { get => armor; set => armor = value; }
     public Equippable Ring { get => ring; set => ring = value; }
+    public Equippable Ranged { get => ranged; set => ranged = value; }
     
 
     public int DefenseBonus()
@@ -64,7 +66,7 @@ public class Equipment : MonoBehaviour
         if (item.GetEquippable is null)
             return false;
 
-        return item.GetEquippable == weapon || item.GetEquippable == armor || item.GetEquippable == ring;
+        return item.GetEquippable == weapon || item.GetEquippable == armor || item.GetEquippable == ring || item.GetEquippable == ranged;
     }
 
     public void unequipMsg(string name)
@@ -75,6 +77,14 @@ public class Equipment : MonoBehaviour
     public void equipMsg(string name)
     {
         UIManager.init.addMsg($"You equip the {name}.", "#a000c8");
+    }
+
+    public void updateName(string slot, Item item, int amount)
+    {
+        Equippable currentItem = getSlot(slot);
+        Item temp = currentItem.GetComponent<Item>();
+        currentItem.name = currentItem.name.Replace($" ({amount + 1}) ", $" ({amount}) ");
+        temp.CurrName = temp.CurrName.Replace($" ({amount + 1}) ", $" ({amount}) ");
     }
 
     public void equipToSlot(string slot, Item item, bool addMsg)
@@ -95,7 +105,11 @@ public class Equipment : MonoBehaviour
         {
             armor = item.GetEquippable;
         }
-        else
+        else if(slot == "Ranged")
+        {
+            ranged = item.GetEquippable;
+        }
+        else if(slot == "Ring")
         {
             ring = item.GetEquippable;
             ring.equip(this.GetComponent<Actor>());
@@ -131,7 +145,11 @@ public class Equipment : MonoBehaviour
         {
             armor = null;
         }
-        else
+        else if(slot == "Ranged")
+        {
+            ranged = null;
+        }
+        else if(slot == "Ring")
         {
             ring.unequip(this.GetComponent<Actor>());
             ring = null;
@@ -152,6 +170,9 @@ public class Equipment : MonoBehaviour
                 break;
             case EquipmentType.Ring:
                 slot = "Ring";
+                break;
+            case EquipmentType.Ranged:
+                slot = "Ranged";
                 break;
         }
 
@@ -176,6 +197,8 @@ public class Equipment : MonoBehaviour
                 return armor;
             case "Ring":
                 return ring;
+            case "Ranged":
+                return ranged;
         }
         return null;
     }

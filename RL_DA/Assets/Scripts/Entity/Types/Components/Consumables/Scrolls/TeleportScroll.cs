@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeleportScroll : Consumable
+public class TeleportScroll : Scroll
 {
     public override bool Activate(Actor actor)
     {

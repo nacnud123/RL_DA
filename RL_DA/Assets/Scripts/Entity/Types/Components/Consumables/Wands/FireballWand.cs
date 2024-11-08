@@ -20,7 +20,7 @@ public class FireballWand : Wand
 
             foreach (Actor target in targets)
             {
-                UIManager.init.addMsg($"The {target.name} is engulfed in a fireball, taking {dmg} damage!", "#ff0000");
+                UIManager.init.addMsg($"The {target.RealName} is engulfed in a fireball, taking {dmg} damage!", "#ff0000");
                 target.GetComponent<Fighter>().Hp -= dmg;
             }
 

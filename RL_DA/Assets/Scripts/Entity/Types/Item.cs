@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Item : Entity
@@ -30,17 +31,32 @@ public class Item : Entity
         }
     }
 
-    public override EntityState SaveState() => new ItemState(
+    public override EntityState SaveState()
+    {
+        int inAmm = -1;
+        if (GetConsumable)
+        {
+            var type = GetConsumable.GetType();
+
+            if(type == typeof(Wand) || type.BaseType == typeof(Wand))
+            {
+                inAmm = GetComponent<Wand>().Uses;
+            }
+        }
+
+        return new ItemState(
         _name: name,
         _currName: currName,
         _realName: realName,
         _blocksMovment: BlocksMovment,
         _isVisible: MapManager.init.VisibleTiles.Contains(MapManager.init.getFloorMap.WorldToCell(transform.position)),
         _pos: transform.position,
-        _parent: transform.parent != null ? transform.parent.gameObject.name : ""
+        _parent: transform.parent != null ? transform.parent.gameObject.name : "",
+        _amount: inAmm
         );
+    }
 
-    public void LoadState(ItemState state)
+    public virtual void LoadState(ItemState state)
     {
         if (!state.IsVisible)
             SR.enabled = false;
@@ -57,6 +73,15 @@ public class Item : Entity
         transform.position = state.Position;
         this.currName = state.CurrName;
         this.realName = state.RealName;
+
+        if(state.Amount != -1)
+        {
+            if(this.GetType() != typeof(RangedAmmo))
+            {
+                ((Wand)GetConsumable).Uses = state.Amount;
+            }
+            
+        }
     }
 }
 
@@ -66,15 +91,18 @@ public class ItemState: EntityState
     [SerializeField] private string parent;
     [SerializeField] private string currName;
     [SerializeField] private string realName;
+    [SerializeField] private int amount;
 
     public string Parent { get => parent; set => parent = value; }
     public string CurrName { get => currName; set => currName = value; }
     public string RealName { get => realName; set => realName = value; }
+    public int Amount { get => amount; set => amount = value; }
 
-    public ItemState(EntityType _type = EntityType.Item, string _name = "", string _currName = "", string _realName = "", bool _blocksMovment = false, bool _isVisible = false, Vector3 _pos = new Vector3(), string _parent = "") : base(_type, _name, _blocksMovment, _isVisible, _pos)
+    public ItemState(EntityType _type = EntityType.Item, string _name = "", string _currName = "", string _realName = "", bool _blocksMovment = false, bool _isVisible = false, Vector3 _pos = new Vector3(), string _parent = "", int _amount = 0) : base(_type, _name, _blocksMovment, _isVisible, _pos)
     {
         parent = _parent;
         currName = _currName;
         realName = _realName;
+        amount = _amount;
     }
 }

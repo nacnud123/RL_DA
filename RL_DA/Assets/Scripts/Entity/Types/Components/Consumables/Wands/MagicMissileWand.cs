@@ -20,7 +20,7 @@ public class MagicMissileWand : Wand
 
             Uses -= 1;
 
-            UIManager.init.addMsg($"The {target.name} is hit with a magic missile, it takes {dmg} damage!", "#ff0000");
+            UIManager.init.addMsg($"The {target.RealName} is hit with a magic missile, it takes {dmg} damage!", "#ff0000");
             target.GetComponent<Fighter>().Hp -= dmg;
         }
         else

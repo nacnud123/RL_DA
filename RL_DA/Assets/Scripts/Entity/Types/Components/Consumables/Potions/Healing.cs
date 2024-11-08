@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Healing : Consumable
+public class Healing : Potion
 {
     [SerializeField] private int amount = 0;
 

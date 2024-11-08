@@ -144,16 +144,36 @@ public class MapManager : MonoBehaviour
                         if (entityObject.GetComponent<Item>().CurrName == "")
                         {
                             entityObject.GetComponent<Item>().CurrName = GameManager.init.makeRandName(entityObject.GetComponent<Item>().RealName);
+                           
+
                             if (entityObject.name.Contains("Potion")) { entityObject.GetComponent<Item>().CurrName += "Potion"; }
                             if (entityObject.name.Contains("Scroll")) { entityObject.GetComponent<Item>().CurrName += "Scroll"; }
                             if (entityObject.name.Contains("Ring")) { entityObject.GetComponent<Item>().CurrName += "Ring"; }
+
+                            
                         }
                     }
                     else
                     {
                         entityObject.GetComponent<Item>().CurrName = entityObject.GetComponent<Item>().RealName;
                     }
-                }                
+                }
+
+                if (entityObject.GetComponent<Item>().GetConsumable)
+                {
+                    var entityType = entityObject.GetComponent<Item>().GetConsumable.GetType();
+
+                    if (entityType == typeof(Wand) || entityType.BaseType == typeof(Wand))
+                    {
+                        entityObject.GetComponent<Wand>().initName();
+                    }
+
+                    if(entityType == typeof(RangedAmmo) || entityType.BaseType == typeof(RangedAmmo))
+                    {
+                        entityObject.GetComponent<RangedAmmo>().initName();
+                    }
+                }
+
             }
 
             if (entityObject.GetComponent<Actor>() is not null)

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Fireball : Consumable
+public class Fireball : Scroll
 {
     [SerializeField] private int damage = 12;
     [SerializeField] private int radius = 3;
@@ -22,7 +22,7 @@ public class Fireball : Consumable
     {
         foreach(Actor target in targets)
         {
-            UIManager.init.addMsg($"The {target.name} is engulfed in a fireball, taking {damage} damage!", "#ff0000");
+            UIManager.init.addMsg($"The {target.RealName} is engulfed in a fireball, taking {damage} damage!", "#ff0000");
             target.GetComponent<Fighter>().Hp -= damage;
         }
 

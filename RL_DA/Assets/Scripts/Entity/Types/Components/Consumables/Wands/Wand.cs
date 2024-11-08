@@ -10,7 +10,20 @@ public class Wand : Consumable
 
     public string Damage { get => damage; }
     public int Radius { get => radius; }
-    public int Uses { get => uses; set => uses = value; }
+    public int Uses
+    {
+        get => uses; 
+        set
+        {
+            uses = value;
+            GetComponent<Item>().CurrName = GetComponent<Item>().CurrName.Replace($" ({uses + 1}) ", $" ({uses}) ");
+        }
+    }
+
+    public void initName()
+    {
+        GetComponent<Item>().CurrName += $" ({uses}) ";
+    }
 
     public virtual void updateName()
     {

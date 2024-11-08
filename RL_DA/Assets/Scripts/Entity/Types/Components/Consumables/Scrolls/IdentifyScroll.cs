@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdentifyScroll : Consumable
+public class IdentifyScroll : Scroll
 {
     public override bool Activate(Actor actor)
     {
