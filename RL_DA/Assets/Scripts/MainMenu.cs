@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.Video;
+using UnityEngine.Device;
 
 public class MainMenu : MonoBehaviour
 {
@@ -12,9 +14,15 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject changeLog;
     [SerializeField] private GameObject optionsMenu;
     [SerializeField] private GameObject credditsMenu;
+
+    [Header("Video stuff")]
+    [SerializeField] private VideoPlayer videoPlayer;
+    [SerializeField] private GameObject screen;
+
     private bool isChangeLogOpen = false;
     private bool isOptionsOpen = false;
     private bool isCredditsOpen = false;
+    private bool isVideoOpen = false;
 
     private void Start()
     {
@@ -25,6 +33,15 @@ public class MainMenu : MonoBehaviour
         else
         {
             eventSystem.SetSelectedGameObject(continueButton.gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            Debug.Log("Play Video!");
+            toggleVideo();
         }
     }
 
@@ -44,7 +61,7 @@ public class MainMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        Application.Quit();
+        UnityEngine.Application.Quit();
     }
 
     public void viewChangeLog()
@@ -63,5 +80,21 @@ public class MainMenu : MonoBehaviour
     {
         isCredditsOpen = !isCredditsOpen;
         credditsMenu.SetActive(isCredditsOpen);
+    }
+
+    private void toggleVideo()
+    {
+        isVideoOpen = !isVideoOpen;
+
+        if (isVideoOpen)
+        {
+            videoPlayer.Play();
+        }
+        else
+        {
+            videoPlayer.Stop();
+        }
+
+        screen.SetActive(isVideoOpen);
     }
 }

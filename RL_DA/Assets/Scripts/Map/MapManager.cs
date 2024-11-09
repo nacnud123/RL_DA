@@ -167,11 +167,10 @@ public class MapManager : MonoBehaviour
                     {
                         entityObject.GetComponent<Wand>().initName();
                     }
-
-                    if(entityType == typeof(RangedAmmo) || entityType.BaseType == typeof(RangedAmmo))
-                    {
-                        entityObject.GetComponent<RangedAmmo>().initName();
-                    }
+                }
+                if(entityObject.GetComponent<Item>().GetType() == typeof(RangedAmmo) || entityObject.GetComponent<Item>().GetType().BaseType == typeof(RangedAmmo))
+                {
+                    entityObject.GetComponent<RangedAmmo>().initName();
                 }
 
             }

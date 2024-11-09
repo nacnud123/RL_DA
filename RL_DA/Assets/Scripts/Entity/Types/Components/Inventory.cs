@@ -32,7 +32,7 @@ public class Inventory : MonoBehaviour
         item.transform.SetParent(null);
         item.SR.enabled = true;
         item.addToGameManager();
-        UIManager.init.addMsg($"You dropped the {item.name}.", "#ff0000");
+        UIManager.init.addMsg($"You dropped the {item.RealName}.", "#ff0000");
     }
 
     public void identifyItem(Item item)
