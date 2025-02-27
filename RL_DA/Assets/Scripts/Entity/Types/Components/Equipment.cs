@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 [RequireComponent(typeof(Actor))]
@@ -85,7 +86,7 @@ public class Equipment : MonoBehaviour
                 unequipFromSlot("PrimarySlot", addMsg);
                 unequipFromSlot("SecondarySlot", addMsg);
                 primaryWeapon = newWeapon;
-                primaryWeapon.EquipmentType = EquipmentType.PrimarySlot;
+                primaryWeapon.EquipmentType = EquipmentType.PrimaryWeapon;
                 SetEquipTag(primaryWeapon, "(R L) (E)");
             }
             else
@@ -94,7 +95,7 @@ public class Equipment : MonoBehaviour
                 {
                     unequipFromSlot("PrimarySlot", addMsg);
                     primaryWeapon = newWeapon;
-                    primaryWeapon.EquipmentType = EquipmentType.PrimarySlot;
+                    primaryWeapon.EquipmentType = EquipmentType.PrimaryWeapon;
                     SetEquipTag(primaryWeapon, "(R) (E)");
                 }
                 else
@@ -102,20 +103,20 @@ public class Equipment : MonoBehaviour
                     if (primaryWeapon == null)
                     {
                         primaryWeapon = newWeapon;
-                        primaryWeapon.EquipmentType = EquipmentType.PrimarySlot;
+                        primaryWeapon.EquipmentType = EquipmentType.PrimaryWeapon;
                         SetEquipTag(primaryWeapon, "(R) (E)");
                     }
                     else if (secondaryWeapon == null)
                     {
                         secondaryWeapon = newWeapon;
-                        secondaryWeapon.EquipmentType = EquipmentType.SecondarySlot;
+                        secondaryWeapon.EquipmentType = EquipmentType.SecondaryWeapon;
                         SetEquipTag(secondaryWeapon, "(L) (E)");
                     }
                     else
                     {
                         unequipFromSlot("SecondarySlot", addMsg);
                         secondaryWeapon = newWeapon;
-                        secondaryWeapon.EquipmentType = EquipmentType.SecondarySlot;
+                        secondaryWeapon.EquipmentType = EquipmentType.SecondaryWeapon;
                         SetEquipTag(secondaryWeapon, "(L) (E)");
                     }
                 }
@@ -143,7 +144,31 @@ public class Equipment : MonoBehaviour
         }
 
         if (addMsg) equipMsg(item.CurrName);
+
+        switch (slot)
+        {
+            case "Ranged":
+                ranged = item.GetEquippable;
+                break;
+            case "Chest":
+                chest = item.GetEquippable;
+                break;
+            case "Boots":
+                boots = item.GetEquippable;
+                break;
+            case "Arms":
+                arms = item.GetEquippable;
+                break;
+            case "Hands":
+                hands = item.GetEquippable;
+                break;
+            case "Head":
+                head = item.GetEquippable;
+                break;
+        }
     }
+
+
 
     public void unequipFromSlot(string slot, bool addMsg)
     {
@@ -193,10 +218,10 @@ public class Equipment : MonoBehaviour
             case EquipmentType.Weapon:
                 slot = "Weapon";
                 break;
-            case EquipmentType.PrimarySlot:
+            case EquipmentType.PrimaryWeapon:
                 slot = "PrimarySlot";
                 break;
-            case EquipmentType.SecondarySlot:
+            case EquipmentType.SecondaryWeapon:
                 slot = "SecondarySlot";
                 break;
             case EquipmentType.Armor:
@@ -213,11 +238,11 @@ public class Equipment : MonoBehaviour
         if (ItemIsEquipped(equippableItem))
         {
             // Ensure we remove the correct weapon (Primary or Secondary)
-            if (equip.EquipmentType == EquipmentType.PrimarySlot)
+            if (equip.EquipmentType == EquipmentType.PrimaryWeapon)
             {
                 unequipFromSlot(slot, addMsg);
             }
-            else if (equip.EquipmentType == EquipmentType.SecondarySlot)
+            else if (equip.EquipmentType == EquipmentType.SecondaryWeapon)
             {
                 unequipFromSlot(slot, addMsg);
             }

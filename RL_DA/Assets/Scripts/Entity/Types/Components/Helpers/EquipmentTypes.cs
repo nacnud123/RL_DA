@@ -4,6 +4,6 @@ public enum EquipmentType
     Armor,
     Ring,
     Ranged,
-    PrimarySlot,
-    SecondarySlot
+    PrimaryWeapon,
+    SecondaryWeapon
 }
