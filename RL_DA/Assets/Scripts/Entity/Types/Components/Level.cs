@@ -80,6 +80,7 @@ public class Level : MonoBehaviour
     }
 }
 
+[System.Serializable]
 public class LevelState
 {
     [SerializeField] private int currentLevel = 1, currentXp, xpToNextLevel;

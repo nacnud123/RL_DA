@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5463051535644349781}
   - component: {fileID: -6353332688801541581}
   m_Layer: 0
-  m_Name: Long Sword
+  m_Name: LongSword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,6 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentType: 0
-  powerBonus: 6
+  powerBonus: 1
   defenseBonus: 0
   damage: 1d8
+  isTwoHanded: 0

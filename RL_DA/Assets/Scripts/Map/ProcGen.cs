@@ -240,11 +240,19 @@ internal sealed class ProcGen
             Actor playerActor = player.GetComponent<Actor>();
 
             Item starterWeapon = MapManager.init.createEntity("Weapons/Dagger", (Vector2Int)playerPos).GetComponent<Item>();
+            Item starterWeapon0 = MapManager.init.createEntity("Weapons/Dagger", (Vector2Int)playerPos).GetComponent<Item>();
+            Item starterWeapon2 = MapManager.init.createEntity("Weapons/LongSword", (Vector2Int)playerPos).GetComponent<Item>();
+            Item starterWeapon3 = MapManager.init.createEntity("Weapons/TwoHandedSword", (Vector2Int)playerPos).GetComponent<Item>();
+            Item starterWeapon4 = MapManager.init.createEntity("Weapons/WarHammer", (Vector2Int)playerPos).GetComponent<Item>();
             Item starterArmor = MapManager.init.createEntity("Armor/Leather", (Vector2Int)playerPos).GetComponent<Item>();
             //Item starterSpell = MapManager.init.createEntity("Scrolls/Fireball Scroll", (Vector2Int)playerPos).GetComponent<Item>();
             Item starterRanged = MapManager.init.createEntity("Ranged Weapons/Bow", (Vector2Int)playerPos).GetComponent<Item>();
             
             playerActor.GetInventory.Add(starterWeapon);
+            playerActor.GetInventory.Add(starterWeapon2);
+            playerActor.GetInventory.Add(starterWeapon3);
+            playerActor.GetInventory.Add(starterWeapon4);
+            playerActor.GetInventory.Add(starterWeapon0);
             playerActor.GetInventory.Add(starterArmor);
             playerActor.GetInventory.Add(starterRanged);
             //((Wand)starterWand.GetConsumable).initName();

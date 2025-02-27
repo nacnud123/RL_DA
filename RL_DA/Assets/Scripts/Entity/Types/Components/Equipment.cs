@@ -5,36 +5,30 @@ using UnityEngine;
 [RequireComponent(typeof(Actor))]
 public class Equipment : MonoBehaviour
 {
-    [SerializeField] private Equippable weapon;
+    [SerializeField] private Equippable primaryWeapon;
+    [SerializeField] private Equippable secondaryWeapon;
+
     [SerializeField] private Equippable armor;
     [SerializeField] private Equippable ring;
     [SerializeField] private Equippable ranged;
-    
 
-    public Equippable Weapon { get => weapon; set => weapon = value; }
+
+    public Equippable PrimaryWeapon { get => primaryWeapon; set => primaryWeapon = value; }
+    public Equippable SecondaryWeapon { get => secondaryWeapon; set => secondaryWeapon = value; }
+
     public Equippable Armor { get => armor; set => armor = value; }
     public Equippable Ring { get => ring; set => ring = value; }
     public Equippable Ranged { get => ranged; set => ranged = value; }
-    
+
 
     public int DefenseBonus()
     {
         int bonus = 0;
 
-        if(weapon is not null && weapon.DefenseBonus > 0)
-        {
-            bonus += weapon.DefenseBonus;
-        }
-
-        if(armor is not null && armor.DefenseBonus > 0)
-        {
-            bonus += armor.DefenseBonus;
-        }
-
-        if (ring is not null && ring.DefenseBonus > 0)
-        {
-            bonus += ring.DefenseBonus;
-        }
+        if (primaryWeapon is not null) bonus += primaryWeapon.DefenseBonus;
+        if (secondaryWeapon is not null) bonus += secondaryWeapon.DefenseBonus;
+        if (armor is not null) bonus += armor.DefenseBonus;
+        if (ring is not null) bonus += ring.DefenseBonus;
 
         return bonus;
     }
@@ -43,30 +37,23 @@ public class Equipment : MonoBehaviour
     {
         int bonus = 0;
 
-        if(weapon is not null && weapon.PowerBonus > 0)
-        {
-            bonus += GameManager.init.getDamage(weapon.Damage);
-        }
-
-        if(armor is not null && armor.PowerBonus > 0)
-        {
-            bonus += armor.PowerBonus;
-        }
-
-        if(ring is not null && ring.PowerBonus > 0)
-        {
-            bonus += ring.PowerBonus;
-        }
+        if (primaryWeapon is not null) bonus += GameManager.init.getDamage(primaryWeapon.Damage);
+        if (secondaryWeapon is not null) bonus += GameManager.init.getDamage(secondaryWeapon.Damage);
+        if (armor is not null) bonus += armor.PowerBonus;
+        if (ring is not null) bonus += ring.PowerBonus;
 
         return bonus;
     }
 
     public bool ItemIsEquipped(Item item)
     {
-        if (item.GetEquippable is null)
-            return false;
+        if (item.GetEquippable is null) return false;
 
-        return item.GetEquippable == weapon || item.GetEquippable == armor || item.GetEquippable == ring || item.GetEquippable == ranged;
+        return item.GetEquippable == primaryWeapon ||
+               item.GetEquippable == secondaryWeapon ||
+               item.GetEquippable == armor ||
+               item.GetEquippable == ring ||
+               item.GetEquippable == ranged;
     }
 
     public void unequipMsg(string name)
@@ -89,80 +76,148 @@ public class Equipment : MonoBehaviour
 
     public void equipToSlot(string slot, Item item, bool addMsg)
     {
-        Equippable currentItem = getSlot(slot);
+        Equippable newEquip = item.GetEquippable;
 
-        if(currentItem is not null)
+        if (slot == "Weapon" && newEquip is Weapon newWeapon)
+        {
+            if (newWeapon.IsTwoHanded)
+            {
+                unequipFromSlot("Weapon", addMsg);
+                primaryWeapon = newWeapon;
+                primaryWeapon.EquipmentType = EquipmentType.PrimarySlot;
+            }
+            else
+            {
+                if (primaryWeapon == null)
+                {
+                    primaryWeapon = newWeapon;
+                    primaryWeapon.EquipmentType = EquipmentType.PrimarySlot;
+                }
+                else if (secondaryWeapon == null)
+                {
+                    secondaryWeapon = newWeapon;
+                    secondaryWeapon.EquipmentType = EquipmentType.SecondarySlot;
+                }
+                else
+                {
+                    unequipFromSlot("Weapon", addMsg, secondaryWeapon.GetComponent<Weapon>());
+                    secondaryWeapon = newWeapon;
+                    secondaryWeapon.EquipmentType = EquipmentType.SecondarySlot;
+                }
+            }
+        }
+        else if (slot == "Armor")
         {
             unequipFromSlot(slot, addMsg);
+            armor = newEquip;
         }
-
-        if(slot == "Weapon")
+        else if (slot == "Ranged")
         {
-            weapon = item.GetEquippable;
-            
+            unequipFromSlot(slot, addMsg);
+            ranged = newEquip;
         }
-        else if(slot == "Armor")
+        else if (slot == "Ring")
         {
-            armor = item.GetEquippable;
-        }
-        else if(slot == "Ranged")
-        {
-            ranged = item.GetEquippable;
-        }
-        else if(slot == "Ring")
-        {
-            ring = item.GetEquippable;
+            unequipFromSlot(slot, addMsg);
+            ring = newEquip;
             ring.equip(this.GetComponent<Actor>());
         }
 
-        if (addMsg)
-        {
-            equipMsg(item.CurrName);
-        }
+        if (addMsg) equipMsg(item.CurrName);
 
         item.name = $"{item.name} (E)";
         item.CurrName = $"{item.CurrName} (E)";
-        
     }
 
-    public void unequipFromSlot(string slot, bool addMsg)
+    public void unequipFromSlot(string slot, bool addMsg, Weapon specificWeapon = null)
     {
-        Equippable currentItem = getSlot(slot);
-        Item temp = currentItem.GetComponent<Item>();
-        currentItem.name = currentItem.name.Replace(" (E)", "");
-        temp.CurrName = temp.CurrName.Replace(" (E)", "");
+        if (slot == "Weapon")
+        {
+            if (specificWeapon != null)
+            {
+                if (primaryWeapon != null && ReferenceEquals(primaryWeapon, specificWeapon))
+                {
+                    unequipMsg(primaryWeapon.name);
+                    RemoveEquipTag(primaryWeapon);
+                    primaryWeapon.EquipmentType = EquipmentType.Weapon; // Restore type
+                    primaryWeapon = null;
+                }
+                else if (secondaryWeapon != null && ReferenceEquals(secondaryWeapon, specificWeapon))
+                {
+                    unequipMsg(secondaryWeapon.name);
+                    RemoveEquipTag(secondaryWeapon);
+                    secondaryWeapon.EquipmentType = EquipmentType.Weapon; // Restore type
+                    secondaryWeapon = null;
+                }
+            }
+            else
+            {
+                if (secondaryWeapon != null)
+                {
+                    unequipMsg(secondaryWeapon.name);
+                    RemoveEquipTag(secondaryWeapon);
+                    secondaryWeapon.EquipmentType = EquipmentType.Weapon; // Restore type
+                    secondaryWeapon = null;
+                }
+                else if (primaryWeapon != null)
+                {
+                    unequipMsg(primaryWeapon.name);
+                    RemoveEquipTag(primaryWeapon);
+                    primaryWeapon.EquipmentType = EquipmentType.Weapon; // Restore type
+                    primaryWeapon = null;
+                }
+            }
+        }
+        else
+        {
+            Equippable currentItem = getSlot(slot);
+            if (currentItem == null) return;
 
-        if (addMsg)
-        {
-            unequipMsg(temp.CurrName);
-        }
+            unequipMsg(currentItem.name);
+            RemoveEquipTag(currentItem);
 
-        if(slot == "Weapon")
-        {
-            weapon = null;
-        }
-        else if(slot == "Armor")
-        {
-            armor = null;
-        }
-        else if(slot == "Ranged")
-        {
-            ranged = null;
-        }
-        else if(slot == "Ring")
-        {
-            ring.unequip(this.GetComponent<Actor>());
-            ring = null;
+            if (slot == "Armor") armor = null;
+            else if (slot == "Ranged") ranged = null;
+            else if (slot == "Ring")
+            {
+                ring.unequip(this.GetComponent<Actor>());
+                ring = null;
+            }
         }
     }
+
+    // Helper function to add correct equip tag
+    private void SetEquipTag(Equippable item, string tag)
+    {
+        Item temp = item.GetComponent<Item>();
+        RemoveEquipTag(item); // Ensure no duplicate tags
+        temp.name = $"{temp.name} {tag}";
+        temp.CurrName = $"{temp.CurrName} {tag}";
+    }
+
+    // Helper function to remove "(E)", "(R)", and "(L)" tags
+    private void RemoveEquipTag(Equippable item)
+    {
+        Item temp = item.GetComponent<Item>();
+        temp.name = temp.name.Replace(" (E)", "").Replace(" (R)", "").Replace(" (L)", "").Trim();
+        temp.CurrName = temp.CurrName.Replace(" (E)", "").Replace(" (R)", "").Replace(" (L)", "").Trim();
+    }
+
+
 
     public void toggleEquip(Item equippableItem, bool addMsg = true)
     {
+        Equippable equip = equippableItem.GetEquippable;
+
+        if (equip == null) return;
+
         string slot = "";
 
-        switch (equippableItem.GetEquippable.EquipmentType)
+        switch (equip.EquipmentType)
         {
             case EquipmentType.Weapon:
+            case EquipmentType.PrimarySlot:
+            case EquipmentType.SecondarySlot:
                 slot = "Weapon";
                 break;
             case EquipmentType.Armor:
@@ -178,7 +233,19 @@ public class Equipment : MonoBehaviour
 
         if (ItemIsEquipped(equippableItem))
         {
-            unequipFromSlot(slot, addMsg);
+            // Ensure we remove the correct weapon (Primary or Secondary)
+            if (equip.EquipmentType == EquipmentType.PrimarySlot)
+            {
+                unequipFromSlot(slot, addMsg, (Weapon)primaryWeapon);
+            }
+            else if (equip.EquipmentType == EquipmentType.SecondarySlot)
+            {
+                unequipFromSlot(slot, addMsg, (Weapon)secondaryWeapon);
+            }
+            else
+            {
+                unequipFromSlot(slot, addMsg);
+            }
         }
         else
         {
@@ -188,19 +255,17 @@ public class Equipment : MonoBehaviour
 
     public Equippable getSlot(string inSlot)
     {
-
-        switch (inSlot)
+        if (inSlot == "Weapon")
         {
-            case "Weapon":
-                return weapon;
-            case "Armor":
-                return armor;
-            case "Ring":
-                return ring;
-            case "Ranged":
-                return ranged;
+            return primaryWeapon ?? secondaryWeapon;
         }
-        return null;
+        return inSlot switch
+        {
+            "Armor" => armor,
+            "Ring" => ring,
+            "Ranged" => ranged,
+            _ => null
+        };
     }
 
 }

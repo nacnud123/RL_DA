@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -52,6 +53,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private bool isLevelUpMenuOpen = false;
     [SerializeField] private GameObject levelUpMenu;
     [SerializeField] private GameObject levelUpMenuContent;
+
+    [Header("Controlls Menu")]
+    [SerializeField] private bool isControllsOpen = false;
+    [SerializeField] private GameObject controlsMenu;
 
 
     public bool skipRest = false;
@@ -187,9 +192,9 @@ public class UIManager : MonoBehaviour
         GameObject strengthButton = levelUpMenuContent.transform.GetChild(1).gameObject;
         GameObject agilityButton = levelUpMenuContent.transform.GetChild(2).gameObject;
 
-        constitutionButton.GetComponent<TextMeshProUGUI>().text = $"Constitution (+20 HP, from {actor.GetComponent<Fighter>().MaxHp})";
-        strengthButton.GetComponent<TextMeshProUGUI>().text = $"Strength (+1 attack, from {actor.GetComponent<Fighter>().Power()})";
-        agilityButton.GetComponent<TextMeshProUGUI>().text = $"Agility (+1 defense, from {actor.GetComponent<Fighter>().Defense()})";
+        constitutionButton.GetComponent<TextMeshProUGUI>().text = $"Constitution (+10 HP, to {actor.GetComponent<Fighter>().MaxHp + 10})";
+        strengthButton.GetComponent<TextMeshProUGUI>().text = $"Strength (+1 attack, to {actor.GetComponent<Fighter>().Power() + 1})";
+        agilityButton.GetComponent<TextMeshProUGUI>().text = $"Agility (+1 defense, to {actor.GetComponent<Fighter>().Defense() + 1})";
 
         foreach (Transform child in levelUpMenuContent.transform)
         {
@@ -257,10 +262,10 @@ public class UIManager : MonoBehaviour
 
     public void Quit()
     {
-        #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-        #endif
-        Application.Quit();
+
+
+        SceneManager.LoadScene(0);
+
     }
 
 
@@ -364,5 +369,11 @@ public class UIManager : MonoBehaviour
         }
         
 
+    }
+
+    public void toggleControls()
+    {
+        isControllsOpen = !isControllsOpen;
+        controlsMenu.SetActive(isControllsOpen);
     }
 }
