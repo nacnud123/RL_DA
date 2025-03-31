@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: -1802896555
   m_SortingLayer: 1
   m_SortingOrder: 2
-  m_Sprite: {fileID: 1947814016, guid: e776099e384fca048a93c9de23f7f7c8, type: 3}
+  m_Sprite: {fileID: -1860700755, guid: 8d62db0eab7fd4b44aa6db5b093d6d38, type: 3}
   m_Color: {r: 0.003921569, g: 0.3647059, b: 0.32156864, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -192,6 +192,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495eaeb88a4018f4cb58be018f6e4ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
+  primaryWeapon: {fileID: 0}
+  secondaryWeapon: {fileID: 0}
   armor: {fileID: 0}
   ring: {fileID: 0}
+  ranged: {fileID: 0}

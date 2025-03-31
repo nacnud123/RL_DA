@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: -1802896555
   m_SortingLayer: 1
   m_SortingOrder: 1
-  m_Sprite: {fileID: 1189289546, guid: e776099e384fca048a93c9de23f7f7c8, type: 3}
+  m_Sprite: {fileID: -576090352, guid: 8d62db0eab7fd4b44aa6db5b093d6d38, type: 3}
   m_Color: {r: 0.6226415, g: 0.60873234, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -119,3 +119,5 @@ MonoBehaviour:
   equipmentType: 1
   powerBonus: 0
   defenseBonus: 5
+  damage: 
+  isTwoHanded: 0

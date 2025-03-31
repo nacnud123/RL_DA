@@ -144,28 +144,6 @@ public class Equipment : MonoBehaviour
         }
 
         if (addMsg) equipMsg(item.CurrName);
-
-        switch (slot)
-        {
-            case "Ranged":
-                ranged = item.GetEquippable;
-                break;
-            case "Chest":
-                chest = item.GetEquippable;
-                break;
-            case "Boots":
-                boots = item.GetEquippable;
-                break;
-            case "Arms":
-                arms = item.GetEquippable;
-                break;
-            case "Hands":
-                hands = item.GetEquippable;
-                break;
-            case "Head":
-                head = item.GetEquippable;
-                break;
-        }
     }
 
 

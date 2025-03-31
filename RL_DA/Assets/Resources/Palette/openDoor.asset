@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: openDoor
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -841546720, guid: e776099e384fca048a93c9de23f7f7c8, type: 3}
+  m_Sprite: {fileID: -1758103632, guid: 8d62db0eab7fd4b44aa6db5b093d6d38, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

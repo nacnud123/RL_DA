@@ -5,16 +5,15 @@ using UnityEngine;
 public enum AmmoType
 {
     Arrows
-};
+}
 
 public class RangedAmmo : Item
 {
+    [Header("Ammo properties")]
     [SerializeField] private AmmoType type;
-
-    public AmmoType Type { get => type; }
-
     [SerializeField] private int amount, maxAmount;
 
+    public AmmoType Type { get => type; }
     public int Amount { 
         get => amount;
         set

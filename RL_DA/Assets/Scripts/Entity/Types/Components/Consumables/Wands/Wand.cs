@@ -10,6 +10,7 @@ public class Wand : Consumable
 
     public string Damage { get => damage; }
     public int Radius { get => radius; }
+
     public int Uses
     {
         get => uses; 
