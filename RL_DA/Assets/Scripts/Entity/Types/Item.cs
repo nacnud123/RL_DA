@@ -7,14 +7,11 @@ public class Item : Entity
 {
     [SerializeField] private Consumable consumable;
     [SerializeField] private Equippable equippable;
-    [SerializeField] private string currName = "";
-    [SerializeField] private string realName = "";
     [SerializeField] private float weight = 1f;
 
     public Consumable GetConsumable { get => consumable; }
     public Equippable GetEquippable { get => equippable; }
-    public string CurrName { get => currName; set => currName = value; }
-    public string RealName { get => realName; set => currName = value; }
+    
     public float Weight { get => weight; set => weight = value; }
 
     private void OnValidate()

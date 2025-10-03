@@ -6,7 +6,11 @@ public class Entity : MonoBehaviour
 {
     [SerializeField] private bool blocksMovement;
     [SerializeField] private SpriteRenderer spriteRenderer;
-    
+    public string realName = "";
+    public string currName = "";
+    public string CurrName { get => currName; set => currName = value; }
+    public string RealName { get => realName; set => currName = value; }
+
     public bool BlocksMovment { get => blocksMovement; set => blocksMovement = value; }
     public SpriteRenderer SR { get => spriteRenderer; set => spriteRenderer = value; }
 
@@ -40,6 +44,16 @@ public class Entity : MonoBehaviour
     }
 
     public virtual EntityState SaveState() => new EntityState();
+
+    public virtual void OnMouseEnter()
+    {
+        UIManager.init.ShowTooltip(this.currName);
+    }
+
+    public virtual void OnMouseExit()
+    {
+        UIManager.init.HideTooltip();
+    }
 }
 
 [System.Serializable]

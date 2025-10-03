@@ -13,7 +13,7 @@ public class Actor : Entity
     [SerializeField] private Fighter fighter;
     [SerializeField] private Level level;
     [SerializeField] private Hunger hunger;
-    [SerializeField] private string realName = "";
+    
 
     AdamMilVisibility algorithm;
 
@@ -27,8 +27,6 @@ public class Actor : Entity
     public Fighter Fighter { get => fighter; set => fighter = value; }
     public Level Level { get => level; set => level = value; }
     public Hunger Hunger { get => hunger; set => hunger = value; }
-
-    public string RealName { get => realName; set => realName = value; }
 
     private void OnValidate()
     {
@@ -146,6 +144,11 @@ public class Actor : Entity
         {
             hunger.LoadState(state.HungerState);
         }
+    }
+
+    public override void OnMouseEnter()
+    {
+        UIManager.init.ShowTooltip(this.realName);
     }
 }
 

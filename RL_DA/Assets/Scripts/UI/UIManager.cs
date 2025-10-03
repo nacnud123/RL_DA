@@ -64,6 +64,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private bool isControllsOpen = false;
     [SerializeField] private GameObject controlsMenu;
 
+    [Header("Tooltip UI")] // tt_ comes before the vars
+    [SerializeField] private GameObject tt_GameObj;
+    [SerializeField] private RectTransform tt_CanvasRect;
+    [SerializeField] private RectTransform tt_backgroundRect;
+    [SerializeField] private TextMeshProUGUI tt_Text;
+    private RectTransform tt_RectTransform;
+
 
     public bool skipRest = false;
     public bool GetIsMenuOpen { get => isMenuOpen; }
@@ -86,16 +93,39 @@ public class UIManager : MonoBehaviour
     {
         setDungeonFloorText(SaveManager.init.CurrentFloor);
 
-        if(SaveManager.init.Save.SavedFloor is 0)
+        if (SaveManager.init.Save.SavedFloor is 0)
         {
-             addMsg("Hi, welcome to da rl", "#0da2ff");
+            addMsg("Hi, welcome to da rl", "#0da2ff");
         }
         else
         {
             addMsg("Welcome back", "#0da2ff");
         }
+
+        tt_RectTransform = tt_GameObj.transform.GetComponent<RectTransform>();
     }
 
+
+    private void Update()
+    {
+        if (tt_GameObj.activeInHierarchy)
+        {
+            Vector2 tt_anchorPos = Input.mousePosition / tt_CanvasRect.localScale.x;
+
+            if (tt_anchorPos.x + tt_backgroundRect.rect.width > tt_CanvasRect.rect.width)
+            {
+                tt_anchorPos.x = tt_CanvasRect.rect.width - tt_backgroundRect.rect.width;
+            }
+
+            if (tt_anchorPos.y + tt_backgroundRect.rect.height > tt_CanvasRect.rect.height)
+            {
+                tt_anchorPos.y = tt_CanvasRect.rect.width - tt_backgroundRect.rect.width;
+            }
+
+
+            tt_RectTransform.anchoredPosition = tt_anchorPos;
+        }
+    }
 
     public void setHealthMax(int maxHP)
     {
@@ -223,7 +253,7 @@ public class UIManager : MonoBehaviour
 
         if (isMenuOpen)
             updateMenu(actor, idMenuContent);
-        
+
     }
 
     public void toggleEscMenu()
@@ -282,7 +312,7 @@ public class UIManager : MonoBehaviour
         isCharInfoOpen = !isCharInfoOpen;
         setBools(charInfoMenu, isCharInfoOpen);
 
-        if(actor != null)
+        if (actor != null)
         {
             charInfoMenu.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"Level: {actor.GetComponent<Level>().CurrentLevel}";
             charInfoMenu.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = $"XP: {actor.GetComponent<Level>().CurrentXP}";
@@ -341,9 +371,9 @@ public class UIManager : MonoBehaviour
         msgPref.color = getColorFromHex(colorHex);
         msgPref.transform.SetParent(msgHistoryContent.transform, false);
 
-        for(int i = 0; i < lastFiveMsgContent.transform.childCount; i++)
+        for (int i = 0; i < lastFiveMsgContent.transform.childCount; i++)
         {
-            if(msgHistoryContent.transform.childCount - 1 < i)
+            if (msgHistoryContent.transform.childCount - 1 < i)
             {
                 return;
             }
@@ -352,14 +382,14 @@ public class UIManager : MonoBehaviour
             TextMeshProUGUI msgHistoryChild = msgHistoryContent.transform.GetChild(msgHistoryContent.transform.childCount - 1 - i).GetComponent<TextMeshProUGUI>();
             lastFiveHistoryChild.text = msgHistoryChild.text;
             lastFiveHistoryChild.color = msgHistoryChild.color;
-            
+
         }
     }
 
     private Color getColorFromHex(string v)
     {
         Color color;
-        if(ColorUtility.TryParseHtmlString(v, out color))
+        if (ColorUtility.TryParseHtmlString(v, out color))
         {
             return color;
         }
@@ -370,10 +400,30 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ShowTooltip(string tooltipText)
+    {
+        tt_GameObj.SetActive(true);
+        SetTooltipText(tooltipText);
+    }
+
+    public void HideTooltip()
+    {
+        tt_GameObj.SetActive(false);
+    }
+
+    private void SetTooltipText(string tooltipString)
+    {
+        tt_Text.SetText(tooltipString);
+        tt_Text.ForceMeshUpdate();
+
+        Vector2 textSize = tt_Text.GetRenderedValues(false) + new Vector2(8, 8);
+        tt_backgroundRect.sizeDelta = textSize;
+    }
+
     private void updateMenu(Actor actor, GameObject menuContent)
     {
 
-        for(int resetNum = 0; resetNum < menuContent.transform.childCount; resetNum++)
+        for (int resetNum = 0; resetNum < menuContent.transform.childCount; resetNum++)
         {
             GameObject menuContentChild = menuContent.transform.GetChild(resetNum).gameObject;
             menuContentChild.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
@@ -382,7 +432,7 @@ public class UIManager : MonoBehaviour
         }
 
         //char c = 'a';
-        for(int itemNum = 0; itemNum < actor.GetInventory.GetItems.Count; itemNum++)
+        for (int itemNum = 0; itemNum < actor.GetInventory.GetItems.Count; itemNum++)
         {
             GameObject menuContentChild = menuContent.transform.GetChild(itemNum).gameObject;
             Item item = actor.GetInventory.GetItems[itemNum];
@@ -391,20 +441,20 @@ public class UIManager : MonoBehaviour
             {
                 if (menuContent == invContent)
                 {
-                    if(item.GetConsumable is not null)
+                    if (item.GetConsumable is not null)
                     {
                         Action.useAction(actor, item);
                     }
-                    else if(item.GetEquippable is not null)
+                    else if (item.GetEquippable is not null)
                     {
                         Action.EquipAction(actor, item);
                     }
                 }
-                else if(menuContent == dropMenuContent)
+                else if (menuContent == dropMenuContent)
                 {
                     Action.dropAction(actor, item);
                 }
-                else if(menuContent == idMenuContent)
+                else if (menuContent == idMenuContent)
                 {
                     Debug.Log("Id menu use Action.");
                     Action.identifyAction(actor, item);
@@ -415,11 +465,11 @@ public class UIManager : MonoBehaviour
             menuContentChild.SetActive(true);
         }
 
-        if(skipRest == false)
+        if (skipRest == false)
         {
             eventSystem.SetSelectedGameObject(menuContent.transform.GetChild(0).gameObject);
         }
-        
+
 
     }
 
