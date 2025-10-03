@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,12 +13,21 @@ static public class Action
             if (GameManager.init.getEntities[i].GetComponent<Actor>() || actor.transform.position != GameManager.init.getEntities[i].transform.position)
                 continue;
 
-            if (actor.GetInventory.GetItems.Count >= actor.GetInventory.GetCapacity)
+            if (GameManager.init.getEntities[i].TryGetComponent<IntractableEntity>(out var intractableEntity))
             {
-                UIManager.init.addMsg($"Your inventory is full.", "#808080"); return;
+                intractableEntity.onInteract();
+                GameManager.init.endTurn();
+                continue;
             }
 
             Item item = GameManager.init.getEntities[i].GetComponent<Item>();
+
+            // Check if we can carry this item
+            if (!actor.GetInventory.CanCarry(item.Weight))
+            {
+                UIManager.init.addMsg($"The {item.CurrName} is too heavy to carry!", "#808080");
+                return;
+            }
 
             if(item.GetType() == typeof(RangedAmmo))
             {
@@ -25,7 +35,7 @@ static public class Action
             }
             else
             {
-                actor.GetInventory.Add(item);
+                actor.GetInventory.Add(item, false); // Skip weight check since we already did it
             }
 
 
@@ -66,7 +76,7 @@ static public class Action
             MapManager.init.GenerateDungeon();
         }
 
-        UIManager.init.addMsg("You take the stiars", "#0da2ff");
+        UIManager.init.addMsg("You take the stairs", "#0da2ff");
         UIManager.init.setDungeonFloorText(SaveManager.init.CurrentFloor);
 
     }
@@ -190,6 +200,14 @@ static public class Action
 
     public static void movementAction(Actor actor, Vector2 dir)
     {
+        // Check if player is over-encumbered
+        if (actor.GetComponent<Player>() && actor.GetInventory.IsOverEncumbered())
+        {
+            UIManager.init.addMsg("You are carrying too much to move!", "#ff0000");
+            GameManager.init.endTurn();
+            return;
+        }
+
         actor.Move(dir);
         actor.updateFOV();
         GameManager.init.endTurn();

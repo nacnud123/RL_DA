@@ -484,8 +484,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 948200351
-  m_SortingLayer: 2
+  m_SortingLayerID: -29077519
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -533,6 +533,63 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1001 &1732277931
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1044418680729380780, guid: 722116ab1d52fea46953c322cdcdd0d6, type: 3}
+      propertyPath: m_Name
+      value: Shrine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5547822917824585046, guid: 722116ab1d52fea46953c322cdcdd0d6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5547822917824585046, guid: 722116ab1d52fea46953c322cdcdd0d6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5547822917824585046, guid: 722116ab1d52fea46953c322cdcdd0d6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5547822917824585046, guid: 722116ab1d52fea46953c322cdcdd0d6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5547822917824585046, guid: 722116ab1d52fea46953c322cdcdd0d6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5547822917824585046, guid: 722116ab1d52fea46953c322cdcdd0d6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5547822917824585046, guid: 722116ab1d52fea46953c322cdcdd0d6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5547822917824585046, guid: 722116ab1d52fea46953c322cdcdd0d6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5547822917824585046, guid: 722116ab1d52fea46953c322cdcdd0d6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5547822917824585046, guid: 722116ab1d52fea46953c322cdcdd0d6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 722116ab1d52fea46953c322cdcdd0d6, type: 3}
 --- !u!1 &1739199189
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,3 +795,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 934322808}
   - {fileID: 1739199191}
+  - {fileID: 1732277931}

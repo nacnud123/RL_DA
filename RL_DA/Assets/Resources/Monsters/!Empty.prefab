@@ -76,8 +76,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 2092583501
-  m_SortingLayer: 1
+  m_SortingLayerID: 1189681829
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -103,6 +103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blocksMovement: 1
+  spriteRenderer: {fileID: 0}
   isAlive: 1
   fovRange: 8
   fov: []
@@ -111,6 +112,7 @@ MonoBehaviour:
   equipment: {fileID: -2573708987317586630}
   fighter: {fileID: -7049084470504224915}
   level: {fileID: -8509539478069354914}
+  realName: 
 --- !u!114 &-7049084470504224915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +130,7 @@ MonoBehaviour:
   baseDefense: 0
   basePower: 0
   target: {fileID: 0}
+  damage: 
 --- !u!114 &-1782777632295938276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,6 +156,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aStar: {fileID: -1782777632295938276}
+  isFrozen: 0
+  isPoisoned: 0
+  frozenTurns: 0
+  poisonedTurns: 0
   fighter: {fileID: -7049084470504224915}
   isFighting: 0
 --- !u!114 &-8509539478069354914
@@ -185,5 +192,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495eaeb88a4018f4cb58be018f6e4ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
+  primaryWeapon: {fileID: 0}
+  secondaryWeapon: {fileID: 0}
   armor: {fileID: 0}
+  ring: {fileID: 0}
+  ranged: {fileID: 0}

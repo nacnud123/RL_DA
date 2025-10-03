@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool isPlayerTurn = true;
     [SerializeField] private List<Entity> entities;
     [SerializeField] private List<Actor> actors;
+    private Dictionary<Vector3, Actor> actorPositions = new Dictionary<Vector3, Actor>();
 
     [Header("Death")]
     [SerializeField] private Sprite deadSprite;
@@ -82,6 +83,13 @@ public class GameManager : MonoBehaviour
         if (actor.GetComponent<Player>())
         {
             isPlayerTurn = true;
+
+            // Decrease hunger each turn
+            if (actor.Hunger != null)
+            {
+                actor.Hunger.DecrementHunger(1);
+            }
+
             if (actor.GetComponent<Player>().NumSlTurns > 0)
             {
                 actor.GetComponent<Player>().NumSlTurns -= 1;
@@ -161,6 +169,8 @@ public class GameManager : MonoBehaviour
         actors.Add(actor);
         delayTime = setTime();
         actorQueue.Enqueue(actor);
+        if (actor.BlocksMovment)
+            actorPositions[actor.transform.position] = actor;
     }
 
     public void insertActor(Actor actor, int index)
@@ -168,6 +178,8 @@ public class GameManager : MonoBehaviour
         actors.Insert(index, actor);
         delayTime = setTime();
         actorQueue.Enqueue(actor);
+        if (actor.BlocksMovment)
+            actorPositions[actor.transform.position] = actor;
     }
 
     public void removeActor(Actor actor)
@@ -179,6 +191,9 @@ public class GameManager : MonoBehaviour
         delayTime = setTime();
 
         actorQueue = new Queue<Actor>(actorQueue.Where(x => x != actor));
+
+        if (actorPositions.ContainsKey(actor.transform.position))
+            actorPositions.Remove(actor.transform.position);
     }
 
     public void RefreshPlayer()
@@ -188,22 +203,33 @@ public class GameManager : MonoBehaviour
 
     public Actor GetActorAtLocation(Vector3 location)
     {
-        foreach(Actor actor in actors)
+        if (actorPositions.TryGetValue(location, out Actor actor))
         {
-            if (actor.BlocksMovment && actor.transform.position == location)
+            if (actor != null && actor.BlocksMovment)
                 return actor;
+            else
+                actorPositions.Remove(location); // Clean up stale entry
         }
         return null;
     }
 
     public Actor getNPCAtLocation(Vector3 loc)
     {
-        foreach(Actor a in actors)
+        if (actorPositions.TryGetValue(loc, out Actor actor))
         {
-            if (a.BlocksMovment && a.GetComponent<NPC>() && a.transform.position == loc)
-                return a;
+            if (actor != null && actor.BlocksMovment && actor.GetComponent<NPC>())
+                return actor;
         }
         return null;
+    }
+
+    public void UpdateActorPosition(Actor actor, Vector3 oldPos, Vector3 newPos)
+    {
+        if (actorPositions.ContainsKey(oldPos))
+            actorPositions.Remove(oldPos);
+
+        if (actor.BlocksMovment)
+            actorPositions[newPos] = actor;
     }
 
     private float setTime() => baseTime / actors.Count;
@@ -315,15 +341,21 @@ public class GameManager : MonoBehaviour
                 entities.Clear();
                 actors.Clear();
                 actorQueue.Clear();
+                actorPositions.Clear();
             }
             else
             {
                 entities.RemoveRange(1, entities.Count - 1);
                 actors.RemoveRange(1, actors.Count - 1);
                 actorQueue = new Queue<Actor>(actorQueue.Where(x => x.GetComponent<Player>()));
+
+                // Rebuild position cache with only player
+                actorPositions.Clear();
+                if (actors.Count > 0 && actors[0].BlocksMovment)
+                    actorPositions[actors[0].transform.position] = actors[0];
             }
 
-            
+
         }
     }
 
@@ -354,7 +386,7 @@ public class GameManager : MonoBehaviour
 
             for (int j = 0; j < numofRolls; j++)
             {
-                total += Random.Range(1, diceType);
+                total += Random.Range(1, diceType + 1);
             }
         }
 

@@ -105,7 +105,7 @@ public class Fighter : MonoBehaviour
 
         SpriteRenderer sp = GetComponent<Actor>().SR;
         sp.sprite = GameManager.init.getDeadSprite;
-        sp.color = new Color(191, 0, 0, 1);
+        sp.color = new Color(191/255f, 0/255f, 0/255f, 1);
         sp.sortingOrder = 0;
 
         name = $"Remains of {this.GetComponent<Actor>().name}";

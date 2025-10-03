@@ -64,7 +64,14 @@ internal sealed class ProcGen
         new Tuple<int,string,int>(10, "Armor/Plate", 15),
         new Tuple<int,string,int>(12, "Armor/Splint", 15),
 
-        new Tuple<int, string, int>(3, "Ranged Weapons/Arrows", 10)
+        new Tuple<int, string, int>(3, "Ranged Weapons/Arrows", 10),
+
+        // Food items
+        new Tuple<int, string, int>(0, "Food/Ration", 40),
+        new Tuple<int, string, int>(0, "Food/Bread", 35),
+        new Tuple<int, string, int>(1, "Food/Cheese", 30),
+        new Tuple<int, string, int>(2, "Food/Apple", 25),
+        new Tuple<int, string, int>(3, "Food/Meat", 20)
 
     };
 

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/Duncan/Documents/GitHub/RL_DA/RL_DA/Assets/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

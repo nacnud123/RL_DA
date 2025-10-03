@@ -9,11 +9,13 @@ public class Item : Entity
     [SerializeField] private Equippable equippable;
     [SerializeField] private string currName = "";
     [SerializeField] private string realName = "";
+    [SerializeField] private float weight = 1f;
 
     public Consumable GetConsumable { get => consumable; }
     public Equippable GetEquippable { get => equippable; }
     public string CurrName { get => currName; set => currName = value; }
     public string RealName { get => realName; set => currName = value; }
+    public float Weight { get => weight; set => weight = value; }
 
     private void OnValidate()
     {
@@ -52,7 +54,8 @@ public class Item : Entity
         _isVisible: MapManager.init.VisibleTiles.Contains(MapManager.init.getFloorMap.WorldToCell(transform.position)),
         _pos: transform.position,
         _parent: transform.parent != null ? transform.parent.gameObject.name : "",
-        _amount: inAmm
+        _amount: inAmm,
+        _weight: weight
         );
     }
 
@@ -73,6 +76,7 @@ public class Item : Entity
         transform.position = state.Position;
         this.currName = state.CurrName;
         this.realName = state.RealName;
+        this.weight = state.Weight;
 
         if(state.Amount != -1)
         {
@@ -92,17 +96,20 @@ public class ItemState: EntityState
     [SerializeField] private string currName;
     [SerializeField] private string realName;
     [SerializeField] private int amount;
+    [SerializeField] private float weight;
 
     public string Parent { get => parent; set => parent = value; }
     public string CurrName { get => currName; set => currName = value; }
     public string RealName { get => realName; set => realName = value; }
     public int Amount { get => amount; set => amount = value; }
+    public float Weight { get => weight; set => weight = value; }
 
-    public ItemState(EntityType _type = EntityType.Item, string _name = "", string _currName = "", string _realName = "", bool _blocksMovment = false, bool _isVisible = false, Vector3 _pos = new Vector3(), string _parent = "", int _amount = 0) : base(_type, _name, _blocksMovment, _isVisible, _pos)
+    public ItemState(EntityType _type = EntityType.Item, string _name = "", string _currName = "", string _realName = "", bool _blocksMovment = false, bool _isVisible = false, Vector3 _pos = new Vector3(), string _parent = "", int _amount = 0, float _weight = 1f) : base(_type, _name, _blocksMovment, _isVisible, _pos)
     {
         parent = _parent;
         currName = _currName;
         realName = _realName;
         amount = _amount;
+        weight = _weight;
     }
 }

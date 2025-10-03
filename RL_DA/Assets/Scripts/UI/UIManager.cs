@@ -18,6 +18,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider hpSlider;
     [SerializeField] private TextMeshProUGUI hpSliderText;
 
+    [Header("Hunger UI")]
+    [SerializeField] private TextMeshProUGUI hungerText;
+
+    [Header("Weight UI")]
+    [SerializeField] private TextMeshProUGUI weightText;
+
     [Header("Msg UI")]
     [SerializeField] private int sameMsgCount = 0; // Read only
     [SerializeField] private string lastMsg; // Read only
@@ -100,6 +106,52 @@ public class UIManager : MonoBehaviour
     {
         hpSlider.value = hp;
         hpSliderText.text = $"HP: {hp}/{maxHp}";
+    }
+
+    public void setHunger(HungerStatus hungerState)
+    {
+        if (hungerText == null)
+            return;
+
+        switch (hungerState)
+        {
+            case HungerStatus.Full:
+                hungerText.text = "Satiated";
+                hungerText.color = getColorFromHex("#00ff00");
+                break;
+            case HungerStatus.Normal:
+                hungerText.text = "Fine";
+                break;
+            case HungerStatus.Hungry:
+                hungerText.text = "Hungry";
+                hungerText.color = getColorFromHex("#ffff00");
+                break;
+            case HungerStatus.Starving:
+                hungerText.text = "Starving";
+                hungerText.color = getColorFromHex("#ff8800");
+                break;
+            case HungerStatus.Critical:
+                hungerText.text = "CRITICAL!";
+                hungerText.color = getColorFromHex("#ff0000");
+                break;
+        }
+    }
+
+    public void setWeight(float currentWeight, float maxWeight)
+    {
+        if (weightText == null)
+            return;
+
+        weightText.text = $"Weight: {currentWeight:F1}/{maxWeight:F0}";
+
+        // Color code based on encumbrance
+        float ratio = currentWeight / maxWeight;
+        if (ratio > 1.0f)
+            weightText.color = getColorFromHex("#ff0000"); // Red if over-encumbered
+        else if (ratio > 0.8f)
+            weightText.color = getColorFromHex("#ffff00"); // Yellow if near limit
+        else
+            weightText.color = getColorFromHex("#ffffff"); // White if normal
     }
 
     public void setDungeonFloorText(int floor)

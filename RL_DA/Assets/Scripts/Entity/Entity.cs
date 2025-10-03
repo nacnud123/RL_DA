@@ -26,6 +26,13 @@ public class Entity : MonoBehaviour
     {
         if(MapManager.init.isValidPos(transform.position + (Vector3)dir))
         {
+            // Update actor position cache if this is an actor
+            Actor actor = GetComponent<Actor>();
+            if (actor != null && actor.BlocksMovment)
+            {
+                GameManager.init.UpdateActorPosition(actor, transform.position, transform.position + (Vector3)dir);
+            }
+
             transform.position += (Vector3)dir;
         }
 

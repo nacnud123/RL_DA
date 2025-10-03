@@ -249,6 +249,8 @@ GameObject:
   - component: {fileID: 5658060129932091896}
   - component: {fileID: -4763412661780621373}
   - component: {fileID: -7538874265633751123}
+  - component: {fileID: -6919021834578593813}
+  - component: {fileID: 2962598794631150942}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -313,8 +315,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1802896555
-  m_SortingLayer: 1
+  m_SortingLayerID: 1189681829
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 2013770625, guid: 8d62db0eab7fd4b44aa6db5b093d6d38, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -370,6 +372,7 @@ MonoBehaviour:
   equipment: {fileID: -7538874265633751123}
   fighter: {fileID: -4681233567774152661}
   level: {fileID: -4763412661780621373}
+  hunger: {fileID: 2962598794631150942}
   realName: 
 --- !u!114 &-4681233567774152661
 MonoBehaviour:
@@ -401,7 +404,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c91acc7c20bb3ce49ba5f66ac34370c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  capacity: 26
   selectedConsumable: {fileID: 0}
   items: []
 --- !u!114 &-4763412661780621373
@@ -439,6 +441,36 @@ MonoBehaviour:
   armor: {fileID: 0}
   ring: {fileID: 0}
   ranged: {fileID: 0}
+--- !u!114 &-6919021834578593813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3654760850110565030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1322628903d64245869b88ba7e33888, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentFavor: 0
+--- !u!114 &2962598794631150942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3654760850110565030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2537bbe5ee75bf94281836b9b154a5ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHunger: 1000
+  maxHunger: 2000
+  hungerWarningThreshold: 300
+  starvingThreshold: 150
+  criticalThreshold: 50
 --- !u!1 &5206616248903383263
 GameObject:
   m_ObjectHideFlags: 0
@@ -1833,6 +1865,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4345693459697742125, guid: b6916c182bd87ad42978470627ca044a, type: 3}
+      propertyPath: m_text
+      value: Fine
+      objectReference: {fileID: 0}
     - target: {fileID: 4589829367827129701, guid: b6916c182bd87ad42978470627ca044a, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -2217,6 +2253,22 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8574851922388306395, guid: b6916c182bd87ad42978470627ca044a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.6187
+      objectReference: {fileID: 0}
+    - target: {fileID: 8574851922388306395, guid: b6916c182bd87ad42978470627ca044a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.6187
+      objectReference: {fileID: 0}
+    - target: {fileID: 8574851922388306395, guid: b6916c182bd87ad42978470627ca044a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.6187
+      objectReference: {fileID: 0}
+    - target: {fileID: 8574851922388306395, guid: b6916c182bd87ad42978470627ca044a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 151
+      objectReference: {fileID: 0}
     - target: {fileID: 8574851922607657665, guid: b6916c182bd87ad42978470627ca044a, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -2227,7 +2279,7 @@ PrefabInstance:
       objectReference: {fileID: 6023574370844331837}
     - target: {fileID: 8574851922607657668, guid: b6916c182bd87ad42978470627ca044a, type: 3}
       propertyPath: m_SortingLayerID
-      value: -740553003
+      value: -1934944393
       objectReference: {fileID: 0}
     - target: {fileID: 8574851922607657669, guid: b6916c182bd87ad42978470627ca044a, type: 3}
       propertyPath: m_Pivot.x

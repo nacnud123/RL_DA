@@ -67,6 +67,18 @@ public class Equipment : MonoBehaviour
         UIManager.init.addMsg($"You equip the {name}.", "#a000c8");
     }
 
+    public void UpdateWeightUI()
+    {
+        if (GetComponent<Player>())
+        {
+            Inventory inventory = GetComponent<Inventory>();
+            if (inventory != null)
+            {
+                UIManager.init.setWeight(inventory.GetCurrentWeight(), inventory.GetMaxCarryWeight());
+            }
+        }
+    }
+
     public void updateName(string slot, Item item, int amount)
     {
         Equippable currentItem = getSlot(slot);
@@ -144,6 +156,8 @@ public class Equipment : MonoBehaviour
         }
 
         if (addMsg) equipMsg(item.CurrName);
+
+        UpdateWeightUI();
     }
 
 
@@ -166,6 +180,8 @@ public class Equipment : MonoBehaviour
             ring.unequip(this.GetComponent<Actor>());
             ring = null;
         }
+
+        UpdateWeightUI();
     }
 
     private void SetEquipTag(Equippable item, string tag)

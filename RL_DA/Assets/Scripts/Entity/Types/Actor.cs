@@ -12,6 +12,7 @@ public class Actor : Entity
     [SerializeField] private Equipment equipment;
     [SerializeField] private Fighter fighter;
     [SerializeField] private Level level;
+    [SerializeField] private Hunger hunger;
     [SerializeField] private string realName = "";
 
     AdamMilVisibility algorithm;
@@ -25,6 +26,7 @@ public class Actor : Entity
 
     public Fighter Fighter { get => fighter; set => fighter = value; }
     public Level Level { get => level; set => level = value; }
+    public Hunger Hunger { get => hunger; set => hunger = value; }
 
     public string RealName { get => realName; set => realName = value; }
 
@@ -46,6 +48,9 @@ public class Actor : Entity
 
         if (GetComponent<Equipment>())
             equipment = GetComponent<Equipment>();
+
+        if (GetComponent<Hunger>())
+            hunger = GetComponent<Hunger>();
     }
 
     // Start is called before the first frame update
@@ -100,7 +105,8 @@ public class Actor : Entity
         _pos: transform.position,
         _currAI: ai != null ? AI.SaveState() : null,
         _fighterState: fighter != null ? fighter.SaveState() : null,
-        _levelState: level != null && GetComponent<Player>() ? level.SaveState() : null
+        _levelState: level != null && GetComponent<Player>() ? level.SaveState() : null,
+        _hungerState: hunger != null && GetComponent<Player>() ? hunger.SaveState() : null
         );
 
     public void LoadState(ActorState state)
@@ -135,6 +141,11 @@ public class Actor : Entity
         {
             level.LoadState(state.LevelState);
         }
+
+        if(state.HungerState != null)
+        {
+            hunger.LoadState(state.HungerState);
+        }
     }
 }
 
@@ -145,17 +156,20 @@ public class ActorState: EntityState
     [SerializeField] private AIState currentAI;
     [SerializeField] private FighterState fighterState;
     [SerializeField] private LevelState levelState;
+    [SerializeField] private HungerState hungerState;
 
     public bool IsAlive { get => isAlive; set => isAlive = value; }
     public AIState CurrentAI { get => currentAI; set => currentAI = value; }
     public FighterState FighterState { get => fighterState; set => fighterState = value; }
     public LevelState LevelState { get => levelState; set => levelState = value; }
+    public HungerState HungerState { get => hungerState; set => hungerState = value; }
 
-    public ActorState(EntityType _type = EntityType.Actor, string _name = "", bool _blocksMovment = false, bool _isVisible = false, Vector3 _pos = new Vector3(), bool _isAlive = true, AIState _currAI = null, FighterState _fighterState = null, LevelState _levelState = null): base(_type, _name, _blocksMovment, _isVisible, _pos)
+    public ActorState(EntityType _type = EntityType.Actor, string _name = "", bool _blocksMovment = false, bool _isVisible = false, Vector3 _pos = new Vector3(), bool _isAlive = true, AIState _currAI = null, FighterState _fighterState = null, LevelState _levelState = null, HungerState _hungerState = null): base(_type, _name, _blocksMovment, _isVisible, _pos)
     {
         isAlive = _isAlive;
         currentAI = _currAI;
         fighterState = _fighterState;
         levelState = _levelState;
+        hungerState = _hungerState;
     }
 }
