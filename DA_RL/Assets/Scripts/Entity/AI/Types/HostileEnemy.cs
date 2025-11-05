@@ -52,24 +52,27 @@ public class HostileEnemy : AI
             fighter.Target = null;
         }
 
-        if (fighter.Target) // If it does have a target then make it go to the player and attack it
+        if (fighter.Target)
         {
-            Vector3Int targetPos = MapManager.init.getFloorMap.WorldToCell(fighter.Target.transform.position);
-            if (isFighting || GetComponent<Actor>().getFOV.Contains(targetPos))
+            Actor actor = GetComponent<Actor>();
+            Vector3 currentPos = transform.position;
+            Vector3 targetPosition = fighter.Target.transform.position;
+            Vector3Int targetPos = MapManager.init.getFloorMap.WorldToCell(targetPosition);
+
+            if (isFighting || actor.getFOV.Contains(targetPos))
             {
                 if (!isFighting)
                     isFighting = true;
 
-                float targetDis = Vector3.Distance(transform.position, fighter.Target.transform.position);
-                Actor acotr = GetComponent<Actor>();
-                Vector3 closestTilePos = transform.position; // Maybe reduntend. Is hold-over from multi-tile enemies.
+                float targetDis = Vector3.Distance(currentPos, targetPosition);
+                Vector3 closestTilePos = currentPos;
 
-                if (targetDis < 1.5f) // If it close to the player attack it.
+                if (targetDis < 1.5f)
                 {
-                    Action.attackAction(GetComponent<Actor>(), fighter.Target);
+                    Action.attackAction(actor, fighter.Target);
                     return;
                 }
-                else // If it is not close to the player continue to walk to it.
+                else
                 {
                     moveAlongPath(closestTilePos, targetPos);
                     return;

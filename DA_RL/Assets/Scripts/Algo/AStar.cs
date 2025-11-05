@@ -6,7 +6,8 @@ using UnityEngine;
 public class AStar : MonoBehaviour
 {
     private Node currentNode;
-    private HashSet<Node> openList, closedList;
+    private HashSet<Node> openList = new HashSet<Node>();
+    private HashSet<Node> closedList = new HashSet<Node>();
 
     /// <summary> Finds the shortest path between two points </summary>
     /// <param name="current">Start position</param>
@@ -15,8 +16,8 @@ public class AStar : MonoBehaviour
     public Vector2 Compute(Vector2Int start, Vector2Int goal)
     {
         currentNode = GetNode(start);
-        openList = new HashSet<Node>();
-        closedList = new HashSet<Node>();
+        openList.Clear();
+        closedList.Clear();
         openList.Add(currentNode);
         Stack<Vector2Int> path = null;
 
@@ -131,7 +132,17 @@ public class AStar : MonoBehaviour
 
         if (openList.Count > 0)
         {
-            current = openList.OrderBy(x => x.f).First();
+            Node minNode = null;
+            int minF = int.MaxValue;
+            foreach (Node node in openList)
+            {
+                if (node.f < minF)
+                {
+                    minF = node.f;
+                    minNode = node;
+                }
+            }
+            current = minNode;
         }
     }
 

@@ -10,6 +10,10 @@ public class MapManager : MonoBehaviour
 {
     public static MapManager init;
 
+    private static readonly Color FOG_COLOR = new Color(1.0f, 1.0f, 1f, .5f);
+    private static readonly Color VISIBLE_COLOR = Color.clear;
+    private static readonly Color FULL_FOG_COLOR = Color.white;
+
     [Header("Map settings")]
     [SerializeField] private int width = 80;
     [SerializeField] private int height = 45;
@@ -35,7 +39,7 @@ public class MapManager : MonoBehaviour
 
     [Header("Features")]
     [SerializeField] private List<RectangularRoom> rooms;
-    [SerializeField] private List<Vector3Int> visibleTiles;
+    private HashSet<Vector3Int> visibleTiles;
 
     [SerializeField] private Dictionary<Vector3Int, TileData> tiles;
     private Dictionary<Vector2Int, Node> nodes = new Dictionary<Vector2Int, Node>();
@@ -57,7 +61,7 @@ public class MapManager : MonoBehaviour
     public Tilemap getFogMap { get => fogMap; }
 
     public List<RectangularRoom> getRooms { get => rooms; }
-    public List<Vector3Int> VisibleTiles { get => visibleTiles; }
+    public HashSet<Vector3Int> VisibleTiles { get => visibleTiles; }
 
     public Dictionary<Vector2Int, Node> getNodes { get => nodes; set => nodes = value; }
     public Dictionary<Vector3Int, TileData> Tiles { get => tiles; }
@@ -101,7 +105,7 @@ public class MapManager : MonoBehaviour
         {
             rooms = new List<RectangularRoom>();
             tiles = new Dictionary<Vector3Int, TileData>();
-            visibleTiles = new List<Vector3Int>();
+            visibleTiles = new HashSet<Vector3Int>();
         }
 
         ProcGen procGen = new ProcGen();
@@ -203,7 +207,7 @@ public class MapManager : MonoBehaviour
             { tiles[pos].IsExplored = true; }
 
             tiles[pos].IsVisible = false;
-            fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1f, .5f));
+            fogMap.SetColor(pos, FOG_COLOR);
         }
 
         visibleTiles.Clear();
@@ -211,7 +215,7 @@ public class MapManager : MonoBehaviour
         foreach(Vector3Int pos in playerFov)
         {
             tiles[pos].IsVisible = true;
-            fogMap.SetColor(pos, Color.clear);
+            fogMap.SetColor(pos, VISIBLE_COLOR);
             visibleTiles.Add(pos);
         }
     }
@@ -223,7 +227,7 @@ public class MapManager : MonoBehaviour
             if(!tiles[pos].IsExplored)
             {
                 tiles[pos].IsExplored = true;
-                fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1f, .5f));
+                fogMap.SetColor(pos, FOG_COLOR);
             }
         }
     }
@@ -235,13 +239,12 @@ public class MapManager : MonoBehaviour
             if (entity.GetComponent<Player>())
                 continue;
 
-
             Vector3Int entityPos = floorMap.WorldToCell(entity.transform.position);
 
             if (visibleTiles.Contains(entityPos))
-                entity.GetComponent<SpriteRenderer>().enabled = true;
+                entity.SR.enabled = true;
             else
-                entity.GetComponent<SpriteRenderer>().enabled = false;
+                entity.SR.enabled = false;
         }
     }
 
@@ -270,11 +273,11 @@ public class MapManager : MonoBehaviour
 
             if (tiles[pos].IsExplored)
             {
-                fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1.0f, .5f));
+                fogMap.SetColor(pos, FOG_COLOR);
             }
             else
             {
-                fogMap.SetColor(pos, Color.white);
+                fogMap.SetColor(pos, FULL_FOG_COLOR);
             }
         }
     }

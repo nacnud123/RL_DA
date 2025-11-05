@@ -14,6 +14,14 @@ public class Entity : MonoBehaviour
     public bool BlocksMovment { get => blocksMovement; set => blocksMovement = value; }
     public SpriteRenderer SR { get => spriteRenderer; set => spriteRenderer = value; }
 
+    protected virtual void Awake()
+    {
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+    }
+
     public virtual void addToGameManager()
     {
         if (GetComponent<Player>())

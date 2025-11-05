@@ -80,30 +80,30 @@ public class GameManager : MonoBehaviour
     {
         Actor actor = actorQueue.Peek();
 
-        if (actor.GetComponent<Player>())
+        Player player = actor.GetComponent<Player>();
+        if (player)
         {
             isPlayerTurn = true;
 
-            // Decrease hunger each turn
             if (actor.Hunger != null)
             {
                 actor.Hunger.DecrementHunger(1);
             }
 
-            if (actor.GetComponent<Player>().NumSlTurns > 0)
+            if (player.NumSlTurns > 0)
             {
-                actor.GetComponent<Player>().NumSlTurns -= 1;
+                player.NumSlTurns -= 1;
                 UIManager.init.addMsg("You are asleep!", "#00ff00");
                 Action.waitAction();
             }
-            if(actor.GetComponent<Player>().PoisTurns > 0)
+            if(player.PoisTurns > 0)
             {
-                actor.GetComponent<Fighter>().Hp -= 2;
-                actor.GetComponent<Player>().PoisTurns -= 1;
+                actor.Fighter.Hp -= 2;
+                player.PoisTurns -= 1;
             }
-            if(actor.GetComponent<Player>().ConfTurns > 0)
+            if(player.ConfTurns > 0)
             {
-                actor.GetComponent<Player>().ConfTurns -= 1;
+                player.ConfTurns -= 1;
             }
         }
         else

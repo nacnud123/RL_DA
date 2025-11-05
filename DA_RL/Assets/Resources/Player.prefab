@@ -315,7 +315,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1189681829
+  m_SortingLayerID: -1284279257
   m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 2013770625, guid: 8d62db0eab7fd4b44aa6db5b093d6d38, type: 3}
@@ -364,6 +364,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blocksMovement: 1
   spriteRenderer: {fileID: 2451367624117580353}
+  realName: 
+  currName: 
   isAlive: 1
   fovRange: 8
   fov: []
@@ -373,7 +375,6 @@ MonoBehaviour:
   fighter: {fileID: -4681233567774152661}
   level: {fileID: -4763412661780621373}
   hunger: {fileID: 2962598794631150942}
-  realName: 
 --- !u!114 &-4681233567774152661
 MonoBehaviour:
   m_ObjectHideFlags: 0

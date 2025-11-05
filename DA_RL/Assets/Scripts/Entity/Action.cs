@@ -158,27 +158,26 @@ static public class Action
 
     public static void attackAction(Actor actor, Actor target, int _dmg = -1)
     {
+        Fighter actorFighter = actor.Fighter;
+        Fighter targetFighter = target.Fighter;
+
         int dmg;
         if (_dmg != -1)
-            dmg = _dmg - target.GetComponent<Fighter>().Defense();
+            dmg = _dmg - targetFighter.Defense();
         else
-            dmg = actor.GetComponent<Fighter>().Power() - target.GetComponent<Fighter>().Defense();
+            dmg = actorFighter.Power() - targetFighter.Defense();
 
         string attackDesc = $"{actor.RealName} attacks {target.RealName}";
 
-        string colorHex = "";
-
-        if (actor.GetComponent<Player>())
-            colorHex = "#ffffff";
-        else
-            colorHex = "#d1a3a4";
+        Player player = actor.GetComponent<Player>();
+        string colorHex = player ? "#ffffff" : "#d1a3a4";
 
         if(dmg > 0)
         {
             UIManager.init.addMsg($"{attackDesc} for {dmg} hit points", colorHex);
-            target.GetComponent<Fighter>().Hp -= dmg;
+            targetFighter.Hp -= dmg;
 
-            if(actor.GetComponent<Player>())
+            if(player)
             {
                 Camera.main.GetComponent<ScreenShake>().TriggerShake();
                 SFXManager.init.playHitSfx();
@@ -188,20 +187,21 @@ static public class Action
         else
         {
             UIManager.init.addMsg($"{attackDesc} but does not damage.", colorHex);
-            if (actor.GetComponent<Player>())
+            if (player)
             {
                 SFXManager.init.playMissSfx();
             }
         }
-        
+
 
         GameManager.init.endTurn();
     }
 
     public static void movementAction(Actor actor, Vector2 dir)
     {
-        // Check if player is over-encumbered
-        if (actor.GetComponent<Player>() && actor.GetInventory.IsOverEncumbered())
+        Player player = actor.GetComponent<Player>();
+
+        if (player && actor.GetInventory.IsOverEncumbered())
         {
             UIManager.init.addMsg("You are carrying too much to move!", "#ff0000");
             GameManager.init.endTurn();
